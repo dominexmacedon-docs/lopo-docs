@@ -1,0 +1,10 @@
+# This program counts down from 5 to 1
+
+define i = 5
+
+while (i > 0) {
+    show(i)
+    i = i - 1
+}
+
+show("Go!")

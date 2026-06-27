@@ -1,0 +1,9 @@
+show("=== CHECK NUMBER ===");
+
+define x = 10;
+
+if (x > 5) {
+    show("Big number");
+} else {
+    show("Small number");
+}

@@ -1,0 +1,60 @@
+show("=== LOPO CALCULATION ENGINE ===");
+
+define numbers = [3, 5, 2, 7];
+
+show("Input numbers:");
+for n in numbers {
+    show(n);
+}
+
+define sum = 0;
+define product = 1;
+define i = 0;
+
+while (i < 4) {
+    sum = sum + numbers[i];
+    product = product * numbers[i];
+    i = i + 1;
+}
+
+show("=== BASIC RESULTS ===");
+show("Sum:");
+show(sum);
+
+show("Product:");
+show(product);
+
+define avg = sum / 4;
+show("Average:");
+show(avg);
+
+show("=== FACTORIAL CALCULATION ===");
+
+define factInput = 5;
+define fact = 1;
+define j = 1;
+
+while (j <= factInput) {
+    fact = fact * j;
+    j = j + 1;
+}
+
+show("Factorial of 5:");
+show(fact);
+
+show("=== POWER CALCULATION ===");
+
+define base = 2;
+define exp = 4;
+define result = 1;
+define k = 0;
+
+while (k < exp) {
+    result = result * base;
+    k = k + 1;
+}
+
+show("2^4:");
+show(result);
+
+show("=== END ===");

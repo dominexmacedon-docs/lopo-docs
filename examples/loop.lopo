@@ -1,0 +1,8 @@
+show("=== COUNTING ===");
+
+define i = 1;
+
+while (i <= 5) {
+    show(i);
+    i = i + 1;
+}

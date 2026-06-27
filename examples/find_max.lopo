@@ -1,0 +1,16 @@
+# This program finds the largest number in a list
+
+define nums = [10, 3, 25, 7]
+
+define max = nums[0]
+define i = 1
+
+while (i < 4) {
+    if (nums[i] > max) {
+        max = nums[i]
+    }
+    i = i + 1
+}
+
+show("Maximum value:")
+show(max)

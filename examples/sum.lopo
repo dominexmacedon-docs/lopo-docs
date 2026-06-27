@@ -1,0 +1,9 @@
+# This program calculates sum of two numbers
+
+define a = 8
+define b = 12
+
+define result = a + b
+
+show("Sum is:")
+show(result)

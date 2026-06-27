@@ -1,0 +1,7 @@
+show("=== LIST ITEMS ===");
+
+define fruits = ["apple", "banana", "mango"];
+
+for f in fruits {
+    show(f);
+}

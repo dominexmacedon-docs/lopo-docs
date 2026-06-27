@@ -1,0 +1,75 @@
+show("=== LOPO ADVANCED SHOP SYSTEM ===");
+
+entity Product {
+    init(name, price) {
+        self.name = name;
+        self.price = price;
+    }
+
+    getInfo() {
+        show self.name + " - " + self.price;
+    }
+}
+define products = [
+    new Product("Apple", 10),
+    new Product("Banana", 5),
+    new Product("Mango", 15),
+    new Product("Orange", 12)
+];
+show("Available Products:");
+
+define index = 1;
+
+for p in products {
+    show(index + ". " + p.name + " - " + p.price);
+    index = index + 1;
+}
+func addToCart(cart, product, qty) {
+    define item = {
+        name: product.name,
+        price: product.price,
+        qty: qty,
+        total: product.price * qty
+    };
+
+    push(cart, item);
+    return cart;
+}
+define cart = [];
+define running = true;
+
+while (running == true) {
+
+    define choice = ask("Enter product number (0 to checkout):");
+    choice = num(choice);
+
+    if (choice == 0) {
+        running = false;
+    } else {
+
+        define qty = ask("Enter quantity:");
+        qty = num(qty);
+
+        define selected = products[choice - 1];
+
+        if (selected != null) {
+            cart = addToCart(cart, selected, qty);
+            show("Added to cart: " + selected.name);
+        } else {
+            show("Invalid product!");
+        }
+    }
+}
+show("=== BILL SUMMARY ===");
+
+define total = 0;
+
+for item in cart {
+    show(item.name + " x " + item.qty + " = " + item.total);
+    total = total + item.total;
+}
+
+show("TOTAL AMOUNT:");
+show(total);
+
+show("Thank you for shopping at Lopo Store!");

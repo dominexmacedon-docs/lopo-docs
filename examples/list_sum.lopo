@@ -1,0 +1,14 @@
+# This program adds all items in a list
+
+define numbers = [2, 4, 6, 8]
+
+define sum = 0
+define i = 0
+
+while (i < 4) {
+    sum = sum + numbers[i]
+    i = i + 1
+}
+
+show("Total sum:")
+show(sum)

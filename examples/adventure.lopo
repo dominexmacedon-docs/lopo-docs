@@ -1,0 +1,56 @@
+show("=== WELCOME TO LOPO DUNGEON ===");
+show("You are standing at the entrance of a dark cave...");
+show("Choose your path wisely.\n");
+
+entity Player {
+    init(name) {
+        self.name = name;
+        self.health = 100;
+        self.gold = 0;
+    }
+
+    damage(amount) {
+        self.health = self.health - amount;
+        show("You lost health!");
+        show(self.health);
+    }
+
+    addGold(amount) {
+        self.gold = self.gold + amount;
+        show("You found gold!");
+        show(self.gold);
+    }
+
+    status() {
+        show("=== STATUS ===");
+        show(self.name);
+        show(self.health);
+        show(self.gold);
+    }
+}
+
+define p = new Player("Hero");
+
+show("You see two paths:");
+show("1. Left path (dark tunnel)");
+show("2. Right path (glowing light)");
+
+define choice = ask("Enter 1 or 2:");
+
+if (choice == "1") {
+    show("You entered the dark tunnel...");
+    show("A monster attacks!");
+
+    p.damage(30);
+
+    show("You run away safely...");
+} else {
+    show("You entered the glowing path...");
+    show("You found treasure!");
+
+    p.addGold(50);
+}
+
+p.status();
+
+show("End of adventure.");

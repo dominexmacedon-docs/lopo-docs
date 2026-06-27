@@ -1,0 +1,12 @@
+# This program checks if a number is even or odd
+
+define num = 7
+
+# Check remainder using simple math
+define check = num - (num / 2) * 2
+
+if (check == 0) {
+    show("Even number")
+} else {
+    show("Odd number")
+}

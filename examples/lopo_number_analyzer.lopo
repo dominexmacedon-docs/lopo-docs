@@ -1,0 +1,62 @@
+show("=== LOPO NUMBER ANALYZER ===");
+
+define numbers = [5, 12, 7, 20, 3, 18];
+
+show("Numbers:");
+for n in numbers {
+    show(n);
+}
+
+define sum = 0;
+define evens = 0;
+define i = 0;
+
+while (i < 6) {
+    define num = numbers[i];
+    sum = sum + num;
+
+    if (num == 0) {
+        show("Zero found");
+    }
+
+    if (num == 12) {
+        show("Lucky number detected");
+    }
+
+    if (num == 20) {
+        show("Big number!");
+    }
+
+    if (num == 18) {
+        show("Final special number");
+    }
+    define modCheck = num - (num / 2) * 2;
+
+    if (modCheck == 0) {
+        evens = evens + 1;
+    }
+
+    i = i + 1;
+}
+
+define max = numbers[0];
+define j = 1;
+
+while (j < 6) {
+    if (numbers[j] > max) {
+        max = numbers[j];
+    }
+    j = j + 1;
+}
+
+show("=== RESULTS ===");
+show("Sum:");
+show(sum);
+
+show("Even Count:");
+show(evens);
+
+show("Max Value:");
+show(max);
+
+show("=== DONE ===");

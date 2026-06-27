@@ -1,0 +1,49 @@
+show("=== LOPO EXPENSE TRACKER ===");
+
+define expenses = [120, 50, 300, 25, 90, 200];
+
+show("Daily expenses:");
+
+for e in expenses {
+    show(e);
+}
+
+define total = 0;
+define i = 0;
+
+while (i < 6) {
+    total = total + expenses[i];
+    i = i + 1;
+}
+
+define max = expenses[0];
+define j = 1;
+
+while (j < 6) {
+    if (expenses[j] > max) {
+        max = expenses[j];
+    }
+    j = j + 1;
+}
+
+define avg = total / 6;
+
+show("=== SUMMARY ===");
+show("Total Spending:");
+show(total);
+
+show("Average Spending:");
+show(avg);
+
+show("Highest Expense:");
+show(max);
+
+show("Status:");
+
+if (total > 500) {
+    show("High spending week!");
+} else {
+    show("Normal spending week.");
+}
+
+show("=== END ===");

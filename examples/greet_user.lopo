@@ -1,0 +1,6 @@
+# This program asks user name and greets them
+
+define name = ask("What is your name?")
+
+show("Hello")
+show(name)

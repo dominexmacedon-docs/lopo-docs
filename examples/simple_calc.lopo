@@ -1,0 +1,16 @@
+# Simple calculator using fixed values
+
+define a = 20
+define b = 4
+
+show("Addition:")
+show(a + b)
+
+show("Subtraction:")
+show(a - b)
+
+show("Multiplication:")
+show(a * b)
+
+show("Division:")
+show(a / b)

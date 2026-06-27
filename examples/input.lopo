@@ -1,0 +1,5 @@
+show("=== INPUT TEST ===");
+
+define name = ask("Enter your name:");
+show("Hello");
+show(name);

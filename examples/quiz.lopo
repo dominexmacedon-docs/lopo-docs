@@ -1,0 +1,58 @@
+show("=== LOPO QUIZ GAME ===");
+show("Answer questions and get your score!\n");
+
+entity Question {
+    init(text, answer) {
+        self.text = text;
+        self.answer = answer;
+    }
+
+    askQuestion() {
+        show(self.text);
+        define user = ask("Your answer:");
+        self.lastAnswer = user;
+    }
+
+    checkAnswer() {
+        define result = self.lastAnswer == self.answer;
+        self.lastResult = result;
+    }
+}
+
+define questions = [
+    new Question("What is 5 + 5?", "10"),
+    new Question("What is capital of France?", "paris"),
+    new Question("What language is this?", "lopo"),
+    new Question("2 * 3 = ?", "6")
+];
+
+func runQuiz(list) {
+    define score = 0;
+    define total = 0;
+
+    for q in list {
+        total = total + 1;
+
+        q.askQuestion();
+        q.checkAnswer();
+
+        if (q.lastResult == true) {
+            show("Correct!");
+            score = score + 1;
+        } else {
+            show("Wrong!");
+        }
+
+        show("-------------------");
+    }
+
+    show("=== FINAL RESULT ===");
+    show("Score:");
+    show(score);
+    show("Out of:");
+    show(total);
+}
+
+runQuiz(questions);
+
+show("Thanks for playing!");

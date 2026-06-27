@@ -1,0 +1,9 @@
+show("=== BASIC MATH ===");
+
+define a = 10;
+define b = 5;
+
+show(a + b);
+show(a - b);
+show(a * b);
+show(a / b);
