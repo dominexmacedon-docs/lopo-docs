@@ -18,7 +18,7 @@ show("Hello World!");
 
 ## Download Lopo
 
-### 🔵 **[Download Lopo now](https://github.com/dominexmacedon-docs/lopo-docs/releases/download/lopo-v1.0.0/Lopo-Installer.exe)**
+### 🔵 **[https://github.com/dominexmacedon-docs/lopo-docs/releases/download/lopo-v1.0.0/Lopo-v1.0.0.exe)**
 
 The installer automatically:
 
