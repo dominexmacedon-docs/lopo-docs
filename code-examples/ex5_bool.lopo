@@ -1,0 +1,2 @@
+define active = true;
+show(active);

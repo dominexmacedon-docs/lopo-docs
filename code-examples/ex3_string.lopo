@@ -1,0 +1,2 @@
+define greeting = "Welcome to Lopo Language!";
+show(greeting);

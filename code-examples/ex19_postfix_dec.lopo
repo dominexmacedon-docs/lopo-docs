@@ -1,0 +1,3 @@
+define lives = 3;
+lives--;
+show(lives);

@@ -1,0 +1,2 @@
+define res = (10 + 5) * 2 / 3;
+show(res);

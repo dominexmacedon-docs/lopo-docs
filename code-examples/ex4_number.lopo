@@ -1,0 +1,2 @@
+define price = 49.99;
+show(price);

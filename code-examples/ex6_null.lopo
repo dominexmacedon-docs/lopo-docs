@@ -1,0 +1,2 @@
+define session = null;
+show(session);

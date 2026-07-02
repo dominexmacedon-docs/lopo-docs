@@ -1,0 +1,2 @@
+define quotient = 100 / 4;
+show(quotient);

@@ -1,0 +1,3 @@
+define score = 100;
+show("Score value:");
+show(score);

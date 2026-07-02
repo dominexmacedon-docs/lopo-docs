@@ -1,0 +1,2 @@
+define sum = 50 + 25;
+show(sum);

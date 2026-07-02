@@ -1,0 +1,2 @@
+define product = 12 * 12;
+show(product);

@@ -1,0 +1,3 @@
+define balance = 500;
+balance -= 100;
+show(balance);
