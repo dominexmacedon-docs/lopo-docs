@@ -1,0 +1,10 @@
+entity User {
+  init(name) {
+    self.name = name;
+  }
+  getName() {
+    return self.name;
+  }
+}
+define u = new User("Alice");
+show(u.getName());
