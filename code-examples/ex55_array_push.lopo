@@ -1,0 +1,3 @@
+define roster = ["Player1"];
+push(roster, "Player2");
+show(roster);

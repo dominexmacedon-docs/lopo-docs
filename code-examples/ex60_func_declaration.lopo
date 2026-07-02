@@ -1,0 +1,4 @@
+func greet() {
+  show("Hello from Lopo context");
+}
+greet();

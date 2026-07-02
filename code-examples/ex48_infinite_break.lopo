@@ -1,0 +1,4 @@
+while (true) {
+  show("Once loop execution");
+  break;
+}

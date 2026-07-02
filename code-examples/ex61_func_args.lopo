@@ -1,0 +1,5 @@
+func multiply(x, y) {
+  return x * y;
+}
+define res = multiply(6, 7);
+show(res);

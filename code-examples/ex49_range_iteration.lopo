@@ -1,0 +1,4 @@
+define indices = range(0, 3);
+for item in indices {
+  show(item);
+}

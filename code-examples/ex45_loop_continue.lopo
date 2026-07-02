@@ -1,0 +1,6 @@
+for (let k = 0; k < 5; k++) {
+  if (k == 2) {
+    continue;
+  }
+  show(k);
+}

@@ -1,0 +1,2 @@
+define config = { active: true, port: 8080 };
+show(config.port);

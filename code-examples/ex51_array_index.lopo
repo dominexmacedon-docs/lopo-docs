@@ -1,0 +1,2 @@
+define tech = ["Lopo", "JS", "C"];
+show(tech[0]);

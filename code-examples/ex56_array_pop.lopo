@@ -1,0 +1,3 @@
+define cards = ["A", "K", "Q"];
+define dropped = pop(cards);
+show(dropped);

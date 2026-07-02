@@ -1,0 +1,2 @@
+define invoke = func(x) { return x + 1; };
+show(invoke(9));

@@ -1,0 +1,4 @@
+func combine(a, b, c) {
+  return a + b + c;
+}
+show(combine("L", "o", "po"));

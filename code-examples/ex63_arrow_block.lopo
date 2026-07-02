@@ -1,0 +1,4 @@
+define evaluate = (val) => {
+  return val * 10;
+};
+show(evaluate(5));

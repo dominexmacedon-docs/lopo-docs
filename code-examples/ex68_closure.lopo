@@ -1,0 +1,5 @@
+func buildMultiplier(factor) {
+  return (val) => val * factor;
+}
+define triple = buildMultiplier(3);
+show(triple(10));

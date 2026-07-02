@@ -1,0 +1,6 @@
+func countdown(num) {
+  if (num <= 0) { return 0; }
+  show(num);
+  return countdown(num - 1);
+}
+countdown(3);

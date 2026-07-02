@@ -1,0 +1,2 @@
+define user = { name: "Alex", rank: 12 };
+show(user);

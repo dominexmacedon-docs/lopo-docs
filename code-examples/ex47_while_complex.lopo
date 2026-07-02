@@ -1,0 +1,5 @@
+define pool = 20;
+while (pool > 0) {
+  pool -= 5;
+  show(pool);
+}

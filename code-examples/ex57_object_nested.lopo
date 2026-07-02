@@ -1,0 +1,2 @@
+define server = { meta: { id: "srv_90" }, region: "US" };
+show(server.meta.id);

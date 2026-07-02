@@ -1,0 +1,5 @@
+func process(callback) {
+  return callback(50);
+}
+define doubleFn = (v) => v * 2;
+show(process(doubleFn));

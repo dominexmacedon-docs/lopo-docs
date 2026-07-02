@@ -1,0 +1,3 @@
+define data = { token: "abc" };
+data.token = "xyz";
+show(data.token);
