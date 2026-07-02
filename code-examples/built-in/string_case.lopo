@@ -1,0 +1,3 @@
+define text = "LopoLang";
+show(upper(text));
+show(lower(text));

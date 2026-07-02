@@ -1,0 +1,3 @@
+define initial = [1, 2, 3];
+define doubled = map(initial, (x) => x * 2);
+show(doubled);

@@ -1,0 +1,2 @@
+define unknown = [1, 2];
+show(typeOf(unknown));

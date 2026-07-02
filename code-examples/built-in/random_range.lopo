@@ -1,0 +1,2 @@
+define roll = random(1, 7);
+show(roll);

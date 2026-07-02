@@ -1,0 +1,3 @@
+define sequence = [10, 15, 20, 25];
+define matches = filter(sequence, (x) => x > 18);
+show(matches);

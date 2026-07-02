@@ -1,0 +1,3 @@
+define chaotic = [5, 1, 9, 3];
+define ordered = sort(chaotic);
+show(ordered);

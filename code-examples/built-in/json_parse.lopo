@@ -1,0 +1,3 @@
+define dynamicString = "{\"status\":\"ok\",\"code\":200}";
+define obj = JSONParse(dynamicString);
+show(obj.code);
