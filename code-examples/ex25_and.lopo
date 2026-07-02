@@ -1,0 +1,2 @@
+define valid = true and false;
+show(valid);

@@ -1,0 +1,2 @@
+define match = (10 == 10);
+show(match);

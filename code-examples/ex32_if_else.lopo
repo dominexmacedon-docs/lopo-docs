@@ -1,0 +1,6 @@
+define choice = false;
+if (choice) {
+  show("Choice is active");
+} else {
+  show("Choice is inactive");
+}

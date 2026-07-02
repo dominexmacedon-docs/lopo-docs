@@ -1,0 +1,8 @@
+define speed = 75;
+if (speed > 100) {
+  show("Too Fast");
+} else if (speed > 60) {
+  show("Cruising speed");
+} else {
+  show("Slow speed");
+}

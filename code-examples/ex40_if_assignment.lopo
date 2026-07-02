@@ -1,0 +1,6 @@
+define initialized = true;
+define value = 0;
+if (initialized) {
+  value = 100;
+}
+show(value);

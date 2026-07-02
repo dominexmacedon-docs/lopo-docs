@@ -1,0 +1,3 @@
+define rating = 4.5;
+define tier = rating > 4 ? "Top" : (rating > 2 ? "Mid" : "Low");
+show(tier);

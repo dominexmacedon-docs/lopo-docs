@@ -1,0 +1,5 @@
+define code = 2;
+start (code) {
+  race 1 { show("Option One"); }
+  race 2 { show("Option Two"); }
+}

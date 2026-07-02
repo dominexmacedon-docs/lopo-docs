@@ -1,0 +1,5 @@
+define userHasToken = true;
+define isAdmin = true;
+if (userHasToken and isAdmin) {
+  show("Full Control Authorized");
+}

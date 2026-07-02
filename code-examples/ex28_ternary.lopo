@@ -1,0 +1,3 @@
+define age = 20;
+define allowed = age >= 18 ? "Yes" : "No";
+show(allowed);

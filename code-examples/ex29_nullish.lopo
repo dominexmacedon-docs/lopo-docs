@@ -1,0 +1,3 @@
+define user = null;
+define profile = user ?? "Guest User";
+show(profile);

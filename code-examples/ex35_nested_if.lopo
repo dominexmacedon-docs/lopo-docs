@@ -1,0 +1,9 @@
+define internal = true;
+define external = false;
+if (internal) {
+  if (external) {
+    show("Both connected");
+  } else {
+    show("Internal active only");
+  }
+}

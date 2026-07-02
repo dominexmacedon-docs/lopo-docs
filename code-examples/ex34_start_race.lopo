@@ -1,0 +1,5 @@
+define mode = "light";
+start (mode) {
+  race "dark" { show("Dark theme configured"); }
+  race "light" { show("Light theme configured"); }
+}
