@@ -1,0 +1,8 @@
+entity Scoreboard {
+  init() { self.score = 0; }
+  addPoints(p) { self.score += p; }
+}
+define sc = new Scoreboard();
+sc.addPoints(10);
+sc.addPoints(25);
+show(sc.score);

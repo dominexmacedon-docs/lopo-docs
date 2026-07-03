@@ -1,0 +1,11 @@
+entity Counter {
+  init() {
+    self.count = 0;
+  }
+  inc() {
+    self.count += 1;
+  }
+}
+define c = new Counter();
+c.inc();
+show(c.count);

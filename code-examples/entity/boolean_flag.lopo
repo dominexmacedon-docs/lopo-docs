@@ -1,0 +1,11 @@
+entity Switch {
+  init() {
+    self.on = false;
+  }
+  toggle() {
+    self.on = !self.on;
+  }
+}
+define s = new Switch();
+s.toggle();
+show(s.on);

@@ -1,0 +1,9 @@
+entity Repeater {
+  run(times) {
+    for (let i = 0; i < times; i++) {
+      show("Looping...");
+    }
+  }
+}
+define r = new Repeater();
+r.run(3);

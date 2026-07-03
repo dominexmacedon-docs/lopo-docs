@@ -1,0 +1,11 @@
+entity Item {
+  init(p) {
+    self.price = p;
+  }
+  update(np) {
+    self.price = np;
+  }
+}
+define i = new Item(45);
+i.update(50);
+show(i.price);

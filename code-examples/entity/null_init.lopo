@@ -1,0 +1,8 @@
+entity Node {
+  init(val) {
+    self.val = val;
+    self.next = null;
+  }
+}
+define n = new Node(10);
+show(n.next);

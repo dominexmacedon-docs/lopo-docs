@@ -1,0 +1,11 @@
+entity Profile {
+  init(first, last) {
+    self.first = first;
+    self.last = last;
+  }
+  fullName() {
+    show(self.first + " " + self.last);
+  }
+}
+define pr = new Profile("John", "Doe");
+pr.fullName();

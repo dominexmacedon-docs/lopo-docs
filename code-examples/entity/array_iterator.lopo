@@ -1,0 +1,9 @@
+entity Inspector {
+  dump(arr) {
+    for item in arr {
+      show(item);
+    }
+  }
+}
+define ins = new Inspector();
+ins.dump([10, 20, 30]);

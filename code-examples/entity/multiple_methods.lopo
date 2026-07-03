@@ -1,0 +1,8 @@
+entity Device {
+  init() { self.active = false; }
+  on() { self.active = true; }
+  off() { self.active = false; }
+}
+define d = new Device();
+d.on();
+show(d.active);

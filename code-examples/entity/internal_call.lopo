@@ -1,0 +1,10 @@
+entity Speaker {
+  say(msg) {
+    show(msg);
+  }
+  whisper() {
+    self.say("quiet sound");
+  }
+}
+define sp = new Speaker();
+sp.whisper();

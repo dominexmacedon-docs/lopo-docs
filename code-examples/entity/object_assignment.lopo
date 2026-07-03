@@ -1,0 +1,7 @@
+entity DataWrapper {
+  init(obj) {
+    self.payload = obj;
+  }
+}
+define dw = new DataWrapper({ status: 200 });
+show(dw.payload.status);

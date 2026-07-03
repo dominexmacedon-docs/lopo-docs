@@ -1,0 +1,7 @@
+entity Fallback {
+  init(customName) {
+    self.name = customName ?? "Default Entity";
+  }
+}
+define f1 = new Fallback(null);
+show(f1.name);

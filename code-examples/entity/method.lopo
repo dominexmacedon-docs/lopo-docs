@@ -1,0 +1,7 @@
+entity Greeter {
+  greet() {
+    show("Hello from entity context");
+  }
+}
+define g = new Greeter();
+g.greet();

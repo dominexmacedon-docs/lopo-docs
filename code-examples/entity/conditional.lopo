@@ -1,0 +1,14 @@
+entity Threshold {
+  init(max) {
+    self.max = max;
+  }
+  check(val) {
+    if (val > self.max) {
+      show("Limit Exceeded");
+    } else {
+      show("Safe");
+    }
+  }
+}
+define t = new Threshold(100);
+t.check(120);

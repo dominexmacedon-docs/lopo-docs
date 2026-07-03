@@ -1,0 +1,7 @@
+entity User {
+  init(name) {
+    self.name = name;
+  }
+}
+define u = new User("Alex");
+show(u.name);

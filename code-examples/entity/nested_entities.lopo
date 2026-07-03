@@ -1,0 +1,9 @@
+entity Engine {
+  init(hp) { self.hp = hp; }
+}
+entity Vehicle {
+  init(eng) { self.engine = eng; }
+}
+define e = new Engine(400);
+define v = new Vehicle(e);
+show(v.engine.hp);

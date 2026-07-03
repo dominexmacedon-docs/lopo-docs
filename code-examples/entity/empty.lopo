@@ -1,0 +1,3 @@
+entity Void {}
+define v = new Void();
+show(v);

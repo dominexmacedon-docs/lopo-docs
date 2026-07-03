@@ -1,0 +1,7 @@
+entity Basket {
+  init() {
+    self.slots = [];
+  }
+}
+define b = new Basket();
+show(b.slots);

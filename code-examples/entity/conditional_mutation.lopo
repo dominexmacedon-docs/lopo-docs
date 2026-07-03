@@ -1,0 +1,11 @@
+entity Account {
+  init(bal) { self.balance = bal; }
+  withdraw(amount) {
+    if (self.balance >= amount) {
+      self.balance -= amount;
+    }
+  }
+}
+define acc = new Account(100);
+acc.withdraw(40);
+show(acc.balance);

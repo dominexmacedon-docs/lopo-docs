@@ -1,0 +1,9 @@
+entity Point {
+  init(x, y) {
+    self.x = x;
+    self.y = y;
+  }
+}
+define p = new Point(10, 20);
+show(p.x);
+show(p.y);

@@ -1,0 +1,11 @@
+entity Stack {
+  init() {
+    self.data = [];
+  }
+  add(item) {
+    push(self.data, item);
+  }
+}
+define st = new Stack();
+st.add("Alpha");
+show(st.data);

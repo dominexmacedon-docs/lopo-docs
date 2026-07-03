@@ -1,0 +1,9 @@
+entity Tracker {
+  init() { self.steps = 0; }
+  step() { self.steps++; }
+  clear() { self.steps = 0; }
+}
+define tr = new Tracker();
+tr.step();
+tr.clear();
+show(tr.steps);

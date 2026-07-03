@@ -1,0 +1,9 @@
+entity Config {
+  init(h, p, s) {
+    self.host = h;
+    self.port = p;
+    self.ssl = s;
+  }
+}
+define c = new Config("localhost", 8080, true);
+show(c.port);
