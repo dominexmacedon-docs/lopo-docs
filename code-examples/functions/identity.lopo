@@ -1,0 +1,4 @@
+define identity = func(val) {
+  return val;
+};
+show identity("Lopo Core");
