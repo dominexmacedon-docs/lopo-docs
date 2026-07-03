@@ -1,0 +1,5 @@
+define extractJsonId = func(jsonPayload) {
+  define parsed = JSONParse(jsonPayload);
+  return parsed.id;
+};
+show extractJsonId("{\"id\":777}");

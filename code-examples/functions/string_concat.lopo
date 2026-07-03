@@ -1,0 +1,4 @@
+define makeGreeting = func(name) {
+  return "Welcome, " + name + "!";
+};
+show makeGreeting("Developer");

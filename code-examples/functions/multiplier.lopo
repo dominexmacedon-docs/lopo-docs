@@ -1,0 +1,4 @@
+define multiply = func(num, factor) {
+  return num * factor;
+};
+show multiply(6, 7);

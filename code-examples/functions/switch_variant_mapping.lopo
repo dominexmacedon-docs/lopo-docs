@@ -1,0 +1,8 @@
+define getRouteMessage = func(path) {
+  start (path) {
+    race "home" { return "Welcome Home"; }
+    race "dashboard" { return "Dashboard View"; }
+  }
+  return "404 Not Found";
+};
+show getRouteMessage("dashboard");

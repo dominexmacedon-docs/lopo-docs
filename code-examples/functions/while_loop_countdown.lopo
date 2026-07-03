@@ -1,0 +1,9 @@
+define collectCountdown = func(startValue) {
+  define tracker = [];
+  while (startValue > 0) {
+    push(tracker, startValue);
+    startValue--;
+  }
+  return tracker;
+};
+show collectCountdown(3);

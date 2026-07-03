@@ -1,0 +1,5 @@
+define runTransformation = func(val, transformFunc) {
+  return transformFunc(val);
+};
+define doubleNum = func(x) { return x * 2; };
+show runTransformation(21, doubleNum);

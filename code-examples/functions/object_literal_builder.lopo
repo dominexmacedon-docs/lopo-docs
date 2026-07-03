@@ -1,0 +1,9 @@
+define createUserProfile = func(id, username) {
+  return {
+    userId: id,
+    loginName: username,
+    timestamp: 12345678
+  };
+};
+define profile = createUserProfile(99, "lopo_dev");
+show profile.loginName;

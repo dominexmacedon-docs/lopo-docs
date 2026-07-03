@@ -1,0 +1,5 @@
+define computePercentage = func(total, parts) {
+  define ratio = parts / total;
+  return ratio * 100;
+};
+show computePercentage(200, 50);

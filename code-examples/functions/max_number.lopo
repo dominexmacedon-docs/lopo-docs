@@ -1,0 +1,4 @@
+define max = func(a, b) {
+  return a > b ? a : b;
+};
+show max(88, 99);

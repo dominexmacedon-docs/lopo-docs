@@ -1,0 +1,4 @@
+define getValidName = func(customName) {
+  return customName ?? "Guest User";
+};
+show getValidName(null);

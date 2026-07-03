@@ -1,0 +1,4 @@
+define invert = func(flag) {
+  return !flag;
+};
+show invert(false);

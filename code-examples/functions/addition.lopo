@@ -1,0 +1,4 @@
+define add = func(a, b) {
+  return a + b;
+};
+show add(15, 25);

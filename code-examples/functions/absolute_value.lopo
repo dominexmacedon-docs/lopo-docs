@@ -1,0 +1,7 @@
+define absolute = func(n) {
+  if (n < 0) {
+    return -n;
+  }
+  return n;
+};
+show absolute(-42);
