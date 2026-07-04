@@ -33,17 +33,17 @@ This document explains how to install and run **Lopo**, the lightweight interpre
    ```
 3. Run the interpreter:
    ```bash
-   node lopo.js
+   lopo
    ```
 4. Test with an example:
    ```bash
-   node lopo.js examples/hello.lopo
+   lopo examples/hello.lopo
    ```
 
 ---
 
 ## Verifying Installation
-- Run `node lopo.js --version` to check the interpreter version.
+- Run `lopo -v` to check the interpreter version.
 - Open the editor and run a sample program to confirm everything works.
 
 ---
@@ -59,7 +59,3 @@ This document explains how to install and run **Lopo**, the lightweight interpre
 - Read the `[Looks like the result wasn't safe to show. Let's switch things up and try something else!]` for writing your first Lopo program.
 - Explore the `examples/` directory for sample code.
 - Join discussions via Issues to share feedback or request features.
-
----
-
-**You’re ready to start coding with Lopo! **
