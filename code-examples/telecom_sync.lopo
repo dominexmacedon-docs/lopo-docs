@@ -1,0 +1,32 @@
+define internalNetworkChannels = [14.2, 55.6, 88.1, 102.5, 7.4, 45.9];
+
+func isolateOptimalFrequencies() {
+    show("=== Base Telecommunications Frequency Intercept Board ===");
+    show("Active Channels Matrix: " + toStr(internalNetworkChannels));
+    
+    define thresholdLimit = num(ask("Enter maximum acceptable channel signal cutoff value (MHz): "));
+    
+    define matchingHitsList = [];
+    define pointer = 0;
+    define totalChannels = len(internalNetworkChannels);
+    
+    while (pointer < totalChannels) {
+        define currentFrequency = num(internalNetworkChannels[pointer]);
+        
+        # Look for elements that sit beneath the specific ceiling constraint
+        if (currentFrequency <= thresholdLimit) {
+            # Use dynamic push execution to assemble a completely new dynamic target array
+            push(matchingHitsList, currentFrequency);
+        }
+        pointer = pointer + 1;
+    }
+    
+    show("---------------------------------------------------------");
+    show("============== COMPILATION FILTER ANALYSIS ==============");
+    show(" Configured Ceiling Cutoff: " + toStr(thresholdLimit) + " MHz");
+    show(" Isolated Sub-Channels:    " + toStr(matchingHitsList));
+    show(" Matching Node Density:     " + toStr(len(matchingHitsList)) + " Items Found");
+    show("=========================================================");
+}
+
+isolateOptimalFrequencies();

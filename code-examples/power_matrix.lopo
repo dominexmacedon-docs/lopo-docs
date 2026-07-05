@@ -1,0 +1,31 @@
+define structuralPowerBusLines = [110, 220, 330, 440, 550]; # Grid pressures KV
+
+func triggerEmergencyLoadInversion() {
+    show("=== Provincial Grid Substation Safety Inversion Board ===");
+    show("Normal Base Configuration Sequence: " + toStr(structuralPowerBusLines));
+    
+    define triggerConfirmationCode = num(ask("Enter Grid Failover Code to flip structural distributions: "));
+    
+    if (triggerConfirmationCode == 9911) {
+        define invertedPowerMap = [];
+        define arrayLength = len(structuralPowerBusLines);
+        define lookupPointer = arrayLength - 1;
+        
+        # Read the structural array backwards from max index down to 0
+        while (lookupPointer >= 0) {
+            define valueToCopy = num(structuralPowerBusLines[lookupPointer]);
+            push(invertedPowerMap, valueToCopy);
+            lookupPointer = lookupPointer - 1;
+        }
+        
+        show("---------------------------------------------------------");
+        show("============== INFRASTRUCTURE FAILOVER SCRIPT ==============");
+        show(" Emergency Core Inversion State: Inverted grid sequence successfully routed.");
+        show(" New Priority Phase Distribution: " + toStr(invertedPowerMap));
+        show("============================================================");
+    } else {
+        show("FAILURE EVENT: Authorization validation invalid. Line routes remain frozen.");
+    }
+}
+
+triggerEmergencyLoadInversion();

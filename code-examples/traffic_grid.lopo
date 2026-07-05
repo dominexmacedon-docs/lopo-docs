@@ -1,0 +1,42 @@
+# Parallel arrays tracking data across matched index positions
+define intersectionNodes = ["Downtown-Cross-Main", "East-Highway-Exit-5", "North-Boulevard-Lane"];
+define congestionIndexes = [45, 82, 12]; # Out of 100 max density
+
+func optimizeTrafficLine() {
+    show("=== Municipal Traffic Intersection Optimization Terminal ===");
+    
+    # Iterate using index boundaries instead of direct element objects
+    define idx = 0;
+    define totalNodes = len(intersectionNodes);
+    while (idx < totalNodes) {
+        show("Index: [" + toStr(idx) + "] | Location: " + intersectionNodes[idx] + " | Current Flow Congestion: " + toStr(congestionIndexes[idx]) + "%");
+        idx = idx + 1;
+    }
+    show("---------------------------------------------------------");
+    
+    define chosenIndex = num(ask("Enter exact matching line Index to manual clear: "));
+    
+    if (chosenIndex >= 0 and chosenIndex < totalNodes) {
+        define currentDensity = num(congestionIndexes[chosenIndex]);
+        show("Isolating Parallel Index Match: " + intersectionNodes[chosenIndex]);
+        
+        define clearanceFactor = num(ask("Enter percentage point congestion load reduction: "));
+        
+        if (clearanceFactor > 0 and clearanceFactor <= currentDensity) {
+            # Update data inside the targeted parallel list slot directly
+            congestionIndexes[chosenIndex] = currentDensity - clearanceFactor;
+            
+            show("============== TRAFFIC SIGNAL DISPATCH CODES ==============");
+            show(" Cleared Grid Path:     " + intersectionNodes[chosenIndex]);
+            show(" Relief Index Factor:  -" + toStr(clearanceFactor) + "% Load");
+            show(" Current Grid Status:   " + toStr(congestionIndexes[chosenIndex]) + "% Aggregated Pressure");
+            show("===========================================================");
+        } else {
+            show("GRID ERROR: Clearance parameters threaten normal intersection safety cycles.");
+        }
+    } else {
+        show("GRID ERROR: Input index maps to zero active physical intersections.");
+    }
+}
+
+optimizeTrafficLine();

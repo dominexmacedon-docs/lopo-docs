@@ -1,0 +1,28 @@
+define frameGridSlots = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; # 0 = Idle Frame Open
+
+func allocateHighPerformanceCore() {
+    show("=== Supercomputer High-Performance Core Array Framework ===");
+    show("Total processing clusters connected: " + toStr(len(frameGridSlots)));
+    
+    define coreStepOffset = num(ask("Enter server node core block processing stride step (1 to 3): "));
+    
+    if (coreStepOffset >= 1 and coreStepOffset <= 3) {
+        define counter = 0;
+        define arrayLimit = len(frameGridSlots);
+        
+        # Traverse the list by manually incrementing jumps based on user offset step inputs
+        while (counter < arrayLimit) {
+            show("Spinning up thread tracking check on target Node Slot: [" + toStr(counter) + "]");
+            frameGridSlots[counter] = 1; # Flag grid as occupied by simulation job
+            counter = counter + coreStepOffset;
+        }
+        
+        show("---------------------------------------------------------");
+        show("Grid compute mapping job allocation execution successful.");
+        show("Current Updated Server Core Blueprint Map: " + toStr(frameGridSlots));
+    } else {
+        show("PROCESSING CRASH: Stride parameters breach physical multi-threading alignments.");
+    }
+}
+
+allocateHighPerformanceCore();

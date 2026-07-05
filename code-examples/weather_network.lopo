@@ -1,0 +1,56 @@
+# Global data array tracking regional weather patterns directly
+define activeClimateStations = [
+    { zoneId: 101, name: "Northern-Alpine-Summit", pressureHpa: 1012, alertBufferDays: 4 },
+    { zoneId: 202, name: "Coastal-Monsoon-Bay",    pressureHpa: 998,  alertBufferDays: 2 },
+    { zoneId: 303, name: "Central-Arid-Plains",    pressureHpa: 1005, alertBufferDays: 7 }
+];
+
+func processStationClimateMetrics() {
+    show("=== National Meteorological Climate Grid Terminal ===");
+    show("--- Live Atmospheric Sensor Monitoring Matrix ---");
+    
+    for station in activeClimateStations {
+        show("Station ID: [" + toStr(station.zoneId) + "] | " + station.name + " | Pressure: " + toStr(station.pressureHpa) + " hPa | Active Window: " + toStr(station.alertBufferDays) + " Days");
+    }
+    show("--------------------------------------------------");
+    
+    define targetCode = num(ask("Enter Station ID to flag for localized weather warning: "));
+    define arrayIndex = -1;
+    define counter = 0;
+    define totalStations = len(activeClimateStations);
+    
+    while (counter < totalStations) {
+        if (num(activeClimateStations[counter].zoneId) == targetCode) {
+            arrayIndex = counter;
+        }
+        counter = counter + 1;
+    }
+    
+    if (arrayIndex != -1) {
+        define currentStation = activeClimateStations[arrayIndex];
+        show("Target Synchronized: Modifying metrics for " + currentStation.name);
+        
+        define daysToDeduct = num(ask("Enter number of warning window cycles to draw down: "));
+        define currentBufferNum = num(currentStation.alertBufferDays);
+        define atmosphericPressureNum = num(currentStation.pressureHpa);
+        
+        if (daysToDeduct > 0 and daysToDeduct <= currentBufferNum) {
+            # Update data matrix element directly
+            currentStation.alertBufferDays = currentBufferNum - daysToDeduct;
+            
+            show("============== WEATHER CLEARANCE ALERT SLIP ==============");
+            show(" Monitoring Station:   " + currentStation.name);
+            show(" Warning Cycles Drawn: " + toStr(daysToDeduct) + " Operational Days");
+            show(" Current Barometer:    " + toStr(atmosphericPressureNum) + " hPa Barometric Index");
+            show("==========================================================");
+            show("Updated remaining monitoring buffer window: " + toStr(currentStation.alertBufferDays));
+        } else {
+            show("STATION ERROR: Requested warning cycle scale overflows current historical buffer parameters.");
+        }
+    } else {
+        show("STATION ERROR: Station ID code could not be matched inside active registry arrays.");
+    }
+}
+
+# Run the execution pipeline
+processStationClimateMetrics();

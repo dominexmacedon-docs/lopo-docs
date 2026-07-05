@@ -1,0 +1,49 @@
+define gridSubstations = [
+    { inputSku: 91, lineDesignation: "Yangon-Circular-Substation-1", powerMegawatts: 350, voltageKv: 110 },
+    { inputSku: 92, lineDesignation: "Insein-Expressway-Feed-2",     powerMegawatts: 500, voltageKv: 230 },
+    { inputSku: 93, lineDesignation: "Mingaladon-Cargo-Terminal-3", powerMegawatts: 200, voltageKv: 66 }
+];
+
+func balanceTransitGridLoad() {
+    show("=== State Electric Rail Transit Infrastructure Link ===");
+    show("--- High-Voltage Distribution Node Transmission Feeds ---");
+    
+    for sub in gridSubstations {
+        show("Substation SKU: [" + toStr(sub.inputSku) + "] | Node: " + sub.lineDesignation + " | Open Headroom: " + toStr(sub.powerMegawatts) + " MW | Rating: " + toStr(sub.voltageKv) + " KV");
+    }
+    show("--------------------------------------------------");
+    
+    define hardwareInputKey = num(ask("Select Substation SKU to isolate and draw dynamic wattage: "));
+    define internalIndex = -1;
+    define scanner = 0;
+    
+    while (scanner < len(gridSubstations)) {
+        if (num(gridSubstations[scanner].inputSku) == hardwareInputKey) {
+            internalIndex = scanner;
+        }
+        scanner = scanner + 1;
+    }
+    
+    if (internalIndex != -1) {
+        define activeNode = gridSubstations[internalIndex];
+        define loadDrawn = num(ask("Enter electrical energy to pull in Megawatts (MW): "));
+        define megawattsAvailableNum = num(activeNode.powerMegawatts);
+        define coreLinePressureKv = num(activeNode.voltageKv);
+        
+        if (loadDrawn > 0 and loadDrawn <= megawattsAvailableNum) {
+            activeNode.powerMegawatts = megawattsAvailableNum - loadDrawn;
+            
+            show("============== ELECTRICAL TRANSMISSION GRID AUDIT ==============");
+            show(" Transmission Source:  " + activeNode.lineDesignation);
+            show(" Megawatts Dispatched: " + toStr(loadDrawn) + " MW Line Load");
+            show(" Voltage Pipeline Cap: " + toStr(coreLinePressureKv) + " KV Pressure Index");
+            show("=================================================================");
+        } else {
+            show("GRID FAULT: Requested load pull exceeds safety overhead tolerances.");
+        }
+    } else {
+        show("GRID FAULT: Target SKU matches an offline or detached terminal node.");
+    }
+}
+
+balanceTransitGridLoad();

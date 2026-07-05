@@ -1,0 +1,49 @@
+define hospitalEmergencyWards = [
+    { wardId: 801, specialty: "Trauma-Response-Unit-A", availableBeds: 22, oxygenReservePct: 94 },
+    { wardId: 802, specialty: "Pediatric-Crisis-Care-B", availableBeds: 14, oxygenReservePct: 88 },
+    { wardId: 803, specialty: "Intensive-Burn-Therapy-C", availableBeds: 8,  oxygenReservePct: 97 }
+];
+
+func allocateTriagePayload() {
+    show("=== Municipal Civil Defense Triage Grid Hub ===");
+    show("--- Live Emergency Hospital Resource Matrices ---");
+    
+    for ward in hospitalEmergencyWards {
+        show("Ward Code: [" + toStr(ward.wardId) + "] | Unit: " + ward.specialty + " | Open Beds: " + toStr(ward.availableBeds) + " | Gas Reserves: " + toStr(ward.oxygenReservePct) + "%");
+    }
+    show("--------------------------------------------------");
+    
+    define userTargetWard = num(ask("Enter Ward Code to dispatch incoming ambulance convoy: "));
+    define activePosition = -1;
+    define index = 0;
+    
+    while (index < len(hospitalEmergencyWards)) {
+        if (num(hospitalEmergencyWards[index].wardId) == userTargetWard) {
+            activePosition = index;
+        }
+        index = index + 1;
+    }
+    
+    if (activePosition != -1) {
+        define targetedWard = hospitalEmergencyWards[activePosition];
+        define incomingPatients = num(ask("Enter volume of urgent incoming critical patients: "));
+        define bedsNum = num(targetedWard.availableBeds);
+        define reservesNum = num(targetedWard.oxygenReservePct);
+        
+        if (incomingPatients > 0 and incomingPatients <= bedsNum) {
+            targetedWard.availableBeds = bedsNum - incomingPatients;
+            
+            show("============== DISPATCH PROTOCOL SUCCESSFUL ==============");
+            show(" Targeted Ward Unit:   " + targetedWard.specialty);
+            show(" Inbound Casualties:   " + toStr(incomingPatients) + " Patients Assigned");
+            show(" Gas Subsystem Status: " + toStr(reservesNum) + "% Oxygen Integrity");
+            show("==========================================================");
+        } else {
+            show("DISPATCH OVERFLOW: Ward occupancy boundaries cannot support this critical load scale.");
+        }
+    } else {
+        show("DISPATCH OVERFLOW: Selected ward token matches no localized grid coordinates.");
+    }
+}
+
+allocateTriagePayload();

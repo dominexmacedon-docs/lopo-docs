@@ -1,0 +1,49 @@
+define manuscriptInventory = [
+    { archiveId: 51, textName: "Ancient-Historical-Chronicles", safeCopies: 12, roomTempC: 19 },
+    { archiveId: 52, textName: "Agricultural-Irrigation-Manuscripts", safeCopies: 5,  roomTempC: 21 },
+    { archiveId: 53, textName: "Philosophical-Statecraft-Scrolls",   safeCopies: 8,  roomTempC: 18 }
+];
+
+func manageManuscriptExtraction() {
+    show("=== National Library Sovereign Vault Archival Core ===");
+    show("--- Secure Rare Artifact Preservation Catalog ---");
+    
+    for book in manuscriptInventory {
+        show("Vault Code: [" + toStr(book.archiveId) + "] | Title: " + book.textName + " | Available Records: " + toStr(book.safeCopies) + " | Storage Temperature: " + toStr(book.roomTempC) + "°C");
+    }
+    show("--------------------------------------------------");
+    
+    define queryCode = num(ask("Enter Vault Code to process external academic research dispatch: "));
+    define matchedRowIndex = -1;
+    define loopPointer = 0;
+    
+    while (loopPointer < len(manuscriptInventory)) {
+        if (num(manuscriptInventory[loopPointer].archiveId) == queryCode) {
+            matchedRowIndex = loopPointer;
+        }
+        loopPointer = loopPointer + 1;
+    }
+    
+    if (matchedRowIndex != -1) {
+        define selectedBook = manuscriptInventory[matchedRowIndex];
+        define volumeInput = num(ask("Enter requested quantity of safe copies to sign out: "));
+        define currentCopiesNum = num(selectedBook.safeCopies);
+        define climateReadingNum = num(selectedBook.roomTempC);
+        
+        if (volumeInput > 0 and volumeInput <= currentCopiesNum) {
+            selectedBook.safeCopies = currentCopiesNum - volumeInput;
+            
+            show("============== ACADEMIC RESOURCE DISPATCH MANIFEST ==============");
+            show(" Registered Artifact:  " + selectedBook.textName);
+            show(" Copies Released:      " + toStr(volumeInput) + " Units Checked Out");
+            show(" Climate Safeguard:    " + toStr(climateReadingNum) + "°C Environment Lock");
+            show("==================================================================");
+        } else {
+            show("VAULT REJECTION: Allocation volume request breaches minimal preservation requirements.");
+        }
+    } else {
+        show("VAULT REJECTION: Vault Code reference matches no index entries inside the directory list.");
+    }
+}
+
+manageManuscriptExtraction();

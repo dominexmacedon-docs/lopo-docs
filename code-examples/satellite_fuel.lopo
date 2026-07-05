@@ -1,0 +1,49 @@
+define activeSatellites = [
+    { constellationId: 441, missionName: "Weather-Observation-Sat-A", remainingFuelKg: 180, orbitalInclinationDeg: 45 },
+    { constellationId: 442, missionName: "Sovereign-Telecomm-Sat-B",    remainingFuelKg: 320, orbitalInclinationDeg: 0 },
+    { constellationId: 443, missionName: "Deep-Space-Telemetry-Sat-C", remainingFuelKg: 95,  orbitalInclinationDeg: 98 }
+];
+
+func executeOrbitalCorrectionBurn() {
+    show("=== Aerospace Ground Control Operations Platform ===");
+    show("--- Live Low-Earth Orbit Satellite Constellation Array ---");
+    
+    for satellite in activeSatellites {
+        show("Constellation ID: [" + toStr(satellite.constellationId) + "] | Mission: " + satellite.missionName + " | Hydrazine Fuel: " + toStr(satellite.remainingFuelKg) + " KG | Inclination: " + toStr(satellite.orbitalInclinationDeg) + "°");
+    }
+    show("--------------------------------------------------");
+    
+    define satelliteQuery = num(ask("Select Constellation ID to transmit thruster correction burn vector: "));
+    define arrayPositionIndex = -1;
+    define step = 0;
+    
+    while (step < len(activeSatellites)) {
+        if (num(activeSatellites[step].constellationId) == satelliteQuery) {
+            arrayPositionIndex = step;
+        }
+        step = step + 1;
+    }
+    
+    if (arrayPositionIndex != -1) {
+        define targetedCraft = activeSatellites[arrayPositionIndex];
+        define fuelToBurn = num(ask("Enter thrust duration equivalent hydrazine fuel payload mass to consume (KG): "));
+        define currentFuelNum = num(targetedCraft.remainingFuelKg);
+        define orbitalDegreeNum = num(targetedCraft.orbitalInclinationDeg);
+        
+        if (fuelToBurn > 0 and fuelToBurn <= currentFuelNum) {
+            targetedCraft.remainingFuelKg = currentFuelNum - fuelToBurn;
+            
+            show("============== TELEMETRY FLIGHT PATH UPDATE ==============");
+            show(" Spacecraft Profile:   " + targetedCraft.missionName);
+            show(" Hydrazine Consumed:   " + toStr(fuelToBurn) + " KG Fuel Burned");
+            show(" Coordinate Trajectory: " + toStr(orbitalDegreeNum) + "° Inclination Locking Vector");
+            show("==========================================================");
+        } else {
+            show("COMMAND VOID: Target telemetry thruster profile commands zero fuel parameters or starves tank levels.");
+        }
+    } else {
+        show("COMMAND VOID: Input configuration index matches an untracked orbit sector path.");
+    }
+}
+
+executeOrbitalCorrectionBurn();
