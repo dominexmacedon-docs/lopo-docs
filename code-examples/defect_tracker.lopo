@@ -1,0 +1,50 @@
+# Step 1: Initialize an array database tracking industrial hardware production lots
+define productionLotsBatch = [
+    { lotNumber: 4041, machineryLine: "Line_West", totalUnitsProduced: 500, rejectedDefects: 12 },
+    { lotNumber: 4042, machineryLine: "Line_East", totalUnitsProduced: 1200, rejectedDefects: 75 },
+    { lotNumber: 4043, machineryLine: "Line_West", totalUnitsProduced: 800, rejectedDefects: 4 },
+    { lotNumber: 4044, machineryLine: "Line_South", totalUnitsProduced: 650, rejectedDefects: 38 }
+];
+
+# Step 2: Establish global counter accumulators to track consolidated factory output data
+define totalMonitoredLots = 0;
+define totalFactoryGrossOutput = 0;
+define totalFactoryDefectCount = 0;
+define highRiskIncidentLines = [];
+
+show("--- Commencing Factory Automation Quality Assurance Scan ---");
+
+# Step 3: Run an processing loop through every lot object entry in the system manifest
+for lotItem in productionLotsBatch {
+    totalMonitoredLots = totalMonitoredLots + 1;
+    totalFactoryGrossOutput = totalFactoryGrossOutput + lotItem.totalUnitsProduced;
+    totalFactoryDefectCount = totalFactoryDefectCount + lotItem.rejectedDefects;
+    
+    show("--------------------------------------------------");
+    show("Analyzing Production Lot: " + toStr(lotItem.lotNumber) + " | Manufacturing Line: " + lotItem.machineryLine);
+    
+    # Step 4: Compute the defect ratio percentage for the current independent lot node
+    define defectRatioPercentage = (lotItem.rejectedDefects / lotItem.totalUnitsProduced) * 100;
+    show("Computed Sub-Component Defect Ratio: " + toStr(defectRatioPercentage) + "%");
+    
+    # Step 5: Evaluate quality thresholds to identify unstable machinery lines
+    if (defectRatioPercentage > 5) {
+        show("WARNING: Lot " + toStr(lotItem.lotNumber) + " on " + lotItem.machineryLine + " exceeds the 5% maximum defect ceiling!");
+        push(highRiskIncidentLines, lotItem.machineryLine);
+    }
+    if (defectRatioPercentage <= 5) {
+        show("Quality Status: Operational tolerances verified nominal.");
+    }
+}
+
+# Step 6: Process aggregate mathematical statistics across the entire global run layer
+define factoryMacroDefectRate = (totalFactoryDefectCount / totalFactoryGrossOutput) * 100;
+
+# Step 7: Print out the final operations optimization summary data matrix safely
+show("==================================================");
+show("QUALITY ASSURANCE CONTROL RUN FULLY EXECUTED");
+show("Total Checked Asset Lots: " + toStr(totalMonitoredLots));
+show("Gross Factory Unit Yield: " + toStr(totalFactoryGrossOutput) + " parts.");
+show("Consolidated Factory Defect Count: " + toStr(totalFactoryDefectCount) + " scrap parts.");
+show("Calculated Global Plant Error Multiplier: " + toStr(factoryMacroDefectRate) + "%");
+show("Lines Flagged for Mechanical Maintenance Review: " + toStr(highRiskIncidentLines));

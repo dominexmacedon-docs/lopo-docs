@@ -1,0 +1,50 @@
+# Create a blueprint to capture standalone unique attributes for individual books
+entity Book {
+    init(title, author) {
+        self.title = title;
+        self.author = author;
+        self.isAvailable = true;
+    }
+
+    markAsBorrowed() {
+        self.isAvailable = false;
+    }
+}
+
+# Create a master tracker object entity to simulate library collection records
+entity Library {
+    init() {
+        self.catalog = [];
+    }
+
+    addBookToCatalog(bookObj) {
+        push(self.catalog, bookObj);
+        show("Registered: '" + bookObj.title + "' written by " + bookObj.author);
+    }
+
+    displayCatalogStatus() {
+        show("--- Current Library Catalog Registry Status ---");
+        for b in self.catalog {
+            define status = "Available";
+            if (b.isAvailable == false) {
+                status = "Checked Out / Borrowed";
+            }
+            show("Book: " + b.title + " | Status: " + status);
+        }
+    }
+}
+
+# Execution instructions and object linking validations
+define lib = new Library();
+
+define b1 = new Book("The Lopo Manual", "Dominex Macedon");
+define b2 = new Book("Compiler Design Basics", "Tech Authors");
+
+lib.addBookToCatalog(b1);
+lib.addBookToCatalog(b2);
+
+# Simulate a user borrowing a book by modifying instance attributes directly
+b1.markAsBorrowed();
+
+# Output the total system logs tracking structural configurations
+lib.displayCatalogStatus();

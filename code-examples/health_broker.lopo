@@ -1,0 +1,81 @@
+# Step 1: Foundational blueprint layout for a generic network server asset container
+entity ClusterNode {
+    init(nodeId, networkIp) {
+        self.nodeId = nodeId;
+        self.networkIp = networkIp;
+        self.isActive = true;
+    }
+}
+
+# Step 2: Specialized child monitor inheriting structural fields from ClusterNode
+entity NodeHealthMonitor inherits ClusterNode {
+    init(nodeId, networkIp, latencyThresholdMs) {
+        # Populate explicit properties linked directly to this inherited tracking frame
+        self.nodeId = nodeId;
+        self.networkIp = networkIp;
+        self.isActive = true;
+        self.latencyThresholdMs = latencyThresholdMs;
+        self.incidentTicketHistory = [];
+        self.failedHeartbeatsCount = 0;
+
+        # Explicitly pull down functional instance references from an instantiated parent snapshot
+        define parentInstance = new ClusterNode(nodeId, networkIp);
+        
+        # Attach behavior as a function expression inside init to support return syntax cleanly
+        self.evaluatePingPacket = func(packetStreamObj) {
+            show("Analyzing network telemetry packet stream data for tracking ID: " + self.nodeId);
+            
+            # Enforce error boundary safety using the language's native exception isolation tools
+            do {
+                # Extract properties and evaluate latency parameters against threshold metrics
+                if (packetStreamObj.latency > self.latencyThresholdMs) {
+                    show("LATENCY EXCESSIVE: Latency response clocked at: " + toStr(packetStreamObj.latency) + " ms");
+                    self.failedHeartbeatsCount = self.failedHeartbeatsCount + 1;
+                    push(self.incidentTicketHistory, "LATENCY_BREACH_ALERT");
+                }
+                if (packetStreamObj.latency <= self.latencyThresholdMs) {
+                    show("PONG received: Connectivity state healthy on channel: " + self.networkIp);
+                }
+            }
+            track {
+                show("HARDWARE FAULT: Corrupted memory frame intercepted from cluster asset node.");
+                self.isActive = false;
+                push(self.incidentTicketHistory, "CRITICAL_HARDWARE_FAILURE");
+            }
+
+            return self.isActive;
+        };
+    }
+}
+
+# Step 3: Standalone asynchronous function managing parallel network broker handshakes
+async func dispatchMacroHeartbeatCheck(monitorEntity, dataInputPayload) {
+    show("Spawning concurrent non-blocking audit sequence for node: " + monitorEntity.nodeId);
+    
+    # Extract the bound instance functional routine out of the target object property container
+    define analyticalEvaluator = monitorEntity.evaluatePingPacket;
+    
+    # Invoke the callback frame passing the input packet data dictionary object
+    define statusOutcome = analyticalEvaluator(dataInputPayload);
+    
+    show("Handshake verification cycle completed. Current operational status: " + toStr(statusOutcome));
+}
+
+# Step 4: System configuration orchestration using async pipeline execution flows
+async func runMasterHealthOrchestrator() {
+    show("--- Launching Enterprise Cluster Network Diagnostic Terminal ---");
+    
+    define regionalMonitorA = new NodeHealthMonitor("US-EAST-NODE-01", "10.0.4.15", 150);
+    define regionalMonitorB = new NodeHealthMonitor("EU-WEST-NODE-02", "192.168.1.99", 150);
+    
+    # Process concurrent check calls cleanly utilizing the language's await parameter hooks
+    await dispatchMacroHeartbeatCheck(regionalMonitorA, { latency: 85, telemetryMeta: "PROD_MAIN" });
+    await dispatchMacroHeartbeatCheck(regionalMonitorB, { latency: 310, telemetryMeta: "FAILOVER_BACKUP" });
+    
+    show("==================================================");
+    show("All distributed server health queues fully resolved.");
+    show("Monitor B Compiled Incident Logs: " + toStr(regionalMonitorB.incidentTicketHistory));
+}
+
+# Execute global microservice orchestrator logic
+runMasterHealthOrchestrator();

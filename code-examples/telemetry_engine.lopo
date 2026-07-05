@@ -1,0 +1,57 @@
+show("--- Launching Enterprise Telemetry Monitoring Framework ---");
+
+# Step 1: Request active configuration safety boundaries from the terminal operator
+define highVibrationThreshold = num(ask("Enter maximum acceptable metric vibration cutoff limit: "));
+
+# Step 2: Set up a comprehensive repository mimicking an active sensor array packet queue
+define telemetryDataStream = [
+    { readingId: 7001, node: "Sensor_North", velocity: 45, vibration: 12 },
+    { readingId: 7002, node: "Sensor_North", velocity: 95, vibration: 88 },
+    { readingId: 7003, node: "Sensor_South", velocity: 110, vibration: 104 },
+    { readingId: 7004, node: "Sensor_East", velocity: 30, vibration: 5 }
+];
+
+# Step 3: Establish cumulative monitoring trackers inside global workspace environments
+define operationalNodeCount = 0;
+define totalAnomalyDetections = 0;
+define abnormalNodes = [];
+
+# Step 4: Launch an processing loop to parse every network packet object in sequence
+for telemetryPacket in telemetryDataStream {
+    operationalNodeCount = operationalNodeCount + 1;
+    
+    show("--------------------------------------------------");
+    show("Parsing Telemetry Log ID: " + toStr(telemetryPacket.readingId) + " | Station: " + telemetryPacket.node);
+    
+    # Step 5: Execute diagnostic multi-factor filter evaluations
+    define speedLimitExceeded = false;
+    define vibrationLimitExceeded = false;
+    
+    if (telemetryPacket.velocity > 90) {
+        speedLimitExceeded = true;
+    }
+    if (telemetryPacket.vibration > highVibrationThreshold) {
+        vibrationLimitExceeded = true;
+    }
+    
+    # Step 6: Process compound structural branching to isolate critical hardware failures
+    if (speedLimitExceeded == true) {
+        if (vibrationLimitExceeded == true) {
+            show("CRITICAL RISK CRITERIA MET: Destructive harmonics detected on " + telemetryPacket.node);
+            totalAnomalyDetections = totalAnomalyDetections + 1;
+            push(abnormalNodes, telemetryPacket.node);
+        }
+    }
+    
+    # Handle normal operating range logging conditions safely
+    if (vibrationLimitExceeded == false) {
+        show("Station Diagnostics: Thermal and stress footprints within normalized parameters.");
+    }
+}
+
+# Step 7: Render aggregate summary performance matrices directly to the console frame
+show("==================================================");
+show("FINAL STREAM PROCESSING SYSTEM CONCLUDED");
+show("Total Stream Data Packets Scanned: " + toStr(operationalNodeCount));
+show("Total Flagged Critical Incidents Evaluated: " + toStr(totalAnomalyDetections));
+show("Full Fault Array Registry Summary: " + toStr(abnormalNodes));

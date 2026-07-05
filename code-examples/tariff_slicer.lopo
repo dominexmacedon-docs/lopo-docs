@@ -1,0 +1,61 @@
+# Step 1: Blueprint managing continuous raw trade manifest import metrics
+entity CustomsImportBuffer {
+    init(seaportRegistryCode) {
+        self.seaportRegistryCode = seaportRegistryCode;
+        # Array containing assessed cargo valuation units ($ thousands) for arriving vessels
+        self.manifestValuationsHistory = [150.5, 420.0, 85.4, 610.2, 330.9, 1200.5, 95.0, 410.6, 780.1, 230.4];
+        
+        # Define a function expression inside init to support return syntax cleanly
+        self.extractManifestSegments = func(startIndex, endIndex, stepFactor) {
+            show("Sovereign Custom Engine: Extracting manifest records for cross-border audit checking.");
+            
+            # Pull segment arrays cleanly using the parser's native multi-colon slicing syntax: [start:end:step]
+            define windowedCargoSegment = self.manifestValuationsHistory[startIndex:endIndex:stepFactor];
+            
+            return windowedCargoSegment;
+        };
+    }
+}
+
+# Step 2: Core regulatory utility coordinating macro trade tax processing
+entity TradeTariffEvaluator {
+    init() {
+        self.aggregatedTariffRevenueCollected = 0.0;
+        self.processedVesselsCount = 0;
+    }
+
+    assessCustomsDutyRate(customsBufferEntity, startPos, endPos) {
+        # Fetch every second manifest entry across a targeted window slice for cargo category auditing
+        define segmentExtractor = customsBufferEntity.extractManifestSegments;
+        define auditedCargoValues = segmentExtractor(startPos, endPos, 2);
+        
+        show("Audited Cargo Valuation Sample Matrix (in thousands): " + toStr(auditedCargoValues));
+        
+        define localValuationSum = 0.0;
+        define recordItemsCount = 0;
+        
+        # Iterate sequentially through the dynamically sliced manifest segment array
+        for cargoValue in auditedCargoValues {
+            localValuationSum = localValuationSum + cargoValue;
+            recordItemsCount = recordItemsCount + 1;
+        }
+        
+        # Apply standard sovereign trade tax multiplier (e.g., 8.5% import tariff rate)
+        define macroTariffRateMultiplier = 0.085;
+        define calculatedDutyRevenue = localValuationSum * macroTariffRateMultiplier;
+        
+        # Update national administrative accounts tracking global trade metrics
+        self.aggregatedTariffRevenueCollected = self.aggregatedTariffRevenueCollected + calculatedDutyRevenue;
+        self.processedVesselsCount = self.processedVesselsCount + 1;
+        
+        show("Customs Duty Assessment Finalized.");
+        show("Assessed Valuation Total: $" + toStr(localValuationSum) + "k | Sovereign Tariff Revenue Net: $" + toStr(calculatedDutyRevenue) + "k");
+    }
+}
+
+# Step 3: Instantiate trade gateways and audit specific container series boundaries
+define maritimeGateway = new CustomsImportBuffer("PORT_OF_YANGON_TERMINAL_3");
+define customsAuditor = new TradeTariffEvaluator();
+
+# Audit cargo manifests from position indices 0 to 7, stepping across every other container item
+customsAuditor.assessCustomsDutyRate(maritimeGateway, 0, 7);

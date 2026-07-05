@@ -1,0 +1,35 @@
+# Step 1: Initialize an array collection storing structured student object data maps
+define studentRosters = [
+    { studentId: 501, initialScore: 92, statusTier: "Unassigned" },
+    { studentId: 502, initialScore: 74, statusTier: "Unassigned" },
+    { studentId: 503, initialScore: 58, statusTier: "Unassigned" }
+];
+
+show("--- Initiating Academic Performance Tier Classification ---");
+
+# Step 2: Iterate sequentially through every dictionary node stored inside the roster array
+for candidate in studentRosters {
+    
+    show("--------------------------------------------------");
+    show("Analyzing Academic Student Identification Token: " + toStr(candidate.studentId));
+    show("Baseline Grade Point Parameter Extracted: " + toStr(candidate.initialScore));
+    
+    # Step 3: Run comprehensive logic evaluation boundaries to compute correct target classifications
+    if (candidate.initialScore >= 90) {
+        candidate.statusTier = "Tier Alpha / Distinguished Scholar";
+    }
+    if (candidate.initialScore >= 70) {
+        if (candidate.initialScore < 90) {
+            candidate.statusTier = "Tier Beta / Satisfactory Academic Standing";
+        }
+    }
+    if (candidate.initialScore < 70) {
+        candidate.statusTier = "Tier Gamma / Academic Action Support Required";
+    }
+    
+    # Step 4: Render the finalized text outcome configurations directly to the system console frame
+    show("Assigned Performance Milestone Status: " + candidate.statusTier);
+}
+
+show("--------------------------------------------------");
+show("Roster batch processing sequence fully concluded.");

@@ -1,0 +1,54 @@
+# Global functional pipeline extracting specific urgent legal categories out of the docket matrix
+func extractHighPriorityAppeals(caseUrgencyScoresArray, lowIndexBoundary, highIndexBoundary) {
+    show("Sovereign Court Protocol: Scanning historical filings array matrix for fast-track processing.");
+    
+    # Isolate records cleanly utilizing the multi-colon slicing grammar layout: [start:end:step]
+    # Stepping across every other record slot to sample divergent litigation branches
+    define prioritizedSubsegment = caseUrgencyScoresArray[lowIndexBoundary:highIndexBoundary:2];
+    
+    return prioritizedSubsegment;
+}
+
+# Step 1: Structural management container for supreme court calendar operations
+entity JudicialDocketManager {
+    init(jurisdictionCode) {
+        self.jurisdictionCode = jurisdictionCode;
+        # Array containing priority index scores (1-100 scale) for pending sovereign appeals
+        self.supremeAppealsPriorityLogs = [88, 45, 92, 31, 74, 99, 12, 65, 81, 53];
+        self.totalCasesReviewed = 0;
+        self.expeditedTracksAssigned = 0;
+    }
+
+    evaluateSeasonalCalendar(startPositionMarker, endPositionMarker) {
+        show("--- Initiating Supreme Constitutional Court Docket Allocation Assessment ---");
+        
+        # Call the standalone global function to pull down the filtered array chunk
+        define targetFilingChunk = extractHighPriorityAppeals(self.supremeAppealsPriorityLogs, startPositionMarker, endPositionMarker);
+        show("Isolated Case Priority Index Metrics Matrix: " + toStr(targetFilingChunk));
+        
+        for casePriorityRating in targetFilingChunk {
+            show("Analyzing Litigation Asset Level Score: " + toStr(casePriorityRating));
+            self.totalCasesReviewed = self.totalCasesReviewed + 1;
+            
+            # Route processing configurations based on localized priority scoring thresholds
+            start (casePriorityRating) {
+                race (casePriorityRating >= 75) {
+                    show("CONSTITUTIONAL EMERGENCY: Expedited hearing date assigned within 48-hour window.");
+                    self.expeditedTracksAssigned = self.expeditedTracksAssigned + 1;
+                }
+                race (casePriorityRating < 75) {
+                    show("DOCKET REASSIGNMENT: Case returned to standard regional appeals court rotation tracks.");
+                }
+            }
+        }
+        
+        show("==================================================");
+        show("Seasonal appraisal sequence closed. Total Expedited High-Court Actions: " + toStr(self.expeditedTracksAssigned));
+    }
+}
+
+# Step 3: Instantiation of the judicial framework driver script
+define unionJudicialTribunal = new JudicialDocketManager("CONSTITUTIONAL_TRIBUNAL_UNION");
+
+# Audit pending appeals recorded between array index boundaries 0 and 9
+unionJudicialTribunal.evaluateSeasonalCalendar(0, 9);

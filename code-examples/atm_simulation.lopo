@@ -1,0 +1,48 @@
+# Step 1: Set up running accounts tracking configuration defaults inside global memory spaces
+define accountBalance = 500;
+define isRunning = true;
+
+show("Welcome to the Secure Lopo Core Bank ATM Terminal");
+
+# Step 2: Fire continuous interface loops until processing flags change value states
+while (isRunning) {
+    show("--- MAIN MENU ---");
+    show("1. View Balance | 2. Deposit Funds | 3. Withdraw Cash | 4. Exit");
+    
+    # Intercept input values via interactive prompts, transforming them directly into integers
+    define action = num(ask("Enter your choice option number (1-4): "));
+    
+    # Process option 1 path: Balance extraction and conversion log displays
+    if (action == 1) {
+        show("Your current secure ledger account balance is: $" + toStr(accountBalance));
+    }
+    
+    # Process option 2 path: Cash aggregation procedures
+    if (action == 2) {
+        define depositAmt = num(ask("Enter cash dollar value amount to deposit: "));
+        accountBalance = accountBalance + depositAmt;
+        show("Success! New ledger balance updated to: $" + toStr(accountBalance));
+    }
+    
+    # Process option 3 path: Fund deductions utilizing conditional safety thresholds
+    if (action == 3) {
+        define withdrawAmt = num(ask("Enter cash dollar value amount to withdraw: "));
+        
+        # Verify account capabilities to protect against negative system balances
+        if (withdrawAmt > accountBalance) {
+            show("ERROR: Transaction declined. Insufficient funds available.");
+        }
+        if (withdrawAmt <= accountBalance) {
+            accountBalance = accountBalance - withdrawAmt;
+            show("Dispensing cash... Remaining account balance: $" + toStr(accountBalance));
+        }
+    }
+    
+    # Process option 4 path: Lifecycle exit routines
+    if (action == 4) {
+        show("Ending terminal connection session... Please remove your card.");
+        isRunning = false;
+    }
+}
+
+show("Thank you for choosing Lopo Core Banking Services. Goodbye!");

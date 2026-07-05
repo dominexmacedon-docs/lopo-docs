@@ -1,0 +1,28 @@
+# Step 1: Set up a comprehensive collection tracking active delivery fleet vehicles
+define deliveryFleet = [
+    { truckId: "T-01", mileage: 45000, condition: "Excellent" },
+    { truckId: "T-02", mileage: 120000, condition: "Service Required" },
+    { truckId: "T-03", mileage: 88000, condition: "Good" }
+];
+
+show("--- Automated Fleet Dispatch Mileage Diagnostics ---");
+
+# Step 2: Establish a numeric threshold benchmark to trigger specific warning messages
+define maintenanceBoundary = 80000;
+
+# Step 3: Iterate through every fleet element record saved in the data framework
+for truck in deliveryFleet {
+    
+    show("--------------------------------------------------");
+    show("Analyzing Unit: " + truck.truckId + " | Current Odometer: " + toStr(truck.mileage));
+    
+    # Step 4: Apply relational comparison operators against the maintenance threshold unit
+    if (truck.mileage >= maintenanceBoundary) {
+        show("ALERT: Unit " + truck.truckId + " has exceeded the tracking limit of " + toStr(maintenanceBoundary) + " miles!");
+        show("Current Status Classification: " + truck.condition);
+    }
+    
+    if (truck.mileage < maintenanceBoundary) {
+        show("Status Check: Operational baseline satisfactory. No immediate service action required.");
+    }
+}

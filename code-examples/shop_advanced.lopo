@@ -1,0 +1,62 @@
+entity Item {
+    init(name, price) {
+        self.name = name;
+        self.price = price;
+    }
+}
+
+entity ShoppingCart {
+    init() {
+        self.items = [];
+        self.total = 0;
+    }
+
+    addItem(item) {
+        push(self.items, item);
+        self.total = self.total + item.price;
+        show("Added " + item.name + " to the cart.");
+    }
+
+    calculateTotal() {
+        if (self.total > 100) {
+            show("Discount applied (10% off items over 100)!");
+            self.total = self.total * 0.9;
+        }
+    }
+
+    checkout() {
+        show("--- Receipt ---");
+        for item in self.items {
+            show(item.name + ": $" + toStr(item.price));
+        }
+        
+        self.calculateTotal();
+        
+        show("Final Total: $" + toStr(self.total));
+        show("Thank you for shopping with us!");
+    }
+}
+
+# Create a shopping cart instance
+define cart = new ShoppingCart();
+
+# Prompt the user for the first item's details
+define name1 = ask("Enter name for item 1: ");
+define price1 = num(ask("Enter price for item 1: "));
+define item1 = new Item(name1, price1);
+cart.addItem(item1);
+
+# Prompt the user for the second item's details
+define name2 = ask("Enter name for item 2: ");
+define price2 = num(ask("Enter price for item 2: "));
+define item2 = new Item(name2, price2);
+cart.addItem(item2);
+
+# Prompt the user for the third item's details
+define name3 = ask("Enter name for item 3: ");
+define price3 = num(ask("Enter price for item 3: "));
+define item3 = new Item(name3, price3);
+cart.addItem(item3);
+
+# Finalize the transaction and display the receipt
+cart.checkout();

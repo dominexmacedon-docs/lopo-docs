@@ -1,0 +1,17 @@
+show("--- Lopo Spatial Geometry Dimension Calculator ---");
+
+# Step 1: Intercept dimension numbers by nesting ask requests inside parsing cast functions
+define rectWidth = num(ask("Enter rectangle structural width dimension unit value: "));
+define rectHeight = num(ask("Enter rectangle structural height dimension unit value: "));
+
+# Step 2: Calculate operational mathematical fields utilizing standard arithmetic rules
+define calculatedArea = rectWidth * rectHeight;
+define calculatedPerimeter = 2 * (rectWidth + rectHeight);
+
+show("--------------------------------------------------");
+show("Calculated Metric Results Summary Log:");
+
+# Step 3: Format and cast numeric balances into text streams to print results
+show("Geometric Width: " + toStr(rectWidth) + " | Geometric Height: " + toStr(rectHeight));
+show("Computed Two-Dimensional Surface Area: " + toStr(calculatedArea) + " square units");
+show("Computed Boundary Perimeter Distance: " + toStr(calculatedPerimeter) + " linear units");

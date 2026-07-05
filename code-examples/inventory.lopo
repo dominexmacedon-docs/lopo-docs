@@ -1,0 +1,21 @@
+# Step 1: Initialize an array containing object elements representing product states
+define products = [
+    { name: "Apples", stock: 50 },
+    { name: "Bananas", stock: 8 },
+    { name: "Oranges", stock: 3 },
+    { name: "Mangoes", stock: 15 }
+];
+
+# Step 2: Print a literal header string to indicate the beginning of the diagnostic check
+show("Checking inventory for low stock items (less than 10)...");
+
+# Step 3: Launch a sequencing collection loop to parse every item inside the array
+for prod in products {
+    
+    # Step 4: Compare the current object's stock property against the limit criteria threshold
+    if (prod.stock < 10) {
+        
+        # Step 5: Format and print a customized low-stock warning using string-cast conversions
+        show("ALERT: " + prod.name + " is low on stock! Only " + toStr(prod.stock) + " left.");
+    }
+}

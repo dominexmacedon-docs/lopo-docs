@@ -1,0 +1,87 @@
+# Step 1: Base abstraction tracking federal election data registries
+entity CentralElectionRegistry {
+    init(commissionCode, baselineRegisteredVoters) {
+        self.commissionCode = commissionCode;
+        self.baselineRegisteredVoters = baselineRegisteredVoters;
+        self.totalValidBallotsCounted = 0;
+
+        # Define internal updates inside init to bind function scope cleanly to self
+        self.accumulateNationalTally = func(certifiedVotesCount) {
+            self.totalValidBallotsCounted = self.totalValidBallotsCounted + certifiedVotesCount;
+            show("National Registry Synchronized: Verified central ballot cache increased by: " + toStr(certifiedVotesCount));
+        };
+    }
+}
+
+# Step 2: Child system specialized to parse and validate regional district counts
+entity RegionalDistrictTabulator inherits CentralElectionRegistry {
+    init(commissionCode, baselineRegisteredVoters, targetQuorumPercentage) {
+        # Populate explicit properties linked directly to this state management layer
+        self.commissionCode = commissionCode;
+        self.baselineRegisteredVoters = baselineRegisteredVoters;
+        self.totalValidBallotsCounted = 0;
+        self.targetQuorumPercentage = targetQuorumPercentage;
+        self.unverifiedBatchesQueue = [];
+
+        # Explicitly pull down functional methods from an instantiated base snapshot
+        define baseRegistrySnapshot = new CentralElectionRegistry(commissionCode, baselineRegisteredVoters);
+        self.accumulateNationalTally = baseRegistrySnapshot.accumulateNationalTally;
+    }
+
+    # Adds an unverified precinct ballot box safely to the processing queue
+    queuePrecinctBallotBox(ballotBoxMetadata) {
+        # Fallback tracking injection utilizing nullish coalescing operators (??)
+        define verifiedLocationTag = ballotBoxMetadata.precinctName ?? "Unspecified Rural Mobile Polling Station Node";
+        
+        define structuredBatchBlock = {
+            batchId: ballotBoxMetadata.batchId,
+            totalVotesInBox: ballotBoxMetadata.totalVotesInBox,
+            precinctName: verifiedLocationTag,
+            isCertified: false
+        };
+        
+        push(self.unverifiedBatchesQueue, structuredBatchBlock);
+        show("Precinct ballot payload securely logged to administrative vault: " + verifiedLocationTag);
+    }
+
+    # Processes queued ballot boxes using specialized structural start/race evaluation gates
+    executeDistrictTabulation() {
+        show("--- Commencing Sovereign Constitutional Ballot Auditing Protocol ---");
+        
+        for dynamicBatch in self.unverifiedBatchesQueue {
+            show("--------------------------------------------------");
+            show("Auditing Batch File ID: " + toStr(dynamicBatch.batchId) + " | Size: " + toStr(dynamicBatch.totalVotesInBox) + " cast ballots");
+            
+            # Execute discriminant pattern condition racing choices against voter registration caps
+            start (self.baselineRegisteredVoters) {
+                # Condition selection branch triggered if a box contains more votes than the registered population cap
+                race (self.baselineRegisteredVoters < dynamicBatch.totalVotesInBox) {
+                    show("REGISTRY INCONGRUITY DETECTED: Ballot box size exceeds precinct registration ceiling. Batch isolated for fraud review: " + dynamicBatch.precinctName);
+                }
+                # Condition selection branch confirming ballot eligibility and executing national tally aggregation
+                race (self.baselineRegisteredVoters >= dynamicBatch.totalVotesInBox) {
+                    show("REGISTRY CERTIFIED: Tabulating verified democratic assets for precinct: " + dynamicBatch.precinctName);
+                    dynamicBatch.isCertified = true;
+                    
+                    # Call parent structural update method safely via the instance pointer reference
+                    define nationalTallyTool = self.accumulateNationalTally;
+                    nationalTallyTool(dynamicBatch.totalVotesInBox);
+                }
+            }
+        }
+        
+        show("==================================================");
+        show("District election tabulation routine completed. Final Consolidated Federal Vote Count: " + toStr(self.totalValidBallotsCounted));
+    }
+}
+
+# Step 3: Run macroeconomic voting models across regional municipal divisions
+define unionElectionCommission = new RegionalDistrictTabulator("UEC-ZONE-04", 50000, 65);
+
+# Register precinct ballot batches containing incomplete details to test nullish fallback code
+unionElectionCommission.queuePrecinctBallotBox({ batchId: 10101, totalVotesInBox: 12500, precinctName: "Naypyidaw Capital Ward 3" });
+unionElectionCommission.queuePrecinctBallotBox({ batchId: 10102, totalVotesInBox: 62000, precinctName: "High-Density Urban Outpost Error Case Test" });
+unionElectionCommission.queuePrecinctBallotBox({ batchId: 10103, totalVotesInBox: 4300, precinctName: null });
+
+# Execute the central tabulation logic sequence
+unionElectionCommission.executeDistrictTabulation();

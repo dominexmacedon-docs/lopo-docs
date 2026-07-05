@@ -1,0 +1,58 @@
+# Step 1: Data blueprint storing multi-vessel import manifests
+entity MaritimeImportBuffer {
+    init(customsPortCode) {
+        self.customsPortCode = customsPortCode;
+        # Array containing trade shipment values in millions ($) passing checkpoints
+        self.declaredCargoValuations = [4.5, 12.8, 1.2, 35.0, 18.4, 9.1, 0.4, 55.2, 22.1, 7.3];
+        
+        # Use functional definitions inside init to enable safe statement execution
+        self.sliceManifestLogs = func(startIndex, endIndex, stepFactor) {
+            show("Sovereign Customs Engine: Isolating selective container metrics for audit tracking.");
+            
+            define compiledSegment = self.declaredCargoValuations[startIndex:endIndex:stepFactor];
+            return compiledSegment;
+        };
+    }
+}
+
+# Step 2: System processing global trade custom duties
+entity TariffRevenueEvaluator {
+    init() {
+        self.totalSovereignTariffRevenueNet = 0.0;
+        self.auditedManifestBlocksCount = 0;
+    }
+
+    executeCustomsAppraisal(importBufferObj, startIdx, endIdx) {
+        # Isolate targeted entries inside the manifest timeline using the bound function property
+        define logExtractor = importBufferObj.sliceManifestLogs;
+        define targetsArray = logExtractor(startIdx, endIdx, 2);
+        
+        show("Audited Cargo Manifest Chunk (Millions $): " + toStr(targetsArray));
+        
+        define localValuationAccumulator = 0.0;
+        define cargoContainersProcessed = 0;
+        
+        for cargoValue in targetsArray {
+            localValuationAccumulator = localValuationAccumulator + cargoValue;
+            cargoContainersProcessed = cargoContainersProcessed + 1;
+        }
+        
+        # Enforce standard country import tax rate adjustments (e.g., 6.5% base trade bracket)
+        define statutoryTariffRate = 0.065;
+        define taxYieldNet = localValuationAccumulator * statutoryTariffRate;
+        
+        # Update macro state records cleanly using variable assignments
+        self.totalSovereignTariffRevenueNet = self.totalSovereignTariffRevenueNet + taxYieldNet;
+        self.auditedManifestBlocksCount = self.auditedManifestBlocksCount + 1;
+        
+        show("Tax Appraisal Concluded successfully.");
+        show("Total Declared Value: $" + toStr(localValuationAccumulator) + "M | Revenue Secured: $" + toStr(taxYieldNet) + "M");
+    }
+}
+
+# Step 3: Run customs evaluations over maritime data records
+define portGateway = new MaritimeImportBuffer("PORT_OF_THILAWA_CUSTOMS");
+define centralEvaluator = new TariffRevenueEvaluator();
+
+# Isolate customs blocks between position indices 1 and 8 across every other record slot
+centralEvaluator.executeCustomsAppraisal(portGateway, 1, 8);

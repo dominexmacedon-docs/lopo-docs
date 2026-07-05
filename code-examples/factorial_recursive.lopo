@@ -1,0 +1,23 @@
+# Define a recursive function expression to find the factorial of a given integer
+define recursiveFactorial = func(n) {
+    # Establish a clear base case threshold condition to safely exit the recursion stack
+    if (n <= 1) {
+        # Halt down-stack execution paths and hand back the standard terminal scalar value
+        return 1;
+    }
+    
+    # Calculate child stack paths by subtracting 1 from the active runtime value
+    define executionResult = recursiveFactorial(n - 1);
+    
+    # Complete the stack calculation phase by multiplying the active number with the nested result
+    return n * executionResult;
+};
+
+# Select a target calculation input test value
+define targetNumber = 5;
+
+# Invoke the recursive function framework expression and intercept the result output
+define totalCalculationResult = recursiveFactorial(targetNumber);
+
+# Convert the numerical summary data safely into a display format before logging it
+show("The recursive factorial calculation result for " + toStr(targetNumber) + " is: " + toStr(totalCalculationResult));

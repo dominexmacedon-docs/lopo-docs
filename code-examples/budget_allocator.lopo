@@ -1,0 +1,88 @@
+# Step 1: Base abstraction tracking federal treasury accounts
+entity MinistryTreasury {
+    init(departmentCode, centralReserveFund) {
+        self.departmentCode = departmentCode;
+        self.centralReserveFund = centralReserveFund;
+        self.allocatedCapitalAccumulator = 0;
+
+        # Define internal updates inside init to bind function scope cleanly to self
+        self.deductTreasuryCapital = func(disbursementAmount) {
+            self.centralReserveFund = self.centralReserveFund - disbursementAmount;
+            self.allocatedCapitalAccumulator = self.allocatedCapitalAccumulator + disbursementAmount;
+            show("Treasury Ledger Updated: Central reserve allocation disbursed by: $" + toStr(disbursementAmount));
+        };
+    }
+}
+
+# Step 2: Child system managing competing regional infrastructural funding requests
+entity RegionalBudgetAllocator inherits MinistryTreasury {
+    init(departmentCode, centralReserveFund, administrativePriorityWeight) {
+        # Populate explicit properties linked directly to this state management layer
+        self.departmentCode = departmentCode;
+        self.centralReserveFund = centralReserveFund;
+        self.allocatedCapitalAccumulator = 0;
+        self.administrativePriorityWeight = administrativePriorityWeight;
+        self.projectProposalQueue = [];
+
+        # Explicitly pull down functional methods from an instantiated base snapshot
+        define baseTreasurySnapshot = new MinistryTreasury(departmentCode, centralReserveFund);
+        self.deductTreasuryCapital = baseTreasurySnapshot.deductTreasuryCapital;
+    }
+
+    # Adds a development request block safely to the national project listing array
+    queueRegionalProject(projectMetadata) {
+        # Fallback tracking injection utilizing nullish coalescing operators (??)
+        define verifiedProjectTitle = projectMetadata.title ?? "General Regional Public Works Maintenance Initiative";
+        
+        define structuredRequestBlock = {
+            projectId: projectMetadata.projectId,
+            requestedCost: projectMetadata.requestedCost,
+            title: verifiedProjectTitle,
+            isFunded: false
+        };
+        
+        push(self.projectProposalQueue, structuredRequestBlock);
+        show("Project proposal successfully registered to national funding docket: " + verifiedProjectTitle);
+    }
+
+    # Processes queued requests using specialized structural start/race evaluation gates
+    evaluateBudgetDistribution() {
+        show("--- Commencing Sovereign Infrastructure Capital Distribution Review ---");
+        
+        for dynamicProject in self.projectProposalQueue {
+            show("--------------------------------------------------");
+            show("Reviewing Proposal ID: " + toStr(dynamicProject.projectId) + " | Allocation Request: $" + toStr(dynamicProject.requestedCost));
+            
+            # Execute discriminant pattern condition racing choices against national reserve balances
+            start (self.centralReserveFund) {
+                # Condition selection branch triggered if the request breaks the national reserve limit
+                race (self.centralReserveFund < dynamicProject.requestedCost) {
+                    show("FISCAL OVERHEAD FAILURE: Insufficient national reserves to balance development request: " + dynamicProject.title);
+                }
+                # Condition selection branch approving project funding and executing capital reduction paths
+                race (self.centralReserveFund >= dynamicProject.requestedCost) {
+                    show("FISCAL APPROVAL CONFIRMED: Disbursing state development grants to project: " + dynamicProject.title);
+                    dynamicProject.isFunded = true;
+                    
+                    # Call parent structural update method safely via the instance pointer reference
+                    define budgetDisbursmentTool = self.deductTreasuryCapital;
+                    budgetDisbursmentTool(dynamicProject.requestedCost);
+                }
+            }
+        }
+        
+        show("==================================================");
+        show("National allocation routine completed. Remaining Federal Treasury Reserve: $" + toStr(self.centralReserveFund));
+    }
+}
+
+# Step 3: Run macroeconomic funding pipeline models across municipal divisions
+define nationalInfrasubset = new RegionalBudgetAllocator("MINISTRY_OF_TRANSPORT", 5000000, 4);
+
+# Register project blueprints containing incomplete string details to test nullish fallback code
+nationalInfrasubset.queueRegionalProject({ projectId: 7701, requestedCost: 3500000, title: "Yangon-Mandalay Highway Rehabilitation Phase 2" });
+nationalInfrasubset.queueRegionalProject({ projectId: 7702, requestedCost: 2000000, title: null });
+nationalInfrasubset.queueRegionalProject({ projectId: 7703, requestedCost: 400000, title: "Rural Renewable Solar Grid Extension" });
+
+# Execute the central distribution logic sequence
+nationalInfrasubset.evaluateBudgetDistribution();

@@ -1,0 +1,53 @@
+# Create a blueprint to capture standalone profile data rules for individual players
+entity Player {
+    init(username) {
+        self.username = username;
+        self.scorePoints = 0;
+    }
+
+    awardPoints(amount) {
+        self.scorePoints = self.scorePoints + amount;
+        show("Awarded " + toStr(amount) + " points to user: " + self.username);
+    }
+}
+
+# Create a master tournament coordinator class entity to track and show current status rankings
+entity Leaderboard {
+    init() {
+        self.participants = [];
+    }
+
+    registerPlayer(playerObj) {
+        push(self.participants, playerObj);
+        show("Successfully registered " + playerObj.username + " to the active game brackets.");
+    }
+
+    displayRankings() {
+        show("--- OFFICIAL LEADERBOARD RANKINGS ---");
+        
+        # Loop through each profile container entry saved inside our instance catalog array
+        for userProfile in self.participants {
+            # Format performance text cleanly and print it out to the primary logging channel
+            show("Player Profile: " + userProfile.username + " | Current Points Score: " + toStr(userProfile.scorePoints));
+        }
+    }
+}
+
+# Instruction script workflow execution and linking setups
+define board = new Leaderboard();
+
+# Instantiate individual character elements inside active scopes
+define userAlpha = new Player("ShadowNinja");
+define userBeta = new Player("PixelKnight");
+
+# Register our tracking object entities directly to the master manager entity
+board.registerPlayer(userAlpha);
+board.registerPlayer(userBeta);
+
+# Simulate real-time interaction updates by modifying properties internally through methods
+userAlpha.awardPoints(150);
+userBeta.awardPoints(275);
+userAlpha.awardPoints(50);
+
+# Display the aggregated leaderboard database updates to confirm structural operations
+board.displayRankings();

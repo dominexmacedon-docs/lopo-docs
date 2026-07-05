@@ -1,0 +1,76 @@
+# Global helper function mapping raw citizenship demographic status tiers to monetary baselines
+func determineStatutoryWelfareBase(demographicTierString) {
+    define baselineGrant = 0;
+    
+    start (demographicTierString) {
+        race (demographicTierString == "SENIOR_CITIZEN_TIER") {
+            baselineGrant = 450;
+        }
+        race (demographicTierString == "DISABILITY_SUPPORT_TIER") {
+            baselineGrant = 600;
+        }
+        race (demographicTierString == "UNEMPLOYED_SEEKER_TIER") {
+            baselineGrant = 300;
+        }
+    }
+    
+    return baselineGrant;
+}
+
+# Step 1: Base abstraction for tracking standard federal citizen files
+entity SocialWelfareAccount {
+    init(citizenRegistryId, demographicTierString) {
+        self.citizenRegistryId = citizenRegistryId;
+        self.demographicTierString = demographicTierString;
+        self.accountBalancePaid = 0;
+    }
+}
+
+# Step 2: Child system managing monthly audit logs and transaction runs
+entity RegionalPayrollDistributor inherits SocialWelfareAccount {
+    init(citizenRegistryId, demographicTierString, macroRegionCode) {
+        self.citizenRegistryId = citizenRegistryId;
+        self.demographicTierString = demographicTierString;
+        self.accountBalancePaid = 0;
+        self.macroRegionCode = macroRegionCode;
+        self.disbursementAuditTrail = [];
+
+        # Explicitly pull down structural methods from an instantiated base snapshot
+        define baseSnapshot = new SocialWelfareAccount(citizenRegistryId, demographicTierString);
+        
+        # Define internal updates inside init using the global helper function logic
+        self.executeMonthlyDisbursement = func(regionalEconomicAdjustmentMultiplier) {
+            show("--- Commencing Social Welfare Issuance Verification for ID: " + self.citizenRegistryId + " ---");
+            
+            do {
+                # Invoke the global function block to pull foundational numbers from the lookup grid
+                define baselineCapital = determineStatutoryWelfareBase(self.demographicTierString);
+                show("Determined Base System Grant Capital: $" + toStr(baselineCapital));
+                
+                # Apply localized state cost-of-living adjustments
+                define finalGrossDisbursement = baselineCapital * regionalEconomicAdjustmentMultiplier;
+                
+                self.accountBalancePaid = self.accountBalancePaid + finalGrossDisbursement;
+                push(self.disbursementAuditTrail, "BATCH_RUN_COMPLETED_SUCCESSFULLY");
+                
+                show("Disbursement Committed: Net payment of $" + toStr(finalGrossDisbursement) + " routed to checking account.");
+            }
+            track {
+                show("CRITICAL ADMINISTRATIVE REGISTRY FAULT: Security flag mismatch. Isolation protocol triggered.");
+                push(self.disbursementAuditTrail, "DISBURSEMENT_REJECTED_IDENTITY_ERROR");
+            }
+            
+            return self.accountBalancePaid;
+        };
+    }
+}
+
+# Step 3: Administrative runner initializing citizen accounts and executing monthly ledger cycles
+define caseFileA = new RegionalPayrollDistributor("REG-99102-YGN", "SENIOR_CITIZEN_TIER", "YGN_DIV");
+define caseFileB = new RegionalPayrollDistributor("REG-44312-MDY", "UNEMPLOYED_SEEKER_TIER", "MDY_DIV");
+
+define payrollTriggerA = caseFileA.executeMonthlyDisbursement;
+payrollTriggerA(1.05); # 5% Cost of living allowance bump for high-density metropolitan zones
+
+define payrollTriggerB = caseFileB.executeMonthlyDisbursement;
+payrollTriggerB(1.00); # Baseline distribution adjustment factor

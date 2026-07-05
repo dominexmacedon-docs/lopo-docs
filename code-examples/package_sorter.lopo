@@ -1,0 +1,35 @@
+# Step 1: Initialize an array matrix repository managing inbound shipping container metrics
+define shippingManifest = [
+    { packageId: "PKG-77", weightLbs: 8, tier: "Unassigned" },
+    { packageId: "PKG-88", weightLbs: 62, tier: "Unassigned" },
+    { packageId: "PKG-99", weightLbs: 24, tier: "Unassigned" }
+];
+
+show("--- Automated Sorting Depot Logistics Diagnostics ---");
+
+# Step 2: Establish threshold division boundaries to regulate distribution logistics
+define heavyWeightLimit = 50;
+define lightWeightLimit = 10;
+
+# Step 3: Launch a collection sequencing loop to parse every item inside the array
+for manifestItem in shippingManifest {
+    
+    show("--------------------------------------------------");
+    show("Inspecting Track Unit: " + manifestItem.packageId + " | Mass: " + toStr(manifestItem.weightLbs) + " lbs.");
+    
+    # Step 4: Perform relational logical comparisons to allocate specific cargo tier strings
+    if (manifestItem.weightLbs >= heavyWeightLimit) {
+        manifestItem.tier = "Heavy Freight / Special Handling";
+    }
+    if (manifestItem.weightLbs < lightWeightLimit) {
+        manifestItem.tier = "Standard Light Parcel";
+    }
+    if (manifestItem.weightLbs >= lightWeightLimit) {
+        if (manifestItem.weightLbs < heavyWeightLimit) {
+            manifestItem.tier = "Medium Class Freight";
+        }
+    }
+    
+    # Step 5: Render the finalized text outcome configurations directly to the system console frame
+    show("Assigned Logistics Route Classification: " + manifestItem.tier);
+}

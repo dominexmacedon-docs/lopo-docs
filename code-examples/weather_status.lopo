@@ -1,0 +1,22 @@
+show("--- Environmental Climate Sensor Terminal Log ---");
+
+# Step 1: Read input text via interactive frames and parse it into an integer tracker
+define activeTemperature = num(ask("Enter current local sensor temperature reading: "));
+
+# Step 2: Create a mutable status text identifier container using a baseline fallback string
+define climateWarning = "Normal / Temperate Conditions";
+
+# Step 3: Run comprehensive threshold logical evaluation boundary paths
+if (activeTemperature > 100) {
+    climateWarning = "EXTREME HEAT WARNING: High thermal indices detected. Limit outdoor operations.";
+}
+
+if (activeTemperature < 32) {
+    climateWarning = "FREEZE WARNING: Sub-zero frost thresholds met. Insulate structural plumbing.";
+}
+
+show("--------------------------------------------------");
+show("Sensor Temperature Recorded: " + toStr(activeTemperature) + " units.");
+
+# Step 4: Render the final updated warning string data outcome inside the required frame
+show("Diagnostic Status Message: " + climateWarning);

@@ -1,0 +1,41 @@
+# Step 1: Initialize a master database collection tracking student records
+define classroom = [
+    { name: "John", grade: 85 },
+    { name: "Sarah", grade: 94 },
+    { name: "David", grade: 62 },
+    { name: "Emily", grade: 78 }
+];
+
+# Step 2: Establish dynamic counter tracking metrics for aggregate calculation steps
+define totalGradePoints = 0;
+define totalCount = 0;
+
+show("--- Processing Classroom Academic Records ---");
+
+# Step 3: Run an iteration routine through the student collection
+for student in classroom {
+    # Increment our counting reference tracking structural index cycles
+    totalCount = totalCount + 1;
+    
+    # Extract the dynamic point property and aggregate it to the global balance tracker
+    totalGradePoints = totalGradePoints + student.grade;
+    
+    # Establish a default localized evaluation fallback text string status variable
+    define performance = "Passing";
+    
+    # Perform strict boundary condition checking to identify students needing assistance
+    if (student.grade < 65) {
+        performance = "Needs Improvement / Remedial Support";
+    }
+    
+    # Print the individual student status summary line using standard wrapper conversions
+    show("Student: " + student.name + " | Grade: " + toStr(student.grade) + " | Status: " + performance);
+}
+
+# Step 4: Calculate the mathematical average boundary value safely
+define classAverage = totalGradePoints / totalCount;
+
+# Step 5: Output the finalized statistical summary report to the console
+show("--------------------------------------------");
+show("Total Active Enrolled Students: " + toStr(totalCount));
+show("Overall Cumulative Classroom Average: " + toStr(classAverage));

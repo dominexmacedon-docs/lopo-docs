@@ -1,0 +1,17 @@
+show("--- Lopo Financial Property Analytics Interface ---");
+
+# Step 1: Intercept financial numeric figures by nesting input routines inside parsing cast utilities
+define capitalInvestment = num(ask("Enter complete property asset purchase price value: "));
+define monthlyRentalRevenue = num(ask("Enter stable monthly rental income cash balance: "));
+
+# Step 2: Process arithmetic formulas to resolve annualized financial returns
+define annualGrossRevenue = monthlyRentalRevenue * 12;
+define calculatedCapitalYield = (annualGrossRevenue / capitalInvestment) * 100;
+
+show("--------------------------------------------------");
+show("Calculated Investment Metrics Summary Report:");
+
+# Step 3: Format and transform numeric values into strings to print output matrices safely
+show("Total Capital Outlay Base: $" + toStr(capitalInvestment));
+show("Computed Projected Annualized Earnings: $" + toStr(annualGrossRevenue));
+show("Estimated Capital ROI Return Rate Percentage: " + toStr(calculatedCapitalYield) + "%");

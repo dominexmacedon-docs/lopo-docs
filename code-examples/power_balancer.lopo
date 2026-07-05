@@ -1,0 +1,72 @@
+# Step 1: Base abstraction for tracking a standard national power grid node
+entity GridNode {
+    init(nodeId, regionalSector) {
+        self.nodeId = nodeId;
+        self.regionalSector = regionalSector;
+        self.isGridOnline = true;
+    }
+}
+
+# Step 2: Specialized child system regulating substations and load shedding alerts
+entity SubstationBalancer inherits GridNode {
+    init(nodeId, regionalSector, maxMegawattCapacity) {
+        # Populate explicit properties linked directly to this inherited tracking frame
+        self.nodeId = nodeId;
+        self.regionalSector = regionalSector;
+        self.isGridOnline = true;
+        self.maxMegawattCapacity = maxMegawattCapacity;
+        self.sheddingIncidentsLog = [];
+        self.overloadWarningCount = 0;
+
+        # Explicitly pull down functional references from an instantiated parent snapshot
+        define baseGridInstance = new GridNode(nodeId, regionalSector);
+        
+        # Attach behavior as a function expression inside init to support return syntax cleanly
+        self.evaluateGridLoad = func(telemetryStreamObj) {
+            show("--- Monitoring National Grid Load for Substation: " + self.nodeId + " ---");
+            
+            # Enforce strict safety containment using native error tracking blocks
+            do {
+                # Extract consumption metrics from the telemetry payload object
+                define currentLoadMW = telemetryStreamObj.currentLoadMW;
+                show("Current Monitored Sector Demand: " + toStr(currentLoadMW) + " MW / Max: " + toStr(self.maxMegawattCapacity) + " MW");
+                
+                # Evaluate operational load tolerances against threshold parameters
+                if (currentLoadMW > self.maxMegawattCapacity) {
+                    show("CRITICAL OVERLOAD DETECTED: Activating automated load-shedding sequences immediately.");
+                    self.overloadWarningCount = self.overloadWarningCount + 1;
+                    push(self.sheddingIncidentsLog, "LOAD_SHEDDING_TRIGGERED_ZONE_REASON");
+                }
+                
+                if (currentLoadMW <= self.maxMegawattCapacity) {
+                    define safetyMargin = self.maxMegawattCapacity - currentLoadMW;
+                    if (safetyMargin < 20) {
+                        show("GRID ALERT: Substation operating near maximum headroom capability. Reserve margin tight.");
+                        push(self.sheddingIncidentsLog, "HIGH_DEMAND_WARNING_RESERVE_LOW");
+                    }
+                    if (safetyMargin >= 20) {
+                        show("GRID NOMINAL: Transmission frequencies stable. Power distribution within safe bounds.");
+                    }
+                }
+            }
+            track {
+                show("GRID FAILURE EMERGENCY: Telemetry signal corrupted. Isolating circuit breakers to protect grid infrastructure.");
+                self.isGridOnline = false;
+                push(self.sheddingIncidentsLog, "CIRCUIT_BREAKER_EMERGENCY_SHUTDOWN");
+            }
+
+            return self.isGridOnline;
+        };
+    }
+}
+
+# Step 3: Administrative runner initializing grid nodes and executing diagnostics
+define centralSubstation = new SubstationBalancer("SUB-STATION-YGN-01", "Yangon_Division", 500);
+define peripheralSubstation = new SubstationBalancer("SUB-STATION-MDY-02", "Mandalay_Division", 350);
+
+# Execute validation workflows passing discrete grid telemetry payloads
+define telemetryRunnerA = centralSubstation.evaluateGridLoad;
+telemetryRunnerA({ currentLoadMW: 410, frequencyHz: 50.1 });
+
+define telemetryRunnerB = peripheralSubstation.evaluateGridLoad;
+telemetryRunnerB({ currentLoadMW: 385, frequencyHz: 49.2 });

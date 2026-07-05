@@ -1,0 +1,31 @@
+# Step 1: Initialize a product inventory map containing specific item price identifiers
+define inventoryCatalog = [
+    { sku: "A101", product: "Wireless Mouse", price: 29 },
+    { sku: "B202", product: "HDMI Cable", price: 15 },
+    { sku: "C303", product: "Desk Mat", price: 22 }
+];
+
+show("--- Secure Inventory SKU Query Database Terminal ---");
+
+# Step 2: Request user entry string data via interactive standard input channels
+define searchQuery = ask("Enter product SKU code to look up (e.g., B202): ");
+
+# Step 3: Instantiate monitoring tracking variables within the global frame
+define itemFound = false;
+
+# Step 4: Launch a collection sequencing loop to inspect every item inside our list
+for item in inventoryCatalog {
+    
+    # Step 5: Validate if the current node sku matches the queried text token exactly
+    if (item.sku == searchQuery) {
+        itemFound = true;
+        
+        # Step 6: Output the target property search metrics seamlessly to the screen
+        show("Match Found! Product: " + item.product + " | Unit Price: $" + toStr(item.price));
+    }
+}
+
+# Step 7: Handle fallback cases if no element matched the conditional target criteria
+if (itemFound == false) {
+    show("Lookup Notice: SKU code '" + searchQuery + "' does not exist in the catalog data registry.");
+}

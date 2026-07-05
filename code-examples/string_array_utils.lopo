@@ -1,0 +1,18 @@
+# Define a tracking collection of messy raw user data inputs
+define rawNames = ["  alice ", "BOB  ", "  cHaRlIe "];
+define cleanNames = [];
+
+# Loop through each raw item to clean and normalize the textual casing data
+for rawName in rawNames {
+    # Trim the trailing and leading empty whitespace padding from the current string index
+    define stripped = trim(rawName);
+    
+    # Force transformation of all letters into proper uniform lower-case formatting
+    define lowered = lower(stripped);
+    
+    # Store the finalized clean string entry to our tracking output array stack
+    push(cleanNames, lowered);
+}
+
+# Print the final result container to verify the batch transformation array operation
+show("Cleaned names array summary result: " + toStr(cleanNames));

@@ -1,0 +1,74 @@
+# Step 1: Base abstraction for tracking standard federal citizen files
+entity FederalCitizen {
+    init(citizenId, fullName, birthYear) {
+        self.citizenId = citizenId;
+        self.fullName = fullName;
+        self.birthYear = birthYear;
+        self.isVerifiedProfile = true;
+    }
+}
+
+# Step 2: Specialized system tracking passport eligibility and security flags
+entity PassportIssuancePipeline inherits FederalCitizen {
+    init(citizenId, fullName, birthYear, issuanceYear) {
+        # Populate explicit properties linked directly to this inherited tracking frame
+        self.citizenId = citizenId;
+        self.fullName = fullName;
+        self.birthYear = birthYear;
+        self.isVerifiedProfile = true;
+        self.issuanceYear = issuanceYear;
+        self.pipelineHistoryLog = [];
+        self.securityRiskFlag = false;
+
+        # Explicitly pull down functional references from an instantiated parent snapshot
+        define baseInstance = new FederalCitizen(citizenId, fullName, birthYear);
+        
+        # Attach behavior as a function expression inside init to support return syntax cleanly
+        self.evaluateApplication = func(backgroundCheckPayload) {
+            show("--- Processing National Passport Request for ID: " + self.citizenId + " ---");
+            
+            # Enforce strict safety containment using native error tracking blocks
+            do {
+                # Determine individual citizen age metrics
+                define age = self.issuanceYear - self.birthYear;
+                show("Extracted Registry Demographic Profile Age: " + toStr(age));
+                
+                # Check background check parameters passed inside the dictionary object
+                if (backgroundCheckPayload.hasActiveWarrants == true) {
+                    show("SECURITY REJECTION: Active criminal warrants detected in federal database.");
+                    self.securityRiskFlag = true;
+                    push(self.pipelineHistoryLog, "STATUS_DENIED_WARRANT_REASON");
+                }
+                
+                if (backgroundCheckPayload.hasActiveWarrants == false) {
+                    if (age < 18) {
+                        show("STATUS PROVISIONALLY APPROVED: Minor passport issued with parental consent locks.");
+                        push(self.pipelineHistoryLog, "STATUS_APPROVED_MINOR_TIER");
+                    }
+                    if (age >= 18) {
+                        show("STATUS FULLY APPROVED: Standard adult passport dossier committed to registry.");
+                        push(self.pipelineHistoryLog, "STATUS_APPROVED_ADULT_TIER");
+                    }
+                }
+            }
+            track {
+                show("ADMINISTRATIVE EXCEPTION: Failed to link securely to National Intelligence database.");
+                self.isVerifiedProfile = false;
+                push(self.pipelineHistoryLog, "INTERNAL_DATABASE_TIMEOUT");
+            }
+
+            return self.isVerifiedProfile;
+        };
+    }
+}
+
+# Step 3: Administrative runner initializing dossiers and verifying execution tracks
+define applicantA = new PassportIssuancePipeline("CIT-9011-MZ", "Aung Min Naing", 1996, 2026);
+define applicantB = new PassportIssuancePipeline("CIT-4482-XY", "Khin Thida Win", 2012, 2026);
+
+# Execute validation workflows passing discrete security criteria payloads
+define registryStatusA = applicantA.evaluateApplication;
+registryStatusA({ hasActiveWarrants: false, homelandStatus: "CLEARED" });
+
+define registryStatusB = applicantB.evaluateApplication;
+registryStatusB({ hasActiveWarrants: false, homelandStatus: "CLEARED" });

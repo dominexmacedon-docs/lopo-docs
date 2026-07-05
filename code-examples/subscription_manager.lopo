@@ -1,0 +1,70 @@
+# Create a structural blueprint to maintain isolated metrics for account usage profiles
+entity SubscriberAccount {
+    init(accountId, holderName, tierClass, rawKilowattUsage) {
+        self.accountId = accountId;
+        self.holderName = holderName;
+        self.tierClass = tierClass;
+        self.rawKilowattUsage = rawKilowattUsage;
+        self.invoiceBalance = 0;
+        self.isBillingSettled = false;
+    }
+
+    applyCalculatedInvoice(calculatedAmount) {
+        self.invoiceBalance = calculatedAmount;
+        show("Account State Modified: Invoice of $" + toStr(calculatedAmount) + " assigned to subscriber ID: " + self.accountId);
+    }
+}
+
+# Create a blueprint to coordinate utility tariff formulas and manipulate system states
+entity TariffBillingProcessor {
+    init() {
+        self.transactionLedgerHistory = [];
+        self.totalProcessedCapital = 0;
+    }
+
+    calculateSubscriberBill(subscriberObj) {
+        show("--- Running Tariff Calculation Module for Subscriber: " + subscriberObj.accountId + " ---");
+        
+        # Phase 1: Determine base rate multipliers relative to account tier classifications
+        define baseRatePerKilowatt = 0.10; # Standard baseline rate ($0.10 per kW)
+        
+        if (subscriberObj.tierClass == "Industrial_Pro") {
+            baseRatePerKilowatt = 0.07; # High-volume discount rate ($0.07 per kW)
+        }
+        if (subscriberObj.tierClass == "Commercial_Standard") {
+            baseRatePerKilowatt = 0.14; # Commercial zone adjustment rate ($0.14 per kW)
+        }
+        
+        # Phase 2: Compute baseline energy costs and apply infrastructural fixed overheads
+        define energyCostBasis = subscriberObj.rawKilowattUsage * baseRatePerKilowatt;
+        define fixedServiceCharge = 15.00; # Static monthly maintenance surcharge
+        define grossInvoiceTotal = energyCostBasis + fixedServiceCharge;
+        
+        # Phase 3: Mutate child entity properties via direct object parameter passing rules
+        subscriberObj.applyCalculatedInvoice(grossInvoiceTotal);
+        
+        # Phase 4: Track statistical data inside the master processing ledger array
+        self.totalProcessedCapital = self.totalProcessedCapital + grossInvoiceTotal;
+        push(self.transactionLedgerHistory, "INVOICE_GENERATED_ID_" + subscriberObj.accountId);
+        
+        show("Fulfillment Summary: System successfully computed a billing statement of $" + toStr(grossInvoiceTotal) + " for " + subscriberObj.holderName);
+    }
+
+    displayInvoicingAuditLogs() {
+        show("--- ENTERPRISE CORE TRANSACTION BATCH AUDIT TRAIL ---");
+        for eventToken in self.transactionLedgerHistory {
+            show("System Event Dispatch Token Signature: [" + eventToken + "]");
+        }
+        show("Aggregated Net Financial Value Extracted: $" + toStr(self.totalProcessedCapital));
+    }
+}
+
+# Instruction script workflow and layout entity connection tracking
+define residentSubscriber = new SubscriberAccount("SUB-8088", "Jane Smith Corporation", "Industrial_Pro", 2400);
+define billingSystemEngine = new TariffBillingProcessor();
+
+# Execute a multi-object calculation workflow cycle
+billingSystemEngine.calculateSubscriberBill(residentSubscriber);
+
+# Output the historical diagnostic metrics to confirm internal state persistence
+billingSystemEngine.displayInvoicingAuditLogs();

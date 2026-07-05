@@ -1,0 +1,38 @@
+# Step 1: Initialize an array collection simulating an existing database of registered usernames
+define existingUsers = ["admin", "dev_lopo", "coder99", "shadow_user"];
+
+show("--- Initiating Secure User Registration Diagnostic ---");
+
+# Step 2: Capture new interactive string input data via the standard console prompt terminal
+define newUsername = ask("Enter a new username to register: ");
+
+# Step 3: Establish standard boolean status tracking variables within the global memory frame
+define isDuplicate = false;
+
+# Step 4: Launch an explicit collection sequencing loop to evaluate every element item
+for user in existingUsers {
+    
+    # Step 5: Perform strict string equality comparisons to identify matching data tokens
+    if (user == newUsername) {
+        
+        # Step 6: Mutate the tracking state flag to true upon discovering an identical match
+        isDuplicate = true;
+    }
+}
+
+# Step 7: Evaluate the finalized flag condition outcomes to dictate registration paths
+if (isDuplicate == true) {
+    
+    # Step 8: Log a distinct transaction warning indicating that registration has failed
+    show("Registration Error: The username '" + newUsername + "' is already claimed inside our records.");
+}
+
+if (isDuplicate == false) {
+    
+    # Step 9: Use the global push command utility to safely insert the valid text token into the collection
+    push(existingUsers, newUsername);
+    
+    # Step 10: Print a definitive completion message showcasing the newly updated repository stream
+    show("Success! Unique username '" + newUsername + "' has been successfully committed to memory.");
+    show("Updated System User Array Registry: " + toStr(existingUsers));
+}

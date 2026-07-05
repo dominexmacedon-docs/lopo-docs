@@ -1,0 +1,88 @@
+# Step 1: Base abstraction modeling a core company asset ledger vault
+entity AssetInventoryLedger {
+    init(warehouseCode, baselineUnitStock) {
+        self.warehouseCode = warehouseCode;
+        self.baselineUnitStock = baselineUnitStock;
+        self.totalAllocatedUnits = 0;
+
+        # Define internal update mutations inside the constructor to ensure self matches cleanly
+        self.commitStockDeduction = func(requestedQuantity) {
+            self.baselineUnitStock = self.baselineUnitStock - requestedQuantity;
+            self.totalAllocatedUnits = self.totalAllocatedUnits + requestedQuantity;
+            show("Ledger Balance Updated: Core units stock diminished by: " + toStr(requestedQuantity));
+        };
+    }
+}
+
+# Step 2: Child system managing racing priority allocations for multi-tenant users
+entity FulfillmentRacerEngine inherits AssetInventoryLedger {
+    init(warehouseCode, baselineUnitStock, systemPriorityTier) {
+        # Populate explicit properties linked directly to this inherited validation class
+        self.warehouseCode = warehouseCode;
+        self.baselineUnitStock = baselineUnitStock;
+        self.totalAllocatedUnits = 0;
+        self.systemPriorityTier = systemPriorityTier;
+        self.quarantinedOrdersQueue = [];
+
+        # Explicitly pull down structural method paths from an instantiated base snapshot
+        define baseLedgerSnapshot = new AssetInventoryLedger(warehouseCode, baselineUnitStock);
+        self.commitStockDeduction = baseLedgerSnapshot.commitStockDeduction;
+    }
+
+    # Queues raw tenant entries into the local execution list matrix
+    registerIncomingOrder(orderMetadata) {
+        # Fallback configuration structure applying nullish coalescing default logic
+        define verifiedClientTag = orderMetadata.clientName ?? "Anonymous Wholesale Corporate Partner";
+        
+        define structuredBlock = {
+            orderId: orderMetadata.orderId,
+            unitsVolume: orderMetadata.unitsVolume,
+            clientRef: verifiedClientTag,
+            isProcessed: false
+        };
+        
+        push(self.quarantinedOrdersQueue, structuredBlock);
+        show("Order accepted to fulfillment pipeline pool for tracking descriptor: " + verifiedClientTag);
+    }
+
+    # Processes queued rows using specialized discriminant start/race branch selection gates
+    evaluateAllocationQueue() {
+        show("--- Commencing High-Throughput Stock Allocation Diagnostics ---");
+        
+        for dynamicOrderBlock in self.quarantinedOrdersQueue {
+            show("--------------------------------------------------");
+            show("Evaluating Order ID: " + toStr(dynamicOrderBlock.orderId) + " | Size: " + toStr(dynamicOrderBlock.unitsVolume));
+            
+            # Execute discriminant pattern racing choices against available inventory balances
+            start (self.baselineUnitStock) {
+                # Condition selection branch mapping out failures if current demand overshoots capacity
+                race (self.baselineUnitStock < dynamicOrderBlock.unitsVolume) {
+                    show("ALLOCATION BLOCKED: Deficient supply volume to fulfill wholesale block: " + dynamicOrderBlock.clientRef);
+                }
+                # Condition selection branch confirming order eligibility and executing ledger reduction methods
+                race (self.baselineUnitStock >= dynamicOrderBlock.unitsVolume) {
+                    show("ALLOCATION VERIFIED: Dispatching stock lot units to client: " + dynamicOrderBlock.clientRef);
+                    dynamicOrderBlock.isProcessed = true;
+                    
+                    # Call parent structural update method cleanly via the instance pointer reference
+                    define inventoryDeductor = self.commitStockDeduction;
+                    inventoryDeductor(dynamicOrderBlock.unitsVolume);
+                }
+            }
+        }
+        
+        show("==================================================");
+        show("Allocation dispatch pipeline process finished. Final Remaining Warehouse Units: " + toStr(self.baselineUnitStock));
+    }
+}
+
+# Step 3: Driver runtime executing high-priority market fulfillment runs
+define logisticsEngine = new FulfillmentRacerEngine("WH-LOGISTICS-SOUTH", 120, "TIER_PREMIUM");
+
+# Feed structural metrics payloads containing missing text segments into validation buffers
+logisticsEngine.registerIncomingOrder({ orderId: 55091, unitsVolume: 40, clientName: "Global Distribution Inc" });
+logisticsEngine.registerIncomingOrder({ orderId: 55092, unitsVolume: 95, clientName: null });
+logisticsEngine.registerIncomingOrder({ orderId: 55093, unitsVolume: 15, clientName: "Aviation Tech Systems" });
+
+# Process the allocation pipeline and view state modifications cascading down onto standard logs
+logisticsEngine.evaluateAllocationQueue();

@@ -1,0 +1,45 @@
+# Step 1: Initialize an array collection of survey responses containing categorical vote objects
+define surveyVotes = [
+    { voterId: 1001, choice: "Yes" },
+    { voterId: 1002, choice: "No" },
+    { voterId: 1003, choice: "Yes" },
+    { voterId: 1004, choice: "Undecided" },
+    { voterId: 1005, choice: "Yes" }
+];
+
+# Step 2: Establish global tracker accumulators to record structural classification counts
+define totalVotes = 0;
+define yesCount = 0;
+define noCount = 0;
+define undecidedCount = 0;
+
+show("--- Processing Public Opinion Survey Data Matrix ---");
+
+# Step 3: Iterate through every vote object stored in the survey data collection
+for vote in surveyVotes {
+    # Increment the total transaction counter variable for each index loop cycle
+    totalVotes = totalVotes + 1;
+    
+    # Check conditional branches to categorize the current string property choice entry
+    if (vote.choice == "Yes") {
+        yesCount = yesCount + 1;
+    }
+    if (vote.choice == "No") {
+        noCount = noCount + 1;
+    }
+    if (vote.choice == "Undecided") {
+        undecidedCount = undecidedCount + 1;
+    }
+}
+
+# Step 4: Perform arithmetic conversions to resolve statistical percentage weights
+define yesPercentage = (yesCount / totalVotes) * 100;
+define noPercentage = (noCount / totalVotes) * 100;
+define undecidedPercentage = (undecidedCount / totalVotes) * 100;
+
+# Step 5: Log the finalized analytical percentages directly to the active console frame
+show("--------------------------------------------------");
+show("Total Cast Survey Ballots: " + toStr(totalVotes));
+show("Support Level (Yes): " + toStr(yesPercentage) + "%");
+show("Opposition Level (No): " + toStr(noPercentage) + "%");
+show("Neutral Margin (Undecided): " + toStr(undecidedPercentage) + "%");
