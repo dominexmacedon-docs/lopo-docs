@@ -1,0 +1,64 @@
+entity SmartphoneRetailHub {
+    init(outletBranchName) {
+        self.outletBranchName = outletBranchName;
+        self.salesRevenueLedger = 0.0;
+        
+        self.productCatalog = [
+            { id: 1, model: "Sovereign-Alpha-Phone", price: 850, stock: 45 },
+            { id: 2, model: "Nexus-Legacy-Device",  price: 520, stock: 60 },
+            { id: 3, model: "Titanium-Secure-X",    price: 1200, stock: 15 }
+        ];
+
+        self.launchInteractiveStorefront = func() {
+            show("=== Welcome to the Telecommunications E-Shop [" + self.outletBranchName + "] ===");
+            show("--- Live Available Product Inventory Listing ---");
+            
+            for item in self.productCatalog {
+                show("Code: [" + toStr(item.id) + "] | " + item.model + " | Unit Price: $" + toStr(item.price) + " | Available Stock: " + toStr(item.stock));
+            }
+            show("--------------------------------------------------");
+            
+            define selectionCode = num(ask("Enter the Product Code you wish to purchase: "));
+            define targetItemIndex = -1;
+            define counter = 0;
+            define catalogSize = len(self.productCatalog);
+            
+            while (counter < catalogSize) {
+                if (num(self.productCatalog[counter].id) == selectionCode) {
+                    targetItemIndex = counter;
+                }
+                counter = counter + 1;
+            }
+            
+            if (targetItemIndex != -1) {
+                define selectedProduct = self.productCatalog[targetItemIndex];
+                show("Selected: " + selectedProduct.model + " ($" + toStr(selectedProduct.price) + "/unit)");
+                
+                define purchaseQuantity = num(ask("Enter target quantity to buy: "));
+                define availableStockNum = num(selectedProduct.stock);
+                define productPriceNum = num(selectedProduct.price);
+                
+                if (purchaseQuantity > 0 and purchaseQuantity <= availableStockNum) {
+                    define grossTotal = productPriceNum * purchaseQuantity;
+                    
+                    selectedProduct.stock = availableStockNum - purchaseQuantity;
+                    self.salesRevenueLedger = self.salesRevenueLedger + grossTotal;
+                    
+                    show("============== ORDER RECEIPT GENERATED ==============");
+                    show(" Product Model:       " + selectedProduct.model);
+                    show(" Quantity Ordered:    " + toStr(purchaseQuantity));
+                    show(" Net Amount Payable:  $" + toStr(grossTotal));
+                    show("=====================================================");
+                    show("Updated remaining warehouse stock count: " + toStr(selectedProduct.stock));
+                } else {
+                    show("ORDER ERROR: Invalid purchase volume requested or insufficient stock allocation.");
+                }
+            } else {
+                show("SELECTION ERROR: Entered Product Code could not be found.");
+            }
+        };
+    }
+}
+
+define telecommShopNode = new SmartphoneRetailHub("Mandalay_Central_HQ");
+telecommShopNode.launchInteractiveStorefront();

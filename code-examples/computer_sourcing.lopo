@@ -1,0 +1,40 @@
+# Standalone logic block analyzing memory allocation spaces
+func checkNodeStructuralIntegrity(availableSlots, requestedNodes) {
+    define roomFlag = false;
+    if (requestedNodes <= availableSlots) {
+        roomFlag = true;
+    }
+    return roomFlag;
+}
+
+entity DatacenterExpansionBoard {
+    init(clusterLocationCode) {
+        self.clusterLocationCode = clusterLocationCode;
+        self.activeServerGridSlots = 24; # Maximum open physical hardware bays
+        self.committedSystemUpgrades = [];
+
+        self.evaluateServerArrayAcquisition = func(computeUnitModel, pricePerBladeNode) {
+            show("--- Auditing Datacenter Grid Expansion for Site: " + self.clusterLocationCode + " ---");
+            show("Available Core System Frame Slots: " + toStr(self.activeServerGridSlots));
+            
+            define bladesToInstall = num(ask("Enter requested server compute nodes to spin up: "));
+            define isSpaceValid = checkNodeStructuralIntegrity(self.activeServerGridSlots, bladesToInstall);
+            
+            if (isSpaceValid and bladesToInstall > 0) {
+                define totalExpenditure = bladesToInstall * pricePerBladeNode;
+                show("  PROVISIONING TRACK CLEAR: Target physical server dimensions checked out.");
+                show("  Aggregated Hardware Invoice Statement: $" + toStr(totalExpenditure));
+                
+                self.activeServerGridSlots = self.activeServerGridSlots - bladesToInstall;
+                push(self.committedSystemUpgrades, computeUnitModel);
+            } else {
+                show("  RESOURCE BREACH: Proposed computing framework exceeds remaining facility bay density mappings.");
+            }
+        };
+    }
+}
+
+define researchGridHub = new DatacenterExpansionBoard("NATIONAL_LAB_MATRIX_A");
+define runGridUpgrade = researchGridHub.evaluateServerArrayAcquisition;
+
+runGridUpgrade("Quantum-Blade-Server-T150", 12500);

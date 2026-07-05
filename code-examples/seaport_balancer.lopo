@@ -1,0 +1,59 @@
+entity MaritimeHarborAuthority {
+    init(portTerminalToken) {
+        self.portTerminalToken = portTerminalToken;
+        self.totalProcessedDeadweightTons = 0;
+        
+        self.dockingBerthsList = [
+            { berthKey: 51, anchorTag: "Deepwater-Container-Berth-1", remainingDraftMeters: 16, maximumCapacityDwt: 120000 },
+            { berthKey: 52, anchorTag: "Bulk-Liquid-Petroleum-Pier-2", remainingDraftMeters: 14, maximumCapacityDwt: 85000 },
+            { berthKey: 53, anchorTag: "General-Breakbulk-Wharf-3",    remainingDraftMeters: 11, maximumCapacityDwt: 45000 }
+        ];
+
+        self.allocateVesselToBerth = func() {
+            show("=== Inter-Sovereign Maritime Gateway Shipping Board [" + self.portTerminalToken + "] ===");
+            show("--- Live Available Container Wharf Docking Structures ---");
+            
+            for berth in self.dockingBerthsList {
+                show("Berth Key: [" + toStr(berth.berthKey) + "] | " + berth.anchorTag + " | Operating Draft: " + toStr(berth.remainingDraftMeters) + "m | Open Space: " + toStr(berth.maximumCapacityDwt) + " DWT");
+            }
+            show("--------------------------------------------------");
+            
+            define cargoInputKey = num(ask("Select target Berth Key to clear mooring clearance: "));
+            define activeBerthPos = -1;
+            define indexCounter = 0;
+            
+            while (indexCounter < len(self.dockingBerthsList)) {
+                if (num(self.dockingBerthsList[indexCounter].berthKey) == cargoInputKey) {
+                    activeBerthPos = indexCounter;
+                }
+                indexCounter = indexCounter + 1;
+            }
+            
+            if (activeBerthPos != -1) {
+                define targetedBerthRow = self.dockingBerthsList[activeBerthPos];
+                define inboundVesselWeight = num(ask("Enter incoming ship displacement cargo weight in Deadweight Tons (DWT): "));
+                define openSpaceDwtNum = num(targetedBerthRow.maximumCapacityDwt);
+                define seaDraftMetersNum = num(targetedBerthRow.remainingDraftMeters);
+                
+                if (inboundVesselWeight > 0 and inboundVesselWeight <= openSpaceDwtNum) {
+                    # Process safe vector assignment across the matrix element
+                    targetedBerthRow.maximumCapacityDwt = openSpaceDwtNum - inboundVesselWeight;
+                    self.totalProcessedDeadweightTons = self.totalProcessedDeadweightTons + inboundVesselWeight;
+                    
+                    show("============== SEAPORT CLEARANCE DISPATCH PROTOCOL ==============");
+                    show(" Cleared Harbor Pier:  " + targetedBerthRow.anchorTag);
+                    show(" Moored Vessel Payload: " + toStr(inboundVesselWeight) + " Deadweight Tons");
+                    show(" Operational Sea Depth: " + toStr(seaDraftMetersNum) + " Meters Draft Limit");
+                    show("=================================================================");
+                } else {
+                    show("CLEARANCE DENIED: Vessel tonnage footprints exceed physical structural limits.");
+                }
+            } else {
+                show("CLEARANCE DENIED: Selection profile matches zero registered mooring coordinates.");
+            }
+        };
+    }
+}
+
+define harborOfficeNode = new MaritimeHarborAuthority("TERMINAL-DAWEI-DEEPSEA");
+harborOfficeNode.allocateVesselToBerth();

@@ -1,0 +1,58 @@
+entity SubstationLoadManager {
+    init(regionalGridCode) {
+        self.regionalGridCode = regionalGridCode;
+        self.totalMegawattsDispatched = 0;
+        
+        self.gridSubstations = [
+            { stationIndex: 401, subName: "Hydro-Electric-Feed-A", megaWattBuffer: 1500, coreVoltageKv: 230 },
+            { stationIndex: 402, subName: "Thermal-Turbine-Grid-B", megaWattBuffer: 950,  coreVoltageKv: 132 },
+            { stationIndex: 403, subName: "Solar-Array-Collector-C", megaWattBuffer: 400,  coreVoltageKv: 66 }
+        ];
+
+        self.routeGridElectricity = func() {
+            show("=== National Power Grid Load Equalization Terminal [" + self.regionalGridCode + "] ===");
+            show("--- High-Voltage Distribution Transmission Channels ---");
+            
+            for sub in self.gridSubstations {
+                show("Station Index: [" + toStr(sub.stationIndex) + "] | " + sub.subName + " | Open Headroom: " + toStr(sub.megaWattBuffer) + " MW | Rating: " + toStr(sub.coreVoltageKv) + " KV");
+            }
+            show("--------------------------------------------------");
+            
+            define queryIndex = num(ask("Enter destination Station Index to pull power: "));
+            define allocationTargetIndex = -1;
+            define i = 0;
+            
+            while (i < len(self.gridSubstations)) {
+                if (num(self.gridSubstations[i].stationIndex) == queryIndex) {
+                    allocationTargetIndex = i;
+                }
+                i = i + 1;
+            }
+            
+            if (allocationTargetIndex != -1) {
+                define activeStation = self.gridSubstations[allocationTargetIndex];
+                define requestedMegawatts = num(ask("Enter load to dispatch over the lines in Megawatts (MW): "));
+                define openHeadroomNum = num(activeStation.megaWattBuffer);
+                define coreVoltsNum = num(activeStation.coreVoltageKv);
+                
+                if (requestedMegawatts > 0 and requestedMegawatts <= openHeadroomNum) {
+                    activeStation.megaWattBuffer = openHeadroomNum - requestedMegawatts;
+                    self.totalMegawattsDispatched = self.totalMegawattsDispatched + requestedMegawatts;
+                    
+                    show("============== TRANSMISSION GRID ROUTING COMPLETE ==============");
+                    show(" Dispatch Origin Node: " + activeStation.subName);
+                    show(" Electrical Energy Out:" + toStr(requestedMegawatts) + " MW");
+                    show(" Voltage Line Pressure:" + toStr(coreVoltsNum) + " KiloVolts");
+                    show("=================================================================");
+                } else {
+                    show("DISPATCH OVERLOAD: Requested output patterns threaten local line hardware stability.");
+                }
+            } else {
+                show("DISPATCH OVERLOAD: Input station index references an offline node frame.");
+            }
+        };
+    }
+}
+
+define regionalGridControl = new SubstationLoadManager("MANDALAY-METRO-GRID");
+regionalGridControl.routeGridElectricity();

@@ -1,0 +1,58 @@
+entity ForestryEcosystemRegistry {
+    init(provincialSectorId) {
+        self.provincialSectorId = provincialSectorId;
+        self.aggregatedSaplingsCommitted = 0;
+        
+        self.conservationSectors = [
+            { sectorCode: 701, ecoZone: "Teak-Wood-Preserve-Alpha", baselineSaplingCapacity: 4000, moistureIndex: 82 },
+            { sectorCode: 702, ecoZone: "Mangrove-Ecosystem-Wetlands", baselineSaplingCapacity: 2500, moistureIndex: 95 },
+            { sectorCode: 703, ecoZone: "Hilly-Pine-Forest-Buffer",    baselineSaplingCapacity: 6000, moistureIndex: 68 }
+        ];
+
+        self.allocateReplantationManifest = func() {
+            show("=== Ministry Environmental Replantation Interface [" + self.provincialSectorId + "] ===");
+            show("--- Live Conservation Sector Matrix Map ---");
+            
+            for zoneRecord in self.conservationSectors {
+                show("Sector Code: [" + toStr(zoneRecord.sectorCode) + "] | Territory: " + zoneRecord.ecoZone + " | Sapling Cap: " + toStr(zoneRecord.baselineSaplingCapacity) + " Units | Soil Moisture: " + toStr(zoneRecord.moistureIndex) + "%");
+            }
+            show("--------------------------------------------------");
+            
+            define customerZoneSelection = num(ask("Enter Targeted Sector Code for environmental deployment: "));
+            define matchedListIndex = -1;
+            define pointer = 0;
+            
+            while (pointer < len(self.conservationSectors)) {
+                if (num(self.conservationSectors[pointer].sectorCode) == customerZoneSelection) {
+                    matchedListIndex = pointer;
+                }
+                pointer = pointer + 1;
+            }
+            
+            if (matchedListIndex != -1) {
+                define activeZone = self.conservationSectors[matchedListIndex];
+                define inputCount = num(ask("Enter total sapling units to plant inside this parcel: "));
+                define structuralMaxCapacity = num(activeZone.baselineSaplingCapacity);
+                
+                if (inputCount > 0 and inputCount <= structuralMaxCapacity) {
+                    # Modify current list record attributes
+                    activeZone.baselineSaplingCapacity = structuralMaxCapacity - inputCount;
+                    self.aggregatedSaplingsCommitted = self.aggregatedSaplingsCommitted + inputCount;
+                    
+                    show("============== BIOLOGICAL PROTECTION RECEIPT ==============");
+                    show(" Designated EcoZone:    " + activeZone.ecoZone);
+                    show(" Saplings Planted:      " + toStr(inputCount) + " New Trees");
+                    show(" Landscape Status:      Ecosystem replenishment successfully scheduled.");
+                    show("===========================================================");
+                } else {
+                    show("REGISTRATION VOID: Plant payload scale overflows maximum environmental density caps.");
+                }
+            } else {
+                show("REGISTRATION VOID: Selection token missing from agricultural lookup arrays.");
+            }
+        };
+    }
+}
+
+define environmentalNode = new ForestryEcosystemRegistry("UPPER-MYANMAR-HILLS");
+environmentalNode.allocateReplantationManifest();

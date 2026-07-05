@@ -1,0 +1,60 @@
+entity FleetLiquidationCenter {
+    init(depotCode) {
+        self.depotCode = depotCode;
+        self.liquidationRevenue = 0.0;
+        
+        self.vehicleLot = [
+            { code: 101, type: "Electric-Sedan-EV", price: 28000, lotsAvailable: 8 },
+            { code: 202, type: "Utility-Transit-Van", price: 35000, lotsAvailable: 4 },
+            { code: 303, type: "Heavy-Duty-Flatbed",  price: 54000, lotsAvailable: 3 }
+        ];
+
+        self.processCustomerPurchaseOrder = func() {
+            show("=== Municipal Vehicle Disposal & Showroom Depot: " + self.depotCode + " ===");
+            show("--- Live Fleet Batches Up For Liquidation ---");
+            
+            for vehicle in self.vehicleLot {
+                show("ID Code: [" + toStr(vehicle.code) + "] | Batch Profile: " + vehicle.type + " | Reserve Unit Price: $" + toStr(vehicle.price) + " | Available Lots: " + toStr(vehicle.lotsAvailable));
+            }
+            show("--------------------------------------------------");
+            
+            define customerSelection = num(ask("Enter the Vehicle Batch Code you wish to acquire: "));
+            define matchedIndex = -1;
+            define i = 0;
+            
+            while (i < len(self.vehicleLot)) {
+                if (num(self.vehicleLot[i].code) == customerSelection) {
+                    matchedIndex = i;
+                }
+                i = i + 1;
+            }
+            
+            if (matchedIndex != -1) {
+                define targetBatch = self.vehicleLot[matchedIndex];
+                define unitsRequested = num(ask("Enter number of fleet vehicle units to clear: "));
+                define lotsAvailableNum = num(targetBatch.lotsAvailable);
+                define unitPriceNum = num(targetBatch.price);
+                
+                if (unitsRequested > 0 and unitsRequested <= lotsAvailableNum) {
+                    define coreCost = unitPriceNum * unitsRequested;
+                    
+                    targetBatch.lotsAvailable = lotsAvailableNum - unitsRequested;
+                    self.liquidationRevenue = self.liquidationRevenue + coreCost;
+                    
+                    show("============== MUNICIPAL DISPOSAL BILL ==============");
+                    show(" Fleet Asset Category:   " + targetBatch.type);
+                    show(" Units Sold:             " + toStr(unitsRequested));
+                    show(" Net Sovereign Payment:  $" + toStr(coreCost));
+                    show("=====================================================");
+                } else {
+                    show("TRANSACTION REJECTED: Requested quantity breaches lot density constraints.");
+                }
+            } else {
+                show("TRANSACTION REJECTED: Invalid municipal vehicle selection token entered.");
+            }
+        };
+    }
+}
+
+define showroomTerminal = new FleetLiquidationCenter("DEPOT-ZONE-NORTH");
+showroomTerminal.processCustomerPurchaseOrder();

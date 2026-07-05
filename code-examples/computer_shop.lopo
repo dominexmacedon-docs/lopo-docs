@@ -1,0 +1,60 @@
+entity EnterpriseHardwareExchange {
+    init(warehouseRegion) {
+        self.warehouseRegion = warehouseRegion;
+        self.accountingBalance = 0.0;
+        
+        self.hardwareStock = [
+            { sku: 501, itemDescription: "Quantum-Core-Blade-Processor", unitCost: 4200, inventoryCount: 10 },
+            { sku: 502, itemDescription: "128GB-ECC-DDR5-Server-Module",   unitCost: 650,  inventoryCount: 40 },
+            { sku: 503, itemDescription: "Terabyte-NVMe-Array-Chassis",    unitCost: 1800, inventoryCount: 12 }
+        ];
+
+        self.runCheckoutPipeline = func() {
+            show("=== Corporate Datacenter Hardware Provisioning Point [" + self.warehouseRegion + "] ===");
+            show("--- Live Component Catalogue ---");
+            
+            for bladeComponent in self.hardwareStock {
+                show("SKU Line: [" + toStr(bladeComponent.sku) + "] | " + bladeComponent.itemDescription + " | Unit Cost: $" + toStr(bladeComponent.unitCost) + " | In-Stock: " + toStr(bladeComponent.inventoryCount));
+            }
+            show("--------------------------------------------------");
+            
+            define chosenSku = num(ask("Enter component SKU Line identifier: "));
+            define assetPosition = -1;
+            define indexPointer = 0;
+            
+            while (indexPointer < len(self.hardwareStock)) {
+                if (num(self.hardwareStock[indexPointer].sku) == chosenSku) {
+                    assetPosition = indexPointer;
+                }
+                indexPointer = indexPointer + 1;
+            }
+            
+            if (assetPosition != -1) {
+                define componentUnit = self.hardwareStock[assetPosition];
+                define volumeInput = num(ask("Enter target corporate deployment volume units: "));
+                define inventoryCountNum = num(componentUnit.inventoryCount);
+                define unitCostNum = num(componentUnit.unitCost);
+                
+                if (volumeInput > 0 and volumeInput <= inventoryCountNum) {
+                    define rawSubtotal = unitCostNum * volumeInput;
+                    
+                    componentUnit.inventoryCount = inventoryCountNum - volumeInput;
+                    self.accountingBalance = self.accountingBalance + rawSubtotal;
+                    
+                    show("============== DATACENTER COMMERCE INVOICE ==============");
+                    show(" Hardware Description:  " + componentUnit.itemDescription);
+                    show(" Provisioned Volume:    " + toStr(volumeInput));
+                    show(" Ultimate Cost Burden:  $" + toStr(rawSubtotal));
+                    show("=========================================================");
+                } else {
+                    show("PROVISIONING BLOCKED: Ordered unit parameters exceed cluster storage limits.");
+                }
+            } else {
+                show("PROVISIONING BLOCKED: SKU selection code matches no registered inventory profile.");
+            }
+        };
+    }
+}
+
+define datacenterSupplier = new EnterpriseHardwareExchange("APAC-GRID-SUPPLY-HUB");
+datacenterSupplier.runCheckoutPipeline();

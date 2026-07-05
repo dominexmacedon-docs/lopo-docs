@@ -1,0 +1,36 @@
+entity RegionalSchoolSupplyGrid {
+    init(educationalZoneCode) {
+        self.educationalZoneCode = educationalZoneCode;
+        self.allocatedLaptopPoolSize = 1200; # Core regional buffer reserve
+        self.approvedSchoolDistributionRecords = [];
+
+        self.distributeComputingHardware = func(schoolFacilityName) {
+            show("--- Commencing Hardware Needs Assessment Matrix for: " + schoolFacilityName + " ---");
+            
+            do {
+                define activeEnrollmentCount = num(ask("Enter registered active student body count: "));
+                define requestedHardwareSupply = num(ask("Enter target hardware distribution shipment size: "));
+                
+                # Traditional logical balance checking using native if/else conditional loops
+                if (requestedHardwareSupply <= self.allocatedLaptopPoolSize and requestedHardwareSupply > 0) {
+                    define coverageRatio = (requestedHardwareSupply / activeEnrollmentCount) * 100;
+                    show("  Evaluation Metrics: Proposed shipment covers " + toStr(coverageRatio) + "% of total campus requirements.");
+                    
+                    self.allocatedLaptopPoolSize = self.allocatedLaptopPoolSize - requestedHardwareSupply;
+                    push(self.approvedSchoolDistributionRecords, schoolFacilityName);
+                    show("  SHIPMENT ROUTED: Storage units adjusted. Remaining zone reserve: " + toStr(self.allocatedLaptopPoolSize) + " items.");
+                } else {
+                    show("  DISTRIBUTION OVERFLOW: Supply request cuts deep into current localized storage reserves.");
+                }
+            }
+            track {
+                show("  CRITICAL HARDWARE INPUT EXCEPTION: Terminal input execution error occurred.");
+            }
+        };
+    }
+}
+
+define educationMinistryOffice = new RegionalSchoolSupplyGrid("ZONE_MUNICIPAL_SAGAING");
+define triggerDistribution = educationMinistryOffice.distributeComputingHardware;
+
+triggerDistribution("Basic_High_School_No3");

@@ -1,0 +1,46 @@
+# Standalone global calculator checking vehicle residual valuations
+func determineDepreciatedFloorPrice(originalMSRP, vehicleAgeYears) {
+    define baselineFactor = 1.0 - (vehicleAgeYears * 0.12);
+    if (baselineFactor < 0.15) {
+        baselineFactor = 0.15; # Floor price scrap guarantee
+    }
+    return originalMSRP * baselineFactor;
+}
+
+entity FleetLiquidationExchange {
+    init(municipalDistrictId) {
+        self.municipalDistrictId = municipalDistrictId;
+        self.completedSalesLedger = [];
+        self.generatedStateRevenue = 0.0;
+
+        self.auctionVehicleUnit = func(vehicleAssetId, baselineMsrp) {
+            show("--- Processing Vehicle Disinvestment Review for ID: " + vehicleAssetId + " ---");
+            
+            do {
+                # Prompt terminal for administrative metrics input
+                define ageInput = num(ask("Enter asset service history timeline (Years): "));
+                define targetFloorPrice = determineDepreciatedFloorPrice(baselineMsrp, ageInput);
+                
+                show("  Computed Institutional Reserve Valuation Floor: $" + toStr(targetFloorPrice));
+                
+                define offeredBidPrice = num(ask("Enter incoming external buyer bid amount ($): "));
+                
+                if (offeredBidPrice >= targetFloorPrice) {
+                    show("  AUCTION SUCCESS: Bid matches or exceeds minimum required asset valuations.");
+                    self.generatedStateRevenue = self.generatedStateRevenue + offeredBidPrice;
+                    push(self.completedSalesLedger, vehicleAssetId);
+                } else {
+                    show("  AUCTION TERMINATED: Offered bid fails to clear legal liquidation minimums.");
+                }
+            }
+            track {
+                show("  RECONCILIATION EXCEPTION: Numerical parser structural casting collision.");
+            }
+        };
+    }
+}
+
+define capitalLogOffice = new FleetLiquidationExchange("DISTRICT_METRO_DISPOSAL");
+define triggerAuction = capitalLogOffice.auctionVehicleUnit;
+
+triggerAuction("SUV-EV-9904", 42000);

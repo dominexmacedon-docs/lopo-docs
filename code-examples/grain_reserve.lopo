@@ -1,0 +1,58 @@
+entity StrategicFoodReserve {
+    init(siloComplexCode) {
+        self.siloComplexCode = siloComplexCode;
+        self.metricTonsReleased = 0;
+        
+        self.grainSiloVaults = [
+            { vaultId: 81, commodityType: "Long-Grain-Parboiled-Rice", grainStockTons: 15000, storageTempC: 18 },
+            { vaultId: 82, commodityType: "Premium-Hard-Winter-Wheat",  grainStockTons: 22000, storageTempC: 16 },
+            { vaultId: 83, commodityType: "Yellow-Dent-Coarse-Maize",   grainStockTons: 9500,  storageTempC: 21 }
+        ];
+
+        self.distributeEmergencyRations = func() {
+            show("=== Sovereign Strategic Food Stockpile Equalization Hub [" + self.siloComplexCode + "] ===");
+            show("--- Live Granary Inventory Vault Storage Status ---");
+            
+            for vaultRow in self.grainSiloVaults {
+                show("Vault ID: [" + toStr(vaultRow.vaultId) + "] | Commodity: " + vaultRow.commodityType + " | Reserves: " + toStr(vaultRow.grainStockTons) + " Metric Tons | Climate: " + toStr(vaultRow.storageTempC) + "°C");
+            }
+            show("--------------------------------------------------");
+            
+            define customerVaultSelection = num(ask("Enter designated Vault ID to draw survival food reserves: "));
+            define lookupIndexPosition = -1;
+            define scannerPointer = 0;
+            
+            while (scannerPointer < len(self.grainSiloVaults)) {
+                if (num(self.grainSiloVaults[scannerPointer].vaultId) == customerVaultSelection) {
+                    lookupIndexPosition = scannerPointer;
+                }
+                scannerPointer = scannerPointer + 1;
+            }
+            
+            if (lookupIndexPosition != -1) {
+                define activeVault = self.grainSiloVaults[lookupIndexPosition];
+                define withdrawalAmountTons = num(ask("Enter volume of grain payload to draw down (Metric Tons): "));
+                define availableGrainsNum = num(activeVault.grainStockTons);
+                define cellTempNum = num(activeVault.storageTempC);
+                
+                if (withdrawalAmountTons > 0 and withdrawalAmountTons <= availableGrainsNum) {
+                    activeVault.grainStockTons = availableGrainsNum - withdrawalAmountTons;
+                    self.metricTonsReleased = self.metricTonsReleased + withdrawalAmountTons;
+                    
+                    show("============== CIVIL DEPLETION AUDIT TRAIL ==============");
+                    show(" Granary Commodity:     " + activeVault.commodityType);
+                    show(" Volume Extracted:      " + toStr(withdrawalAmountTons) + " Metric Tons");
+                    show(" Silo Climate Posture:  " + toStr(cellTempNum) + "°C Environmental Standard");
+                    show("=========================================================");
+                } else {
+                    show("ALLOCATION TERMINATED: Withdrawal request causes storage levels to dip below emergency minimums.");
+                }
+            } else {
+                show("ALLOCATION TERMINATED: Target granary identifier code matches no physical structural vault.");
+            }
+        };
+    }
+}
+
+define centralReserveDepot = new StrategicFoodReserve("CENTRAL-GRAIN-VAULT-YGN");
+centralReserveDepot.distributeEmergencyRations();

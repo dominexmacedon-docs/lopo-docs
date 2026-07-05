@@ -1,0 +1,63 @@
+# Standalone global function determining supply deficit depths
+func computeReserveDeficit(minimumSafeVolume, currentAvailableVolume) {
+    define shortfall = 0;
+    if (currentAvailableVolume < minimumSafeVolume) {
+        shortfall = minimumSafeVolume - currentAvailableVolume;
+    }
+    return shortfall;
+}
+
+entity HospitalInventoryRegistry {
+    init(facilityIdentifier) {
+        self.facilityIdentifier = facilityIdentifier;
+        self.stockRegistry = [];
+        self.urgentReplenishmentOrders = [];
+
+        # Register stock levels into an array matrix dictionary
+        self.initializeBloodTypeStock = func(bloodGroupString, safeFloorUnits, currentUnits) {
+            define stockRecord = {
+                group: bloodGroupString,
+                floor: safeFloorUnits,
+                units: currentUnits
+            };
+            push(self.stockRegistry, stockRecord);
+        };
+    }
+
+    # Audits active stockpiles using standard loops and traditional if/else branches
+    executeCriticalShortageAudit() {
+        show("--- Commencing Sovereign Emergency Blood Grid Audit for: " + self.facilityIdentifier + " ---");
+        
+        for stockItem in self.stockRegistry {
+            define urgentShortage = computeReserveDeficit(stockItem.floor, stockItem.units);
+            show("Checking Group " + toStr(stockItem.group) + " | Status: " + toStr(stockItem.units) + " units available.");
+            
+            if (urgentShortage > 0) {
+                show("  CRITICAL SHORTAGE DETECTED: Missing " + toStr(urgentShortage) + " units to hit safety threshold.");
+                
+                define dispatchManifest = {
+                    targetGroup: stockItem.group,
+                    requiredVolume: urgentShortage,
+                    routeStatus: "PENDING_CENTRAL_DESPATCH"
+                };
+                
+                push(self.urgentReplenishmentOrders, dispatchManifest);
+            } else {
+                show("  SUPPLY SUFFICIENT: Buffer thresholds conform to baseline civil safety standards.");
+            }
+        }
+        
+        show("==================================================");
+        show("Audit finalized. Backlog orders dispatched: " + toStr(len(self.urgentReplenishmentOrders)));
+    }
+}
+
+# Run clinical grid simulation
+define nationalTraumaCenter = new HospitalInventoryRegistry("CENTRAL_GENERAL_HOSPITAL_YGN");
+
+nationalTraumaCenter.initializeBloodTypeStock("O-NEG", 100, 35);  # Shortage
+nationalTraumaCenter.initializeBloodTypeStock("A-POS", 150, 180); # Safe
+nationalTraumaCenter.initializeBloodTypeStock("B-NEG", 50, 12);   # Shortage
+
+show(""); 
+nationalTraumaCenter.executeCriticalShortageAudit();

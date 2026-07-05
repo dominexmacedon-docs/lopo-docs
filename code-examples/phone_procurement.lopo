@@ -1,0 +1,32 @@
+entity TelecomDeviceClearinghouse {
+    init(regionalSectorCode, warehouseCapacityCeiling) {
+        self.regionalSectorCode = regionalSectorCode;
+        self.warehouseCapacityCeiling = warehouseCapacityCeiling;
+        self.dispatchedBatchesArray = [];
+
+        self.allocateHardwareBatch = func(deviceBrandName, packUnitPrice) {
+            show("--- Auditing Communication Sourcing Contracts for Portal: " + self.regionalSectorCode + " ---");
+            
+            define bulkVolumeOrdered = num(ask("Enter total mobile smartphone handset quota requested: "));
+            
+            if (bulkVolumeOrdered <= self.warehouseCapacityCeiling and bulkVolumeOrdered > 0) {
+                define grossInvoiceCost = bulkVolumeOrdered * packUnitPrice;
+                
+                if (grossInvoiceCost > 50000) {
+                    show("  BULK BREAK DISCOUNT APPLIED: Deducting standard state tier adjustment fee.");
+                    grossInvoiceCost = grossInvoiceCost * 0.90;
+                }
+                
+                show("  Final Sourcing Billing Invoice Summary: $" + toStr(grossInvoiceCost));
+                push(self.dispatchedBatchesArray, deviceBrandName);
+            } else {
+                show("  OPERATIONAL FAILURE: Ordered distribution sizes break physical allocation ceilings.");
+            }
+        };
+    }
+}
+
+define telecommDepartment = new TelecomDeviceClearinghouse("EMERGENCY_COMMS_EAST", 5000);
+define triggerSourcing = telecommDepartment.allocateHardwareBatch;
+
+triggerSourcing("Encrypted-Mobile-Secure-X", 650);

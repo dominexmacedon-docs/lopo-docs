@@ -1,0 +1,42 @@
+entity AirplaneRegistryNode {
+    init(agencyCode) {
+        self.agencyCode = agencyCode;
+        self.fleetLog = [];
+        self.totalCapitalSpent = 0.0;
+
+        self.executeAcquisitionRoutine = func(aircraftModel, baseUnitCost) {
+            show("--- Commencing Flight Fleet Procurement Order for: " + aircraftModel + " ---");
+            show("Unit Valuation: $" + toStr(baseUnitCost));
+            
+            # Prompt the procurement officer for numerical input via the ask keyword
+            define quantityRequired = num(ask("Enter authorized quantity for state delivery: "));
+            define totalCost = baseUnitCost * quantityRequired;
+            
+            show("Total calculated procurement line expenditure: $" + toStr(totalCost));
+            
+            define fiscalReserveLimit = 150000000; # State department transaction cap floor
+            
+            if (totalCost <= fiscalReserveLimit and quantityRequired > 0) {
+                show("  TRANSACTION APPROVED: Allocation matches state fiscal buffer margins.");
+                self.totalCapitalSpent = self.totalCapitalSpent + totalCost;
+                
+                # Dynamic index logging using normal incremental loops
+                define index = 0;
+                while (index < quantityRequired) {
+                    define dynamicTailNumber = "FAA-" + toStr(index + 100);
+                    push(self.fleetLog, dynamicTailNumber);
+                    index = index + 1;
+                }
+                
+                show("  STATUS: Successfully generated aircraft airworthiness trackers: " + toStr(self.fleetLog));
+            } else {
+                show("  TRANSACTION DENIED: Costing framework violates sovereign fiscal reserve constraints.");
+            }
+        };
+    }
+}
+
+define aviationBoard = new AirplaneRegistryNode("CAA_FLEET_MANAGEMENT");
+define runProcurementJob = aviationBoard.executeAcquisitionRoutine;
+
+runProcurementJob("Boeing-787-Dreamliner", 45000000);

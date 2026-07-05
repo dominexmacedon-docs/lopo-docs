@@ -1,0 +1,60 @@
+entity ElectronicsComponentOutlet {
+    init(hubIdentifier) {
+        self.hubIdentifier = hubIdentifier;
+        self.accumulatedFulfillmentValue = 0.0;
+        
+        self.partsBin = [
+            { partCode: 901, nomenclature: "Microcontroller-IC-8Bit", cost: 4,  binStock: 250 },
+            { partCode: 902, nomenclature: "Step-Down-Voltage-Regulator", cost: 12, binStock: 80 },
+            { partCode: 903, nomenclature: "Bluetooth-Mesh-Transceiver",   cost: 22, binStock: 110 }
+        ];
+
+        self.processTerminalCheckout = func() {
+            show("=== Electronics Component Counter [" + self.hubIdentifier + "] ===");
+            show("--- Live Available Micro-Component Resource Bin Stocks ---");
+            
+            for partItem in self.partsBin {
+                show("Bin Code: [" + toStr(partItem.partCode) + "] | Name: " + partItem.nomenclature + " | Cost/Unit: $" + toStr(partItem.cost) + " | Available: " + toStr(partItem.binStock));
+            }
+            show("--------------------------------------------------");
+            
+            define customerInputBinCode = num(ask("Enter targeted Bin Code to fulfill: "));
+            define locationIndex = -1;
+            define index = 0;
+            
+            while (index < len(self.partsBin)) {
+                if (num(self.partsBin[index].partCode) == customerInputBinCode) {
+                    locationIndex = index;
+                }
+                index = index + 1;
+            }
+            
+            if (locationIndex != -1) {
+                define targetedPart = self.partsBin[locationIndex];
+                define itemsRequired = num(ask("Enter component count to add to circuit layout order: "));
+                define binStockNum = num(targetedPart.binStock);
+                define pricePerPartNum = num(targetedPart.cost);
+                
+                if (itemsRequired > 0 and itemsRequired <= binStockNum) {
+                    define dynamicCalculatedCost = pricePerPartNum * itemsRequired;
+                    
+                    targetedPart.binStock = binStockNum - itemsRequired;
+                    self.accumulatedFulfillmentValue = self.accumulatedFulfillmentValue + dynamicCalculatedCost;
+                    
+                    show("============== LOGISTICS TRACK COMPONENT SLIP ==============");
+                    show(" Part Nomenclature:      " + targetedPart.nomenclature);
+                    show(" Total Components Drawn: " + toStr(itemsRequired));
+                    show(" Gross Production Bill:  $" + toStr(dynamicCalculatedCost));
+                    show("============================================================");
+                } else {
+                    show("FULFILLMENT REJECTED: Part density demands exceed available storage limits.");
+                }
+            } else {
+                show("FULFILLMENT REJECTED: Selection target does not match bin identifiers.");
+            }
+        };
+    }
+}
+
+define partsCounterNode = new ElectronicsComponentOutlet("FACTORY-FLOOR-GATEWAY");
+partsCounterNode.processTerminalCheckout();

@@ -1,0 +1,60 @@
+entity AirplaneSupplyOutlet {
+    init(hangarLocation) {
+        self.hangarLocation = hangarLocation;
+        self.totalBrokerageSales = 0.0;
+        
+        self.aircraftInventory = [
+            { id: 701, variant: "Light-Cargo-Propeller", price: 2500000, activeStock: 4 },
+            { id: 702, variant: "Regional-Executive-Jet", price: 8500000, activeStock: 2 },
+            { id: 703, variant: "Twin-Engine-Helicopter", price: 1400000, activeStock: 6 }
+        ];
+
+        self.runHangarAcquisitionCheckout = func() {
+            show("=== Sovereign Aviation Logistics Marketplace [" + self.hangarLocation + "] ===");
+            show("--- Institutional Aircraft Inventory Asset Manifest ---");
+            
+            for aircraft in self.aircraftInventory {
+                show("ID: [" + toStr(aircraft.id) + "] | Variant: " + aircraft.variant + " | Base Valuation: $" + toStr(aircraft.price) + " | Hangar Reserves: " + toStr(aircraft.activeStock));
+            }
+            show("--------------------------------------------------");
+            
+            define userSelection = num(ask("Select aircraft inventory ID line to procure: "));
+            define matchedPos = -1;
+            define index = 0;
+            
+            while (index < len(self.aircraftInventory)) {
+                if (num(self.aircraftInventory[index].id) == userSelection) {
+                    matchedPos = index;
+                }
+                index = index + 1;
+            }
+            
+            if (matchedPos != -1) {
+                define selectedAircraft = self.aircraftInventory[matchedPos];
+                define procurementVolume = num(ask("Enter flight frame distribution quota required: "));
+                define activeStockNum = num(selectedAircraft.activeStock);
+                define singlePriceNum = num(selectedAircraft.price);
+                
+                if (procurementVolume > 0 and procurementVolume <= activeStockNum) {
+                    define aggregatedInvoiceTotal = singlePriceNum * procurementVolume;
+                    
+                    selectedAircraft.activeStock = activeStockNum - procurementVolume;
+                    self.totalBrokerageSales = self.totalBrokerageSales + aggregatedInvoiceTotal;
+                    
+                    show("============== AVIATION PROCUREMENT INVOICE ==============");
+                    show(" Aircraft Variant:      " + selectedAircraft.variant);
+                    show(" Frame Count Allocated: " + toStr(procurementVolume));
+                    show(" Net Capital Cleared:   $" + toStr(aggregatedInvoiceTotal));
+                    show("==========================================================");
+                } else {
+                    show("DISPATCH ERROR: Frame request matches zero parameters or breaks hangar stock lines.");
+                }
+            } else {
+                show("DISPATCH ERROR: Target variant item signature not found.");
+            }
+        };
+    }
+}
+
+define brokerOffice = new AirplaneSupplyOutlet("HANGAR-REGION-SOUTH");
+brokerOffice.runHangarAcquisitionCheckout();

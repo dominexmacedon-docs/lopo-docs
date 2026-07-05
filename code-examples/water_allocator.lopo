@@ -1,0 +1,52 @@
+# Standalone helper evaluating dynamic cubic allocation benchmarks
+func evaluateVolumetricConsumptionCeiling(allottedQuota, actualUsage) {
+    define usageDiscrepancy = actualUsage - allottedQuota;
+    return usageDiscrepancy;
+}
+
+entity IrrigationGridDistributor {
+    init(catchmentDistrictId) {
+        self.catchmentDistrictId = catchmentDistrictId;
+        self.ecologicalSurchargeLog = [];
+        self.totalSurchargeRevenue = 0.0;
+
+        self.processDistrictConsumptionProfiles = func(farmRecordsArray) {
+            show("--- Commencing Macro Canal Resource Allocation Check for: " + self.catchmentDistrictId + " ---");
+            
+            for singleFarm in farmRecordsArray {
+                define consumptionVariance = evaluateVolumetricConsumptionCeiling(singleFarm.allocatedQuota, singleFarm.actualUsage);
+                show("Inspecting Parcel: " + toStr(singleFarm.parcelId) + " | Over-consumption: " + toStr(consumptionVariance) + " m³");
+                
+                if (consumptionVariance > 0) {
+                    define excessFee = consumptionVariance * 4.50;
+                    
+                    if (consumptionVariance > 500) {
+                        # Apply heavy regulatory penalties for structural waste
+                        excessFee = excessFee + 1200.0; 
+                    }
+                    
+                    self.totalSurchargeRevenue = self.totalSurchargeRevenue + excessFee;
+                    push(self.ecologicalSurchargeLog, singleFarm.parcelId);
+                    show("  PENALTY APPLIED: Allocation limits broken. Surcharge Invoice: $" + toStr(excessFee));
+                } else {
+                    show("  CONSERVATION TARGET MET: Consumption metrics remain within authorized regional limits.");
+                }
+            }
+            
+            show("==================================================");
+            show("Reconciliation cycle complete. Total Conservation Penalties Collected: $" + toStr(self.totalSurchargeRevenue));
+        };
+    }
+}
+
+# Construct distribution datasets
+define monitoringData = [
+    { parcelId: "AGRI-PLOT-101", allocatedQuota: 1200, actualUsage: 1150 }, # Compliant
+    { parcelId: "AGRI-PLOT-204", allocatedQuota: 800,  actualUsage: 1450 }, # Exceeds (Penalty + Over-use)
+    { parcelId: "AGRI-PLOT-882", allocatedQuota: 2000, actualUsage: 2100 }  # Exceeds (Standard Penalty)
+];
+
+define municipalWaterOffice = new IrrigationGridDistributor("DAWEI_AGRICULTURE_VALLEY");
+define executionPipeline = municipalWaterOffice.processDistrictConsumptionProfiles;
+
+executionPipeline(monitoringData);
