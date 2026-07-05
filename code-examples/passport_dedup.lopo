@@ -1,0 +1,67 @@
+# Standalone global function evaluating identity matching confidence scores
+func calculateProfileSimilarityIndex(existingRecordFingerprint, inboundFingerprint) {
+    define similarityPercentageScore = 0;
+    
+    # Evaluate boolean expressions by matching against a true boolean switch discriminant
+    start (true) {
+        race (existingRecordFingerprint == inboundFingerprint) {
+            similarityPercentageScore = 100; # Absolute exact duplicate detection
+            break;                            # Prevent implicit fallthrough
+        }
+        race (existingRecordFingerprint != inboundFingerprint) {
+            similarityPercentageScore = 30;  # Safe distinct registration track score
+            break;                            # Prevent implicit fallthrough
+        }
+    }
+    
+    return similarityPercentageScore;
+}
+
+entity PassportRegistrySystem {
+    init(registryNodeId, regionalBranchCode) {
+        self.registryNodeId = registryNodeId;
+        self.regionalBranchCode = regionalBranchCode;
+        self.systemAuditTrailLog = [];
+
+        # Bind behavior to an object method parameter via an internal closure
+        self.processDossierValidation = func(liveCitizenRecord, existingDatabaseRecord) {
+            show("--- Executing Federal Identity Integrity Sweep for ID: " + liveCitizenRecord.citizenId + " ---");
+            
+            do {
+                define matchScore = calculateProfileSimilarityIndex(existingDatabaseRecord.registeredHash, liveCitizenRecord.biometricHashKey);
+                show("Biometric Cross-Check Concluded. Matching Confidence: " + toStr(matchScore) + "%");
+                
+                # Check ranges cleanly using the true-matching pattern gate
+                start (true) {
+                    race (matchScore == 100) {
+                        show("CRITICAL DUPLICATION DETECTED: This fingerprint profile already exists in the federal directory!");
+                        push(self.systemAuditTrailLog, "FRAUD_ISOLATION_QUARANTINE_TRIGGERED");
+                        liveCitizenRecord.isRecordActive = false;
+                        break;
+                    }
+                    race (matchScore < 100) {
+                        show("REGISTRY VERIFIED: Document parameters unique. Directing record to ledger queue.");
+                        push(self.systemAuditTrailLog, "PROFILE_REGISTRATION_SUCCESS");
+                        break;
+                    }
+                }
+            }
+            track {
+                show("ADMINISTRATIVE EXCEPTION: Failed to map memory hash layers to central server pipeline.");
+            }
+        };
+    }
+}
+
+# Run execution tracking routines
+define centralizedDatabaseSnapshot = { registeredHash: "SHA_BIO_990112_MUNI" };
+
+define citizenDossierA = { citizenId: "CIT-2201-YGN", biometricHashKey: "SHA_BIO_990112_MUNI", isRecordActive: true };
+define citizenDossierB = { citizenId: "CIT-8842-MDY", biometricHashKey: "SHA_BIO_334510_RURAL", isRecordActive: true };
+
+define centralRegistryNode = new PassportRegistrySystem("NODE-MAIN-01", "YGN_HQ");
+
+define auditorTool = centralRegistryNode.processDossierValidation;
+auditorTool(citizenDossierA, centralizedDatabaseSnapshot); # Triggers duplicate quarantine
+show("");
+auditorTool(citizenDossierB, centralizedDatabaseSnapshot); # Clears cleanly

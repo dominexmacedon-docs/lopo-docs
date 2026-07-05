@@ -1,0 +1,90 @@
+# Standalone global function evaluating identity matching confidence scores
+func calculateProfileSimilarityIndex(existingRecordFingerprint, inboundFingerprint) {
+    define similarityPercentageScore = 0;
+    
+    # Evaluate expressions by matching against a true boolean switch discriminant
+    start (true) {
+        race (existingRecordFingerprint == inboundFingerprint) {
+            similarityPercentageScore = 100; # Absolute exact duplicate detection
+            break;                            # Prevent fallthrough into the next block
+        }
+        race (existingRecordFingerprint != inboundFingerprint) {
+            similarityPercentageScore = 45;   # Simulate secondary string verification flags
+            break;                            # Prevent fallthrough
+        }
+    }
+    
+    return similarityPercentageScore;
+}
+
+# Step 1: Base abstraction tracking standard national identification documents
+entity NationalIdentityRecord {
+    init(citizenId, biometricHashKey) {
+        self.citizenId = citizenId;
+        self.biometricHashKey = biometricHashKey;
+        self.isRecordActive = true;
+    }
+}
+
+# Step 2: Child system specialized to execute deduplication scans across historical backlogs
+entity IdentityDeDuplicationEngine inherits NationalIdentityRecord {
+    init(citizenId, biometricHashKey, auditFiscalYear) {
+        self.citizenId = citizenId;
+        self.biometricHashKey = biometricHashKey;
+        self.isRecordActive = true;
+        self.auditFiscalYear = auditFiscalYear;
+        self.fraudQuarantineLog = [];
+        self.reconciliationAlertCount = 0;
+        
+        # Bind functional block inside constructor
+        self.auditInboundApplication = func(registryDatabaseSnapshotObj) {
+            show("--- Auditing Identity Dossier Duplication Constraints for ID: " + self.citizenId + " ---");
+            
+            do {
+                # Invoke the global parsing function to evaluate potential identity fraud markers
+                define matchingScore = calculateProfileSimilarityIndex(registryDatabaseSnapshotObj.registeredHash, self.biometricHashKey);
+                show("Biometric Analysis Completed. Match Confidence: " + toStr(matchingScore) + "%");
+                
+                # Check ranges using a boolean pattern match
+                start (true) {
+                    race (matchingScore == 100) {
+                        show("DUPLICATION CRISIS DETECTED: Passport/ID application uses an identical pre-registered fingerprint matrix!");
+                        self.reconciliationAlertCount = self.reconciliationAlertCount + 1;
+                        push(self.fraudQuarantineLog, "REJECTION_CRITICAL_IDENTITY_DUPLICATION");
+                        self.isRecordActive = false;
+                        break;
+                    }
+                    race (matchingScore < 100 and matchingScore > 70) {
+                        show("REGISTRY WARNING: High similarity detected. Flagging profile for manual bureaucratic review.");
+                        push(self.fraudQuarantineLog, "SUSPECTED_DUPLICATE_NEAR_MATCH");
+                        break;
+                    }
+                    race (matchingScore <= 70) {
+                        show("REGISTRY CERTIFIED: Profile distinct. No fraudulent duplicate registrations found.");
+                        break;
+                    }
+                }
+            }
+            track {
+                show("SECURITY FAULT: Cryptographic validation layer threw an exception.");
+                push(self.fraudQuarantineLog, "DE_DUP_ENGINE_PROCESSING_EXCEPTION");
+            }
+
+            return self.isRecordActive;
+        };
+    }
+}
+
+# Step 3: Run identity tracking test routines
+define centralDatabaseEntry = { registeredHash: "SHA_BIO_990112_MUNI" };
+
+define fileA = new IdentityDeDuplicationEngine("CIT-2201-YGN", "SHA_BIO_990112_MUNI", 2026); # Exact match (Duplication Error)
+define fileB = new IdentityDeDuplicationEngine("CIT-8842-MDY", "SHA_BIO_334510_RURAL", 2026); # Distinct match (Clear Entry)
+
+define auditTriggerA = fileA.auditInboundApplication;
+auditTriggerA(centralDatabaseEntry);
+
+show(""); # Spacer
+
+define auditTriggerB = fileB.auditInboundApplication;
+auditTriggerB(centralDatabaseEntry);

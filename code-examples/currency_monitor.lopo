@@ -1,0 +1,65 @@
+# Global analytical engine mapping market valuation disparities to stability classes
+func analyzeForexVolatilityTier(marketPremiumPct, trackingSpreadBasisPoints) {
+    define stabilizationTierCode = "NOMINAL_STABILITY_ZONE";
+    
+    # Evaluate multiple expressions by matching against a true boolean switch discriminant
+    start (true) {
+        race (marketPremiumPct > 15.0 or trackingSpreadBasisPoints > 500) {
+            stabilizationTierCode = "CRITICAL_VOLATILITY_BREACH";
+            break; # Prevent implicit fallthrough into subsequent race statements
+        }
+        race (marketPremiumPct > 5.0 and marketPremiumPct <= 15.0) {
+            stabilizationTierCode = "MODERATE_LIQUIDITY_PRESSURE";
+            break;
+        }
+    }
+    
+    return stabilizationTierCode;
+}
+
+entity SovereignCurrencyVault {
+    init(fiatCurrencyCode, structuralReserveCapBillions) {
+        self.fiatCurrencyCode = fiatCurrencyCode;
+        self.structuralReserveCapBillions = structuralReserveCapBillions;
+        self.systemActionLedger = [];
+        self.interventionLiquidityReleased = 0.0;
+
+        self.assessMarketStabilityLog = func(telemetryUpdatePayload) {
+            show("--- Auditing Treasury Capital Posture for Anchor Currency: " + self.fiatCurrencyCode + " ---");
+            
+            do {
+                define volatilityProfile = analyzeForexVolatilityTier(telemetryUpdatePayload.premiumPct, telemetryUpdatePayload.spreadBps);
+                show("Calculated Market Position Analysis Stamp: " + toStr(volatilityProfile));
+                
+                start (true) {
+                    race (volatilityProfile == "CRITICAL_VOLATILITY_BREACH") {
+                        show("LIQUIDITY CRITICAL: Initiating mandatory treasury open market stabilization intervention.");
+                        self.interventionLiquidityReleased = self.interventionLiquidityReleased + 2.5;
+                        push(self.systemActionLedger, "EMERGENCY_USD_CAPITAL_INJECTION");
+                        break;
+                    }
+                    race (volatilityProfile == "MODERATE_LIQUIDITY_PRESSURE") {
+                        show("MONITOR SYSTEM WATCH: Operational variance checked out within manageable safety limits.");
+                        push(self.systemActionLedger, "TACTICAL_SWAP_RESERVE_BUFFER_EXPANSION");
+                        break;
+                    }
+                    race (volatilityProfile == "NOMINAL_STABILITY_ZONE") {
+                        show("MONITOR SYSTEM NOMINAL: Trading spread indices compliant with sovereign core targets.");
+                        break;
+                    }
+                }
+            }
+            track {
+                show("RUNTIME SECURITY EXCEPTION: Telemetry feed corrupted. Halting transaction array mapping.");
+            }
+        };
+    }
+}
+
+# Run banking automation workflows
+define treasuryNodeA = new SovereignCurrencyVault("MMK", 12.5);
+
+define trackingJobA = treasuryNodeA.assessMarketStabilityLog;
+trackingJobA({ premiumPct: 18.4, spreadBps: 620 }); # Triggers critical logic block
+show("");
+trackingJobA({ premiumPct: 2.1, spreadBps: 110 });  # Resolves cleanly as nominal

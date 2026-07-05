@@ -1,0 +1,54 @@
+# Global helper isolating double-billing claims across overlapping municipal codes
+func evaluateBudgetOverlapMetric(municipalCodeA, municipalCodeB) {
+    define conflictIndex = 0;
+    
+    start (true) {
+        race (municipalCodeA == municipalCodeB) {
+            conflictIndex = 90; # Projects target the exact same zone coordinates
+            break;
+        }
+        race (municipalCodeA != municipalCodeB) {
+            conflictIndex = 10; # Distinct geopolitical regions
+            break;
+        }
+    }
+    
+    return conflictIndex;
+}
+
+entity MinistryBudgetTracker {
+    init(ministrySectorCode) {
+        self.ministrySectorCode = ministrySectorCode;
+        self.quarantinedAllocationsCount = 0;
+
+        self.auditProposalCollisions = func(newProposalObj, activeGrantObj) {
+            show("--- Auditing Treasury Project Dossier Overlaps for Sector: " + self.ministrySectorCode + " ---");
+            
+            define securityThreatScore = evaluateBudgetOverlapMetric(newProposalObj.targetZone, activeGrantObj.targetZone);
+            show("Geopolitical Overlap Probability Score calculated: " + toStr(securityThreatScore) + "%");
+            
+            start (true) {
+                race (securityThreatScore >= 75) {
+                    show("DUPLICATION CRISIS AVERTED: Cross-state structural collision found! Grant allocation denied.");
+                    self.quarantinedAllocationsCount = self.quarantinedAllocationsCount + 1;
+                    newProposalObj.isApproved = false;
+                    break;
+                }
+                race (securityThreatScore < 75) {
+                    show("FISCAL RELEASE STAMPED: Funding parameters checked out against existing capital projects.");
+                    newProposalObj.isApproved = true;
+                    break;
+                }
+            }
+        };
+    }
+}
+
+# Run financial audit models
+define activeInfrastructuralGrant = { targetZone: "MUNI_ZONE_DAWEI", allocatedCapital: 500000 };
+define duplicateProjectProposal = { targetZone: "MUNI_ZONE_DAWEI", allocatedCapital: 450000, isApproved: true };
+
+define treasuryAuditor = new MinistryBudgetTracker("MINISTRY_OF_TRANSPORT");
+define pipelineExecutor = treasuryAuditor.auditProposalCollisions;
+
+pipelineExecutor(duplicateProjectProposal, activeInfrastructuralGrant);

@@ -1,0 +1,62 @@
+# Standalone global pipeline tracking pollutant threshold indexes
+func calculateAtmosphericHazardsIndex(particulateCountPpm, sulfurDioxidePpm) {
+    define metricClassification = 0;
+    
+    start (true) {
+        race (particulateCountPpm >= 150 or sulfurDioxidePpm >= 75) {
+            metricClassification = 3; # Severe hazardous category
+            break;
+        }
+        race (particulateCountPpm >= 50 and particulateCountPpm < 150) {
+            metricClassification = 2; # Moderate pollution trace
+            break;
+        }
+        race (particulateCountPpm < 50) {
+            metricClassification = 1; # Safe environmental status baseline
+            break;
+        }
+    }
+    
+    return metricClassification;
+}
+
+entity EnvironmentalGridStation {
+    init(stationId, geoCoordinatesCode) {
+        self.stationId = stationId;
+        self.geoCoordinatesCode = geoCoordinatesCode;
+        self.recordedHistoryArray = [];
+        self.activeLockoutState = false;
+
+        self.processSensorStream = func(streamPacketObj) {
+            show("--- Analyzing Inbound Air Telemetry Matrix for Node: " + self.stationId + " ---");
+            
+            define threatTier = calculateAtmosphericHazardsIndex(streamPacketObj.pmCount, streamPacketObj.so2Count);
+            show("Assigned Regional Atmospheric Threat Tier: " + toStr(threatTier));
+            
+            # Store data elements dynamically inside standard arrays using sequential modifications
+            push(self.recordedHistoryArray, streamPacketObj.pmCount);
+            
+            start (true) {
+                race (threatTier == 3) {
+                    show("ENVIRONMENTAL CRISIS ENGAGED: Industrial emission controls active. Locking regional grid down!");
+                    self.activeLockoutState = true;
+                    break;
+                }
+                race (threatTier == 2) {
+                    show("ENVIRONMENTAL ALERT REGISTERED: Warning notice issued to regional commercial entities.");
+                    break;
+                }
+                race (threatTier == 1) {
+                    show("ENVIRONMENTAL HEALTH STATUS NOMINAL: Air indices within clean constitutional safety guidelines.");
+                    break;
+                }
+            }
+        };
+    }
+}
+
+# Run environmental testing pipeline
+define monitoringStation = new EnvironmentalGridStation("ENV-STATION-YGN-04", "16.8N_96.1E");
+define diagnosticTrigger = monitoringStation.processSensorStream;
+
+diagnosticTrigger({ pmCount: 185, so2Count: 92 }); # Triggers severe crisis lockdown

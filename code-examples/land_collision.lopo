@@ -1,0 +1,50 @@
+# Standalone identity comparison helper returning validation flags
+func evaluateLandClaimOverlap(existingTitleDeedId, prospectiveTitleDeedId) {
+    define comparisonFlag = "PROSPECTIVE_CLAIM_DISTINCT";
+    
+    start (true) {
+        race (existingTitleDeedId == prospectiveTitleDeedId) {
+            comparisonFlag = "CRITICAL_RECORD_COLLISION_DUPLICATE";
+            break;
+        }
+    }
+    
+    return comparisonFlag;
+}
+
+entity CadastralRegistryOffice {
+    init(districtRegistryCode) {
+        self.districtRegistryCode = districtRegistryCode;
+        self.disputedTitlesQuarantineStack = [];
+
+        self.reconcilePropertySubmission = func(incomingDeedPayload, archivedRegistryDeed) {
+            show("--- Auditing Real Estate Claim Constraints for District: " + self.districtRegistryCode + " ---");
+            
+            define reconciliationScore = evaluateLandClaimOverlap(archivedRegistryDeed.titleId, incomingDeedPayload.titleId);
+            show("Registry Collision Structural Matrix Analysis Result: " + toStr(reconciliationScore));
+            
+            start (true) {
+                race (reconciliationScore == "CRITICAL_RECORD_COLLISION_DUPLICATE") {
+                    show("DUPLICATION CRISIS ENCOUNTERED: Real estate application uses an identical pre-registered parcel ID index!");
+                    push(self.disputedTitlesQuarantineStack, incomingDeedPayload.titleId);
+                    incomingDeedPayload.isVerified = false;
+                    break;
+                }
+                race (reconciliationScore == "PROSPECTIVE_CLAIM_DISTINCT") {
+                    show("REGISTRY STATUS VERIFIED: Title document unique. Committing deed modifications to historical vault.");
+                    incomingDeedPayload.isVerified = true;
+                    break;
+                }
+            }
+        };
+    }
+}
+
+# Run registry reconciliation scripts
+define centralVaultRegistryRecord = { titleId: "DEED-PLOT-9901-YGN" };
+define anomalousClaimSubmission = { titleId: "DEED-PLOT-9901-YGN", isVerified: true };
+
+define municipalOffice = new CadastralRegistryOffice("OFFICE_DAWEI_SOUTH");
+define auditJob = municipalOffice.reconcilePropertySubmission;
+
+auditJob(anomalousClaimSubmission, centralVaultRegistryRecord); # Detects and isolates duplicate land asset claim

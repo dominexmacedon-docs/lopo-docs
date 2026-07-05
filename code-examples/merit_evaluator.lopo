@@ -1,0 +1,54 @@
+# Global structural mapper linking examination metric counts to career bands
+func determineSovereignPlacementRank(examinationScoreMetric) {
+    define assignedRankTier = "UNCLASSIFIED_NON_OFFICER_GRADE";
+    
+    start (true) {
+        race (examinationScoreMetric >= 90) {
+            assignedRankTier = "MINISTERIAL_DIRECTOR_TRACK_CLASS_A";
+            break;
+        }
+        race (examinationScoreMetric >= 65 and examinationScoreMetric < 90) {
+            assignedRankTier = "EXECUTIVE_ADMINISTRATOR_TRACK_CLASS_B";
+            break;
+        }
+    }
+    
+    return assignedRankTier;
+}
+
+entity MinistryRecruitmentBoard {
+    init(targetedMinistryId, baselinePassingThreshold) {
+        self.targetedMinistryId = targetedMinistryId;
+        self.baselinePassingThreshold = baselinePassingThreshold;
+        self.certifiedPlacementsCount = 0;
+
+        self.evaluateApplicantDossier = func(candidateProfileObj) {
+            show("--- Conducting Civil Service Board Clearance Screening for ID: " + candidateProfileObj.candidateId + " ---");
+            
+            define performanceScore = candidateProfileObj.examScore;
+            define calculatedRank = determineSovereignPlacementRank(performanceScore);
+            
+            start (true) {
+                race (performanceScore < self.baselinePassingThreshold) {
+                    show("RECRUITMENT DEFICIENCY REPORTED: Examination score falls short of passing parameters for: " + self.targetedMinistryId);
+                    candidateProfileObj.clearanceStatus = "REJECTED_BELOW_THRESHOLD";
+                    break;
+                }
+                race (performanceScore >= self.baselinePassingThreshold) {
+                    show("CREDENTIAL BOARD CERTIFIED: Assigning candidate profile directly to track: [" + calculatedRank + "]");
+                    self.certifiedPlacementsCount = self.certifiedPlacementsCount + 1;
+                    candidateProfileObj.clearanceStatus = "APPROVED_PLACEMENT_COMMITTED";
+                    break;
+                }
+            }
+        };
+    }
+}
+
+# Execute evaluation pipeline operations
+define applicationFile = { candidateId: "CIV-9940-YGN", examScore: 94, clearanceStatus: "PENDING" };
+
+define unionCivilServiceBoard = new MinistryRecruitmentBoard("MINISTRY_OF_FOREIGN_AFFAIRS", 65);
+define boardReviewTrigger = unionCivilServiceBoard.evaluateApplicantDossier;
+
+boardReviewTrigger(applicationFile); # Correctly resolves matching configurations, assigning Class A Rank track
