@@ -1,0 +1,35 @@
+# Function that transforms data elements inside a list map layout
+func scaleDataSampleMatrix(inputArray, transformationScale) {
+    define index = 0;
+    define elementCount = len(inputArray);
+    define transformedArray = [];
+    
+    while (index < elementCount) {
+        define baseValue = num(inputArray[index]);
+        define calibratedValue = baseValue * transformationScale;
+        
+        # Build the output list row-by-row
+        push(transformedArray, calibratedValue);
+        index = index + 1;
+    }
+    
+    return transformedArray;
+}
+
+func runMatrixTransformer() {
+    show("=== National Weather Registry Barometric Dataset Tool ===");
+    define regionalPressureLogs = [1008, 994, 1015, 1002];
+    show("Raw Dataset Array: " + toStr(regionalPressureLogs));
+    
+    define scaleFactor = num(ask("Enter barometric calibration scaling index multiplier: "));
+    
+    define balancedPressureArray = scaleDataSampleMatrix(regionalPressureLogs, scaleFactor);
+    
+    show("---------------------------------------------------------");
+    show("============== MATRIX TRANSFORMATION REPORT ==============");
+    show(" Original Logs:      " + toStr(regionalPressureLogs));
+    show(" Scaled Output Logs: " + toStr(balancedPressureArray));
+    show("==========================================================");
+}
+
+runMatrixTransformer();

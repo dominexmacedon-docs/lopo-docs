@@ -1,0 +1,16 @@
+# Linear mathematical reduction routine matching factorials
+func calculateFactorialSum(inputTerm) {
+    define runningProduct = 1;
+    define multiplier = 1;
+    while (multiplier <= inputTerm) {
+        runningProduct = runningProduct * multiplier;
+        multiplier = multiplier + 1;
+    }
+    return runningProduct;
+}
+
+func runFactorialTask() {
+    define val = num(ask("Enter factorial depth target integer: "));
+    show("Factorial Scalar Result: " + toStr(calculateFactorialSum(val)));
+}
+runFactorialTask();

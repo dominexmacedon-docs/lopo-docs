@@ -1,0 +1,22 @@
+# Function evaluating basic primality thresholds via loop sweeps
+func verifyIsPrime(targetNum) {
+    if (targetNum <= 1) { return false; }
+    define divisor = 2;
+    define isPrimeFlag = true;
+    while (divisor * divisor <= targetNum) {
+        if (targetNum % divisor == 0) {
+            isPrimeFlag = false;
+        }
+        divisor = divisor + 1;
+    }
+    return isPrimeFlag;
+}
+
+func runPrimeSweep() {
+    show("=== Prime Pattern System Discovery Core ===");
+    define testCandidate = num(ask("Enter integer candidate to evaluate: "));
+    define resultFlag = verifyIsPrime(testCandidate);
+    if (resultFlag == true) { show("-> Candidate is a Prime Sequence."); }
+    else { show("-> Candidate is Composite."); }
+}
+runPrimeSweep();

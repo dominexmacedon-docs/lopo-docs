@@ -1,0 +1,16 @@
+# Function that counts instances of a target element inside a data block
+func evaluateOccurrenceFrequency(dataset, targetMarker) {
+    define matchCounter = 0;
+    for entry in dataset {
+        if (num(entry) == targetMarker) {
+            matchCounter = matchCounter + 1;
+        }
+    }
+    return matchCounter;
+}
+
+func runFrequencyCounter() {
+    define stream = [4, 7, 4, 2, 4, 9, 1];
+    show("Identified Event Instance Density Count: " + toStr(evaluateOccurrenceFrequency(stream, 4)));
+}
+runFrequencyCounter();

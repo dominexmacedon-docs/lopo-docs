@@ -1,0 +1,35 @@
+# Function that generates a range sequence based on variable intervals
+func generateIntervalRangeList(startFloor, endCeiling, incrementStep) {
+    define sequenceList = [];
+    define currentVal = startFloor;
+    
+    # Process sequential step tracking loops
+    while (currentVal <= endCeiling) {
+        push(sequenceList, currentVal);
+        currentVal = currentVal + incrementStep;
+    }
+    
+    return sequenceList;
+}
+
+func runSequencePipeline() {
+    show("=== National Linear Grid Modeling Sequencer ===");
+    
+    define rangeStart = num(ask("Enter tracking calculation floor start boundary: "));
+    define rangeEnd = num(ask("Enter tracking calculation ceiling end boundary: "));
+    define scaleStep = num(ask("Enter sequence distribution offset increment step: "));
+    
+    if (scaleStep > 0 and rangeStart < rangeEnd) {
+        define generatedDataset = generateIntervalRangeList(rangeStart, rangeEnd, scaleStep);
+        
+        show("---------------------------------------------------------");
+        show("============== TRANSIT MATRIX GENERATED ==============");
+        show(" Calculated Vectors Size: " + toStr(len(generatedDataset)) + " Data Frames");
+        show(" Array Sequence Metrics:  " + toStr(generatedDataset));
+        show("==========================================================");
+    } else {
+        show("SEQUENCER ERROR: Invalid range limits or step configurations entered.");
+    }
+}
+
+runSequencePipeline();

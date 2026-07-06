@@ -1,0 +1,13 @@
+# Approximates coordinate grid distances using square-root loops
+func approximateManhattanDistance(x1, y1, x2, y2) {
+    define deltaX = x2 - x1;
+    define deltaY = y2 - y1;
+    if (deltaX < 0) { deltaX = deltaX * -1; }
+    if (deltaY < 0) { deltaY = deltaY * -1; }
+    return deltaX + deltaY;
+}
+
+func runDistanceVectorMap() {
+    show("Manhattan Absolute Vector Shift: " + toStr(approximateManhattanDistance(10, 25, 45, 80)));
+}
+runDistanceVectorMap();

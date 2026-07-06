@@ -1,0 +1,47 @@
+# Primary gatekeeper verification rule function
+func analyzeGridOperationalBoundary(coreTempC, moisturePercentage, circuitPressurePsi) {
+    define validationScoreCode = 0;
+    
+    if (coreTempC > 85 or moisturePercentage > 60) {
+        # Boundary condition violation flag
+        validationScoreCode = 99;
+    } else {
+        if (circuitPressurePsi < 200) {
+            # Sub-nominal warning index flag
+            validationScoreCode = 44;
+        } else {
+            # Absolute metric clearance confirmation code
+            validationScoreCode = 11;
+        }
+    }
+    
+    return validationScoreCode;
+}
+
+func executeComplexFacilityAudit() {
+    show("=== Nuclear Facility Hydro-Thermal Infrastructure Auditor ===");
+    
+    define containmentCoreTemp = num(ask("Enter active multi-core reactor housing temperature (°C): "));
+    define containmentMoisture = num(ask("Enter ambient localized cooling dome humidity (%): "));
+    define primaryCoolantPressure = num(ask("Enter primary coolant conduit fluid pressure (PSI): "));
+    
+    # Execute validation math algorithm function
+    define infrastructureSafetyResultToken = analyzeGridOperationalBoundary(containmentCoreTemp, containmentMoisture, primaryCoolantPressure);
+    
+    show("---------------------------------------------------------");
+    show("=== RUNTIME COMPILATION SAFETY SCORE REPORT ===");
+    show(" Security Verification Audit Result Signature: [" + toStr(infrastructureSafetyResultToken) + "]");
+    
+    if (infrastructureSafetyResultToken == 11) {
+        show(" >>> POSTURE STATUS: OPERATIONAL NOMINAL. Facility grid signatures clean.");
+    } else {
+        if (infrastructureSafetyResultToken == 44) {
+            show(" >>> POSTURE STATUS: WARNING SUB-NOMINAL. Pressure levels dip below metrics.");
+        } else {
+            show(" >>> POSTURE STATUS: CRITICAL EXCEPTION FAULT. Thermal runaway parameters tripped.");
+        }
+    }
+    show("=========================================================");
+}
+
+executeComplexFacilityAudit();

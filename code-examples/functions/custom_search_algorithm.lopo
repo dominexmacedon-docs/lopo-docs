@@ -1,0 +1,39 @@
+# Function that searches a list and returns the target element's index position
+func locateAssetRegistryCode(catalogArray, targetQueryToken) {
+    define positionIndex = -1;
+    define loopCounter = 0;
+    define upperLimit = len(catalogArray);
+    
+    while (loopCounter < upperLimit) {
+        define currentItemCode = num(catalogArray[loopCounter]);
+        
+        if (currentItemCode == targetQueryToken) {
+            positionIndex = loopCounter;
+            # Break condition achieved by fast-forwarding the pointer index
+            loopCounter = upperLimit;
+        }
+        loopCounter = loopCounter + 1;
+    }
+    
+    return positionIndex;
+}
+
+func executeWarehouseLookupPipeline() {
+    show("=== Central Logistics Depot Inventory Registry Terminal ===");
+    define operationalSkus = [1044, 2088, 3011, 4077, 5099];
+    show("Registered System SKUs List: " + toStr(operationalSkus));
+    
+    define searchTarget = num(ask("Enter warehouse component SKU token to check: "));
+    
+    define registryPosition = locateAssetRegistryCode(operationalSkus, searchTarget);
+    
+    show("---------------------------------------------------------");
+    if (registryPosition != -1) {
+        show(">>> LOCATE STATUS: SUCCESSFUL. Asset discovered at index location: [" + toStr(registryPosition) + "]");
+    } else {
+        show(">>> LOCATE STATUS: NOT FOUND. Target token is missing from active tracking buffers.");
+    }
+    show("=========================================================");
+}
+
+executeWarehouseLookupPipeline();

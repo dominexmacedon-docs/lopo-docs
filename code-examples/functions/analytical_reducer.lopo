@@ -1,0 +1,30 @@
+# Function that processes a list and outputs an aggregated reduction sum metric
+func computeAggregatedMegawattsMass(powerLogList) {
+    define totalRunningSum = 0.0;
+    define structuralPointer = 0;
+    define totalEntries = len(powerLogList);
+    
+    while (structuralPointer < totalEntries) {
+        define metricPoint = num(powerLogList[structuralPointer]);
+        totalRunningSum = totalRunningSum + metricPoint;
+        structuralPointer = structuralPointer + 1;
+    }
+    
+    return totalRunningSum;
+}
+
+func runSubstationGridAggregator() {
+    show("=== Provincial Power Grid Transmission Load Consolidation ===");
+    define activeLineLoadsMw = [450.5, 320.1, 580.9, 120.4];
+    show("Active Live Load Sectors (MW): " + toStr(activeLineLoadsMw));
+    
+    define combinedGridLoad = computeAggregatedMegawattsMass(activeLineLoadsMw);
+    
+    show("---------------------------------------------------------");
+    show("============== POWER INFRASTRUCTURE SUMMARY =============");
+    show(" Monitored Network Nodes: " + toStr(len(activeLineLoadsMw)));
+    show(" Combined System Load:    " + toStr(combinedGridLoad) + " MW");
+    show("=========================================================");
+}
+
+runSubstationGridAggregator();

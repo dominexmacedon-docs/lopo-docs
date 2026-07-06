@@ -1,0 +1,35 @@
+# Function scanning an array to find and isolate the minimum numerical value
+func identifyOptimalBaselineMetric(performanceTelemetryArray) {
+    define totalElements = len(performanceTelemetryArray);
+    define absoluteMinimumVal = num(performanceTelemetryArray[0]);
+    define scanIndex = 1;
+    
+    while (scanIndex < totalElements) {
+        define relativeValue = num(performanceTelemetryArray[scanIndex]);
+        
+        if (relativeValue < absoluteMinimumVal) {
+            # Update running baseline tracking ceiling records
+            absoluteMinimumVal = relativeValue;
+        }
+        scanIndex = scanIndex + 1;
+    }
+    
+    return absoluteMinimumVal;
+}
+
+func runCoreOptimizationAnalysis() {
+    show("=== Mainframe Cluster Core Microsecond Latency Analyzer ===");
+    define computeClusterLatencyLogs = [24.5, 18.2, 35.9, 12.1, 19.4];
+    show("Active Server Cluster Processing Logs (ms): " + toStr(computeClusterLatencyLogs));
+    
+    # Process list reductions via dynamic array analytical functions
+    define minimumDiscoveredLatency = identifyOptimalBaselineMetric(computeClusterLatencyLogs);
+    
+    show("---------------------------------------------------------");
+    show("============== LATENCY MINIMIZATION SYSTEM SUMMARY ==============");
+    show(" Total Server Cores Scanned: " + toStr(len(computeClusterLatencyLogs)));
+    show(" Peak Optimized Core Thread: " + toStr(minimumDiscoveredLatency) + " ms Processing Overhead");
+    show("=================================================================");
+}
+
+runCoreOptimizationAnalysis();

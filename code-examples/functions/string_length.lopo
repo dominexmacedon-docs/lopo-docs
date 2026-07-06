@@ -1,0 +1,14 @@
+# Tracks custom string allocations by analyzing length constraints
+func stringIsWithinBounds(textSample, maximumThreshold) {
+    define trackingLength = len(textSample);
+    if (trackingLength <= maximumThreshold) {
+        return true;
+    }
+    return false;
+}
+
+func runStringValidator() {
+    define userInput = ask("Enter code signature comment label: ");
+    show("Passes Buffer Ceiling Validation: " + toStr(stringIsWithinBounds(userInput, 12)));
+}
+runStringValidator();

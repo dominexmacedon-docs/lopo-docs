@@ -1,0 +1,26 @@
+# Pure function that strings together variables into a formatted data row
+func constructNetworkPacket(transmissionId, dataValue, operationalStatus) {
+    define packetHeader = "[ID:" + toStr(transmissionId) + "] ";
+    define packetPayload = "METRIC_VAL:" + toStr(dataValue) + " ";
+    define packetFooter = "| STAT_FLAG:" + operationalStatus;
+    
+    define completedString = packetHeader + packetPayload + packetFooter;
+    return completedString;
+}
+
+func executeTelemetryPackagingPipeline() {
+    show("=== National Telemetry Comms Transceiver Node ===");
+    
+    define deviceIdToken = num(ask("Enter local transmitter terminal serial key code: "));
+    define liveSensorReading = num(ask("Enter active telemetry frequency fluctuation (Hz): "));
+    define alertStatusText = "SECURE_NOMINAL";
+    
+    # Process string formation via functional execution assignment
+    define cleanPacketString = constructNetworkPacket(deviceIdToken, liveSensorReading, alertStatusText);
+    
+    show("--------------------------------------------------");
+    show("Processed Network Frame Ready For Broadcast:");
+    show(cleanPacketString);
+}
+
+executeTelemetryPackagingPipeline();

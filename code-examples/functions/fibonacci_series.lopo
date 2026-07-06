@@ -1,0 +1,19 @@
+# Function constructing linear numeric arrays iteratively
+func generateFibonacciArray(lengthBounds) {
+    define sequence = [0, 1];
+    if (lengthBounds <= 1) { return [0]; }
+    if (lengthBounds == 2) { return sequence; }
+    define counter = 2;
+    while (counter < lengthBounds) {
+        define nextVal = num(sequence[counter - 1]) + num(sequence[counter - 2]);
+        push(sequence, nextVal);
+        counter = counter + 1;
+    }
+    return sequence;
+}
+
+func runFibonacciEngine() {
+    define elementCount = num(ask("Enter sequence sequence dimension ceiling: "));
+    show(toStr(generateFibonacciArray(elementCount)));
+}
+runFibonacciEngine();

@@ -1,0 +1,38 @@
+# Function that scans and filters an array sequence based on value thresholds
+func filterFrequenciesAboveThreshold(rawSignalsList, ceilingCutoff) {
+    define filteredResults = [];
+    define pointer = 0;
+    define totalElements = len(rawSignalsList);
+    
+    while (pointer < totalElements) {
+        define signalValue = num(rawSignalsList[pointer]);
+        
+        # Check matching filter parameters
+        if (signalValue <= ceilingCutoff) {
+            push(filteredResults, signalValue);
+        }
+        pointer = pointer + 1;
+    }
+    
+    return filteredResults;
+}
+
+func manageSignalAnalysisCounter() {
+    show("=== Aerospace Signal Frequency Intercept Array ===");
+    define telemetryFrequencies = [14.2, 55.6, 88.1, 102.5, 7.4, 45.9];
+    show("Raw Constellation Dataset: " + toStr(telemetryFrequencies));
+    
+    define safeCeilingInput = num(ask("Enter maximum safe channel limit frequency (MHz): "));
+    
+    # Pass arrays and values directly into filtering functions
+    define parsedSignalArray = filterFrequenciesAboveThreshold(telemetryFrequencies, safeCeilingInput);
+    
+    show("--------------------------------------------------");
+    show("============== SPECTRUM FILTER SUMMARY ==============");
+    show(" Allowed Safety Ceiling: " + toStr(safeCeilingInput) + " MHz");
+    show(" Clean Signal Matches:   " + toStr(parsedSignalArray));
+    show(" Total Active Nodes:     " + toStr(len(parsedSignalArray)));
+    show("=====================================================");
+}
+
+manageSignalAnalysisCounter();

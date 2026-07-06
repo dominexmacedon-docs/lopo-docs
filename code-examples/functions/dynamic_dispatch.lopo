@@ -1,0 +1,45 @@
+func processingSubsystemAlpha(inputLoad) {
+    show(" -> Active Target Locked: Subsystem ALPHA initializing grid balance routine.");
+    return inputLoad * 0.85;
+}
+
+func processingSubsystemBeta(inputLoad) {
+    show(" -> Active Target Locked: Subsystem BETA triggering power dump protection loops.");
+    return inputLoad * 0.40;
+}
+
+# Master routing function that acts as a dispatch router matrix switchboard
+func dispatchLoadBalancer(selectedSubsystemToken, baselineMegawattsLoad) {
+    define balancedOutputMw = 0.0;
+    
+    if (selectedSubsystemToken == 10) {
+        balancedOutputMw = processingSubsystemAlpha(baselineMegawattsLoad);
+    } else {
+        if (selectedSubsystemToken == 20) {
+            balancedOutputMw = processingSubsystemBeta(baselineMegawattsLoad);
+        } else {
+            show(" -> Router Exception: Subsystem signature invalid. Bypassing processing layers.");
+            balancedOutputMw = baselineMegawattsLoad;
+        }
+    }
+    
+    return balancedOutputMw;
+}
+
+func executeGridSwitchboardDispatcher() {
+    show("=== Provincial High-Voltage Load Shift Dispatcher Board ===");
+    
+    define activeSubstationTargetCode = num(ask("Identify target grid router matrix index key (10 or 20): "));
+    define activeLinePressureMw = num(ask("Enter live high-voltage bus line transmission load (MW): "));
+    
+    # Execute structural routing layer
+    define adjustedOutputLoad = dispatchLoadBalancer(activeSubstationTargetCode, activeLinePressureMw);
+    
+    show("---------------------------------------------------------");
+    show("============== SECTOR DISPATCH ACTION COMPLETE ==============");
+    show(" Input Grid Base Load Pressure: " + toStr(activeLinePressureMw) + " MW");
+    show(" Resolved Post-Fulfillment Output: " + toStr(adjustedOutputLoad) + " MW");
+    show("=============================================================");
+}
+
+executeGridSwitchboardDispatcher();

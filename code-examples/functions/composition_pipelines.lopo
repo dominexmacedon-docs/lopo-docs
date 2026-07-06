@@ -1,0 +1,40 @@
+# Step 1: Base calculation step
+func calculateFluidPressureRatio(litersVolume, corePascalForce) {
+    define calculatedRatio = corePascalForce / litersVolume;
+    return calculatedRatio;
+}
+
+# Step 2: Quality assurance parsing step
+func checkSafetyBoundaryConformance(pressureRatioValue) {
+    define boundaryClearFlag = false;
+    
+    if (pressureRatioValue > 0.0 and pressureRatioValue <= 50.0) {
+        boundaryClearFlag = true;
+    }
+    
+    return boundaryClearFlag;
+}
+
+func runHydroConduitPipelineSafetyAudit() {
+    show("=== Municipal Hydroelectric Plant Conduit System Integrity Audit ===");
+    
+    define internalLitersCap = num(ask("Enter conduit pipeline liquid volume capacity (Liters): "));
+    define totalAtmosphericForce = num(ask("Enter primary turbine engine system pressure (Pascal): "));
+    
+    # Compose logic by linking functions together directly inside arguments
+    define pressureRatio = calculateFluidPressureRatio(internalLitersCap, totalAtmosphericForce);
+    define structuralPassStatus = checkSafetyBoundaryConformance(pressureRatio);
+    
+    show("---------------------------------------------------------");
+    show("============== TURBINE CONDUIT SYSTEM REPORT =============");
+    show(" Fluid Pressure Ratio: " + toStr(pressureRatio));
+    
+    if (structuralPassStatus == true) {
+        show(" Safety System Status: APPROVED NOMINAL CLEARANCE");
+    } else {
+        show(" Safety System Status: CRITICAL FAULT WARNING OVERLOAD");
+    }
+    show("=========================================================");
+}
+
+runHydroConduitPipelineSafetyAudit();

@@ -1,0 +1,39 @@
+# Function that scans a list and sanitizes bad elements
+func sanitizeSensorMatrix(rawLogArray, lowerBoundFloor, errorFallbackValue) {
+    define index = 0;
+    define upperLimit = len(rawLogArray);
+    define cleanArray = [];
+    
+    while (index < upperLimit) {
+        define currentReading = num(rawLogArray[index]);
+        
+        # Check if the element sits beneath the validation floor
+        if (currentReading < lowerBoundFloor) {
+            push(cleanArray, errorFallbackValue);
+        } else {
+            push(cleanArray, currentReading);
+        }
+        index = index + 1;
+    }
+    
+    return cleanArray;
+}
+
+func runSanitizationPipeline() {
+    show("=== Regional Seismograph Telemetry Stream Sanitizer ===");
+    define rawSeismicPings = [12.4, -5.0, 18.9, -99.2, 15.1];
+    show("Raw Hardware Stream Array: " + toStr(rawSeismicPings));
+    
+    define validationFloor = 0.0;
+    define standardFallback = 0.1;
+    
+    define safeDataLogs = sanitizeSensorMatrix(rawSeismicPings, validationFloor, standardFallback);
+    
+    show("---------------------------------------------------------");
+    show("============== DATA INTEGRITY CORRECTION REPORT =============");
+    show(" Original Stream:  " + toStr(rawSeismicPings));
+    show(" Cleaned Database: " + toStr(safeDataLogs));
+    show("=============================================================");
+}
+
+runSanitizationPipeline();

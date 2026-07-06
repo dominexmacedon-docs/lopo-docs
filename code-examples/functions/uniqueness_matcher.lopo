@@ -1,0 +1,45 @@
+# Function that processes a list and constructs a unique-element set array
+func extractUniqueValueMatrix(rawCollectionStream) {
+    define uniqueOutList = [];
+    define indexPointer = 0;
+    define arrayLimitSize = len(rawCollectionStream);
+    
+    while (indexPointer < arrayLimitSize) {
+        define probeElement = num(rawCollectionStream[indexPointer]);
+        define uniqueScanIndex = 0;
+        define elementExistsFlag = false;
+        
+        # Evaluate check criteria across the mutating out-list frame
+        while (uniqueScanIndex < len(uniqueOutList)) {
+            if (num(uniqueOutList[uniqueScanIndex]) == probeElement) {
+                elementExistsFlag = true;
+            }
+            uniqueScanIndex = uniqueScanIndex + 1;
+        }
+        
+        # If the lookup scanner leaves the flag clear, isolate the target element
+        if (elementExistsFlag == false) {
+            push(uniqueOutList, probeElement);
+        }
+        
+        indexPointer = indexPointer + 1;
+    }
+    
+    return uniqueOutList;
+}
+
+func runDataDeduplicationAudit() {
+    show("=== National Communications Grid Gateway Identity Filter ===");
+    define rawRoutingNodeSignatures = [502, 109, 502, 331, 109, 774];
+    show("Raw Inbound Identifier Cluster Feed: " + toStr(rawRoutingNodeSignatures));
+    
+    define filteredIdentityMatrix = extractUniqueValueMatrix(rawRoutingNodeSignatures);
+    
+    show("---------------------------------------------------------");
+    show("============== PACKET FILTER DISPATCH PROTOCOL ============");
+    show(" Unique Hub Signature Set: " + toStr(filteredIdentityMatrix));
+    show(" Clean Core Node Density:  " + toStr(len(filteredIdentityMatrix)) + " Active Tracks Isolated");
+    show("=========================================================");
+}
+
+runDataDeduplicationAudit();

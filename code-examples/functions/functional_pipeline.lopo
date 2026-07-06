@@ -1,0 +1,58 @@
+# Pure mathematical processing block 1
+func amplifySignal(value) {
+    return value * 3.1415;
+}
+
+# Pure mathematical processing block 2
+func stabilizeSignal(value) {
+    return value + 100.0;
+}
+
+# High-order function pipeline that consumes another function as a parameter rule
+func runDataPipeline(datasetArray, functionalRulePointer) {
+    define processedOutputList = [];
+    define pointer = 0;
+    define totalItems = len(datasetArray);
+    
+    while (pointer < totalItems) {
+        define element = num(datasetArray[pointer]);
+        
+        # Call the variable reference pointing to the function parameter
+        define transformedValue = functionalRulePointer(element);
+        push(processedOutputList, transformedValue);
+        
+        pointer = pointer + 1;
+    }
+    
+    return processedOutputList;
+}
+
+func executeHighOrderCommsSystem() {
+    show("=== High-Order Telemetry Signal Processing Matrix ===");
+    define rawFrequencies = [12.5, 45.0, 78.2];
+    show("Source Signal Waveform Array: " + toStr(rawFrequencies));
+    show("---------------------------------------------------------");
+    show("Select operational mathematical transformation script:");
+    show(" 1: Signal Amplification Rule [X * 3.1415]");
+    show(" 2: Signal Voltage Stabilization Rule [X + 100]");
+    
+    define operationalChoice = num(ask("Enter selected processing rule index: "));
+    define resultsOutput = [];
+    
+    if (operationalChoice == 1) {
+        # Pass the function 'amplifySignal' directly as a variable argument pointer
+        resultsOutput = runDataPipeline(rawFrequencies, amplifySignal);
+    } else {
+        if (operationalChoice == 2) {
+            # Pass 'stabilizeSignal' directly into the executor pipeline
+            resultsOutput = runDataPipeline(rawFrequencies, stabilizeSignal);
+        }
+    }
+    
+    show("================= PIPELINE PROCESSING EXECUTION =================");
+    show(" Applied Rule Index:  " + toStr(operationalChoice));
+    show(" Transformed Array:   " + toStr(resultsOutput));
+    show("=================================================================");
+}
+
+executeHighOrderCommsSystem();

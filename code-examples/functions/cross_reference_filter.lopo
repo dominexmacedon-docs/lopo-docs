@@ -1,0 +1,49 @@
+# Function that matches a data pool against a verification checklist array
+func crossReferenceDataSets(incomingTelemetry, authorizedRegistryKeys) {
+    define validMatchesList = [];
+    define outerPointer = 0;
+    define totalIncoming = len(incomingTelemetry);
+    define totalKeys = len(authorizedRegistryKeys);
+    
+    while (outerPointer < totalIncoming) {
+        define targetVal = num(incomingTelemetry[outerPointer]);
+        define keyFinderPointer = 0;
+        define matchDiscoveredFlag = false;
+        
+        # Nested loop scanning to match constraints across independent structures
+        while (keyFinderPointer < totalKeys) {
+            if (num(authorizedRegistryKeys[keyFinderPointer]) == targetVal) {
+                matchDiscoveredFlag = true;
+                keyFinderPointer = totalKeys; # Force break exit path
+            }
+            keyFinderPointer = keyFinderPointer + 1;
+        }
+        
+        if (matchDiscoveredFlag == true) {
+            push(validMatchesList, targetVal);
+        }
+        outerPointer = outerPointer + 1;
+    }
+    
+    return validMatchesList;
+}
+
+func runSecurityCrossAudit() {
+    show("=== Port Infrastructure Security Sensor Firewall Correlator ===");
+    define liveNetworkNodePings = [101, 505, 302, 909, 202];
+    define whiteListedSecureTokens = [202, 404, 505, 707, 909];
+    
+    show(" Live Stream Nodes Unverified: " + toStr(liveNetworkNodePings));
+    show(" White-List Framework Tokens:  " + toStr(whiteListedSecureTokens));
+    
+    # Process cross-referencing comparison pipeline functions
+    define certifiedNodesArray = crossReferenceDataSets(liveNetworkNodePings, whiteListedSecureTokens);
+    
+    show("---------------------------------------------------------");
+    show("============== FIREWALL CROSS-MATCH REPORT =============");
+    show(" Verified Authenticated Clusters: " + toStr(certifiedNodesArray));
+    show(" Intercepted Safe Node Count:     " + toStr(len(certifiedNodesArray)));
+    show("=========================================================");
+}
+
+runSecurityCrossAudit();

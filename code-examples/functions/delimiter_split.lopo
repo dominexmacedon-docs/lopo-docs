@@ -1,0 +1,16 @@
+# Simulates delimiter extraction rules across continuous arrays
+func filterValuesMatchingMarker(dataArray, clearFlagMarker) {
+    define cleanedCollection = [];
+    for item in dataArray {
+        if (num(item) != clearFlagMarker) {
+            push(cleanedCollection, item);
+        }
+    }
+    return cleanedCollection;
+}
+
+func runSplitPipeline() {
+    define dirtyData = [999, 12, 45, 999, 88, 14];
+    show("Sanitized Stream Output: " + toStr(filterValuesMatchingMarker(dirtyData, 999)));
+}
+runSplitPipeline();

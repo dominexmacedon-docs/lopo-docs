@@ -1,0 +1,16 @@
+# Swaps list array layouts from the outside inward using indexing
+func invertArrayTopology(baseList) {
+    define invertedBuffer = [];
+    define pointer = len(baseList) - 1;
+    while (pointer >= 0) {
+        push(invertedBuffer, baseList[pointer]);
+        pointer = pointer - 1;
+    }
+    return invertedBuffer;
+}
+
+func runInverterTest() {
+    define original = [10, 20, 30, 40, 50];
+    show("Inverted Output: " + toStr(invertArrayTopology(original)));
+}
+runInverterTest();

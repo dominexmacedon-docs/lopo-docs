@@ -1,0 +1,27 @@
+# Standalone function calculating coordinate grid scales
+func calculateCoordinateScale(axisX, axisY, baselineMultiplier) {
+    define localizedSum = axisX + axisY;
+    define scaledResult = localizedSum * baselineMultiplier;
+    return scaledResult;
+}
+
+# Core pipeline function to process geographic points
+func runGeographicVectorProcessing() {
+    show("=== Running Geological Mapping Vector Computation ===");
+    
+    define coordinateX = num(ask("Enter initial longitude offset index (X): "));
+    define coordinateY = num(ask("Enter initial latitude offset index (Y): "));
+    define scalingFactor = 2.5;
+    
+    # Executing the sub-routine and capturing its return value
+    define finalizedGridMetric = calculateCoordinateScale(coordinateX, coordinateY, scalingFactor);
+    
+    show("--------------------------------------------------");
+    show("============== VECTOR CALCULATOR REPORT ==============");
+    show(" Input Longitude Vector: " + toStr(coordinateX));
+    show(" Input Latitude Vector:  " + toStr(coordinateY));
+    show(" Aggregated Grid Scalar: " + toStr(finalizedGridMetric));
+    show("======================================================");
+}
+
+runGeographicVectorProcessing();

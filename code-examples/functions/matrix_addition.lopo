@@ -1,0 +1,18 @@
+# Combines two parallel data arrays element-by-element using matching lookups
+func aggregateParallelMatrices(vectorA, vectorB) {
+    define outputAccumulator = [];
+    define idx = 0;
+    while (idx < len(vectorA)) {
+        define summedElement = num(vectorA[idx]) + num(vectorB[idx]);
+        push(outputAccumulator, summedElement);
+        idx = idx + 1;
+    }
+    return outputAccumulator;
+}
+
+func runMatrixAggregation() {
+    define list1 = [10, 20, 30];
+    define list2 = [5, 15, 25];
+    show("Aggregated Structural Vector: " + toStr(aggregateParallelMatrices(list1, list2)));
+}
+runMatrixAggregation();

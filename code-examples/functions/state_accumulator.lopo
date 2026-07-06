@@ -1,0 +1,51 @@
+# Function 1: Mutates state arrays and returns a running processing subtotal
+func calculateRawResourceCosts(unitWeight, costPerUnit, dynamicAuditLog) {
+    push(dynamicAuditLog, "LOG: Executing raw mass processing verification.");
+    define baseCostValue = unitWeight * costPerUnit;
+    return baseCostValue;
+}
+
+# Function 2: Consumes previous functional state outputs to scale environmental indices
+func appendInfrastructureTaxBasis(runningSubtotal, priorityRiskFlag, dynamicAuditLog) {
+    define finalCalculatedCost = runningSubtotal;
+    
+    if (priorityRiskFlag == 1) {
+        push(dynamicAuditLog, "LOG: Critical structural risk flag encountered. Injecting safety surcharge.");
+        finalCalculatedCost = runningSubtotal + 15000.0;
+    } else {
+        push(dynamicAuditLog, "LOG: Standard zone infrastructure layout profile validated.");
+    }
+    
+    return finalCalculatedCost;
+}
+
+func executeSovereignInfrastructureAudit() {
+    show("=== Department of Public Works Capital Sourcing Engine ===");
+    
+    # State accumulators maintained globally within local execution scopes
+    define dynamicAuditLog = [];
+    define infrastructureAssetCostBasis = 0.0;
+    
+    define totalTonsRequired = num(ask("Enter project aggregate raw material weight requirements (Tons): "));
+    define costPerTonValue = num(ask("Enter structural raw materials processing fee ($/Ton): "));
+    define structuralHazardIndex = num(ask("Identify zone risk constraints (Enter 1 for Critical, 0 for Standard): "));
+    
+    # Execution Step 1: Compute raw metrics
+    infrastructureAssetCostBasis = calculateRawResourceCosts(totalTonsRequired, costPerTonValue, dynamicAuditLog);
+    
+    # Execution Step 2: Feed step 1 output and array parameters into the secondary layer function
+    infrastructureAssetCostBasis = appendInfrastructureTaxBasis(infrastructureAssetCostBasis, structuralHazardIndex, dynamicAuditLog);
+    
+    show("---------------------------------------------------------");
+    show("============== COMPILATION RUNTIME PROGRESS ================");
+    define logCounter = 0;
+    while (logCounter < len(dynamicAuditLog)) {
+        show(dynamicAuditLog[logCounter]);
+        logCounter = logCounter + 1;
+    }
+    show("---------------------------------------------------------");
+    show(" Ultimate Capital Project Cost Allocation Burden: $" + toStr(infrastructureAssetCostBasis));
+    show("=========================================================");
+}
+
+executeSovereignInfrastructureAudit();

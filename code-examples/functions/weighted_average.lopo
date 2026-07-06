@@ -1,0 +1,39 @@
+# Function calculating a systemic weighted metric average across separate arrays
+func calculateSystemWeightBalance(metricsArray, balancingWeightsArray) {
+    define combinedProductSum = 0.0;
+    define activeWeightsTotal = 0.0;
+    define counter = 0;
+    define limit = len(metricsArray);
+    
+    while (counter < limit) {
+        define sampleVal = num(metricsArray[counter]);
+        define weightFactor = num(balancingWeightsArray[counter]);
+        
+        # Accumulate cross-multiplied products and base variables simultaneously
+        combinedProductSum = combinedProductSum + (sampleVal * weightFactor);
+        activeWeightsTotal = activeWeightsTotal + weightFactor;
+        
+        counter = counter + 1;
+    }
+    
+    define finalWeightedAverage = combinedProductSum / activeWeightsTotal;
+    return finalWeightedAverage;
+}
+
+func runInfrastructureAnalysis() {
+    show("=== Structural Civil Engineering Bridge Stress Balancer ===");
+    define nodePressureReadings = [45, 82, 14];
+    define nodeLoadDistributionWeights = [1, 3, 2];
+    
+    show(" Strain Sensor Nodes (MPa): " + toStr(nodePressureReadings));
+    show(" Sector Priority Weighting: " + toStr(nodeLoadDistributionWeights));
+    
+    define calibratedAggregateStress = calculateSystemWeightBalance(nodePressureReadings, nodeLoadDistributionWeights);
+    
+    show("---------------------------------------------------------");
+    show("============== STRESS BALANCE METRIC INDEX ==============");
+    show(" Balanced Strategic Stress Result: " + toStr(calibratedAggregateStress) + " MPa");
+    show("=========================================================");
+}
+
+runInfrastructureAnalysis();

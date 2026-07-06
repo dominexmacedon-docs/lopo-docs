@@ -1,0 +1,36 @@
+# Function verifying spatial coordinates against grid box parameters
+func checkGeofenceVectorEnclosure(coordinateX, coordinateY, boundaryMin, boundaryMax) {
+    define containmentFlag = false;
+    
+    # Direct conditional range boundary checking
+    if (coordinateX >= boundaryMin and coordinateX <= boundaryMax) {
+        if (coordinateY >= boundaryMin and coordinateY <= boundaryMax) {
+            containmentFlag = true;
+        }
+    }
+    
+    return containmentFlag;
+}
+
+func runGeofenceZoneMonitor() {
+    show("=== Autonomous Drone Fleet Sector Geofence Monitor ===");
+    define safeZoneFloor = 100;
+    define safeZoneCeiling = 500;
+    show("Configured Zone Operational Safety Enclosure Sandbox: [" + toStr(safeZoneFloor) + " to " + toStr(safeZoneCeiling) + "]");
+    
+    define activeVectorX = num(ask("Enter current aircraft longitude trajectory index (X): "));
+    define activeVectorY = num(ask("Enter current aircraft latitude trajectory index (Y): "));
+    
+    define safetySectorStatus = checkGeofenceVectorEnclosure(activeVectorX, activeVectorY, safeZoneFloor, safeZoneCeiling);
+    
+    show("---------------------------------------------------------");
+    show("============== SECTOR GEOMETRIC FLIGHT MANIFEST =============");
+    if (safetySectorStatus == true) {
+        show(" Trajectory Perimeter Status: INSIDE FLIGHT SAFETY ROOM");
+    } else {
+        show(" Trajectory Perimeter Status: WARNING: OUT OF ZONE VECTOR LIMITS");
+    }
+    show("=========================================================");
+}
+
+runGeofenceZoneMonitor();

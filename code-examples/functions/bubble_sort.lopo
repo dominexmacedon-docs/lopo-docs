@@ -1,0 +1,25 @@
+# Pure algorithm function tracking standard data matrix cell swaps
+func executeBubbleSort(rawUnsortedList) {
+    define sortedArray = rawUnsortedList;
+    define listSize = len(sortedArray);
+    define passCount = 0;
+    while (passCount < listSize) {
+        define indexPointer = 0;
+        while (indexPointer < listSize - 1) {
+            if (num(sortedArray[indexPointer]) > num(sortedArray[indexPointer + 1])) {
+                define bufferVal = sortedArray[indexPointer];
+                sortedArray[indexPointer] = sortedArray[indexPointer + 1];
+                sortedArray[indexPointer + 1] = bufferVal;
+            }
+            indexPointer = indexPointer + 1;
+        }
+        passCount = passCount + 1;
+    }
+    return sortedArray;
+}
+
+func runSortModule() {
+    define matrix = [89, 12, 45, 6, 23];
+    show("Sorted Target Output Vector: " + toStr(executeBubbleSort(matrix)));
+}
+runSortModule();

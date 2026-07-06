@@ -1,0 +1,20 @@
+# Scanning loop function verifying search keys inside datasets
+func executeScanLookup(sourceArray, itemQuery) {
+    define trackingMatchIndex = -1;
+    define i = 0;
+    while (i < len(sourceArray)) {
+        if (num(sourceArray[i]) == itemQuery) {
+            trackingMatchIndex = i;
+            i = len(sourceArray); # Short-circuit
+        }
+        i = i + 1;
+    }
+    return trackingMatchIndex;
+}
+
+func runLinearSearchPipeline() {
+    define targetList = [501, 202, 903, 404];
+    define query = num(ask("Identify target search tracking code: "));
+    show("Discovered at Index Matrix Slot: " + toStr(executeScanLookup(targetList, query)));
+}
+runLinearSearchPipeline();

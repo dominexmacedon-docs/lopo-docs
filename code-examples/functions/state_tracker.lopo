@@ -1,0 +1,41 @@
+# Function processing system state strings and outputting configuration flags
+func routeOperationalStateCode(currentStateTokenString) {
+    define systemicActionFlag = 0; # 0 = STANDBY_LOCK
+    
+    if (currentStateTokenString == "BOOT") {
+        systemicActionFlag = 11; # INITIALIZATION_SEQUENCE
+    } else {
+        if (currentStateTokenString == "RUN") {
+            systemicActionFlag = 55; # SYSTEM_CORE_ENGAGED
+        } else {
+            if (currentStateTokenString == "HALT") {
+                systemicActionFlag = 99; # EMERGENCY_BRAKE_ISOLATION
+            }
+        }
+    }
+    
+    return systemicActionFlag;
+}
+
+func runAutomatedStatePipeline() {
+    show("=== Inter-Sovereign Rail Grid Switchboard State Automaton ===");
+    show(" Valid Operational Sequence Configurations: [BOOT, RUN, HALT]");
+    
+    define phaseStateInput = ask("Enter target state instruction sequence key: ");
+    
+    define binaryExecutionCommand = routeOperationalStateCode(phaseStateInput);
+    
+    show("---------------------------------------------------------");
+    show("============== MACHINE AUTOMATON REPORT ==============");
+    show(" Parsed Input String Profile: " + phaseStateInput);
+    show(" Dispatched Subsystem Action: [" + toStr(binaryExecutionCommand) + "]");
+    
+    if (binaryExecutionCommand == 0) {
+        show(" Action Path Tracked: State unidentified. System holding standard fallback safety vectors.");
+    } else {
+        show(" Action Path Tracked: System routing commands over active hardware sectors.");
+    }
+    show("=========================================================");
+}
+
+runAutomatedStatePipeline();

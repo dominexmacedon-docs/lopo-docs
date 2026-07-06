@@ -1,0 +1,18 @@
+# Function determining the greatest common divisor using an iterative modulo process
+func calculateGcdScalar(integerA, integerB) {
+    define tempA = integerA;
+    define tempB = integerB;
+    while (tempB != 0) {
+        define remainder = tempA % tempB;
+        tempA = tempB;
+        tempB = remainder;
+    }
+    return tempA;
+}
+
+func runGcdCalculator() {
+    define firstNum = num(ask("Enter leading alignment integer (A): "));
+    define secondNum = num(ask("Enter lagging alignment integer (B): "));
+    show("Greatest Common Divisor Axis: " + toStr(calculateGcdScalar(firstNum, secondNum)));
+}
+runGcdCalculator();

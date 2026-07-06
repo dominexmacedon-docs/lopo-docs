@@ -1,0 +1,35 @@
+# Function that runs a loop until a target system configuration state resolves
+func countdownStabilizationSteps(initialSubSystemCycles) {
+    define executionStepTracker = initialSubSystemCycles;
+    define totalAdjustmentsMade = 0;
+    
+    show("Commencing sub-routine optimization loop state processing...");
+    while (executionStepTracker > 0) {
+        show("  -> Tuning frequency alignment step segment: " + toStr(executionStepTracker));
+        executionStepTracker = executionStepTracker - 1;
+        totalAdjustmentsMade = totalAdjustmentsMade + 1;
+    }
+    
+    return totalAdjustmentsMade;
+}
+
+func triggerCoreCalibrationJob() {
+    show("=== Supercomputer Cooling Loop Calibration Matrix ===");
+    
+    define stabilizationTargets = num(ask("Enter core thermal cycle adjustments requested: "));
+    
+    if (stabilizationTargets > 0 and stabilizationTargets <= 10) {
+        define completedCyclesCount = countdownStabilizationSteps(stabilizationTargets);
+        
+        show("--------------------------------------------------");
+        show("============== TUNING CYCLE EXECUTION COMPLETE ==============");
+        show(" Total Scheduled Operations: " + toStr(stabilizationTargets));
+        show(" Verified Executed Sweeps:   " + toStr(completedCyclesCount));
+        show(" System Posture Alignment:  Optimized operational sync reached.");
+        show("=============================================================");
+    } else {
+        show("CALIBRATION CRASH: Tuning limits out of safe operational thresholds (1-10).");
+    }
+}
+
+triggerCoreCalibrationJob();
