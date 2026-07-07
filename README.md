@@ -55,7 +55,7 @@
 
 2. **Check installation**  
    ```bash
-   lopo --v
+   lopo -v
    ```
 
 3. **Write your first program** → `hello.lopo`  
