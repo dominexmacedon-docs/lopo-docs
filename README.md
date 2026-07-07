@@ -50,11 +50,11 @@
 ## Try Lopo in 60 Seconds
 
 1. **Download the installer**  
-   [Lopo v1.0.0 Installer](https://github.com/dominexmacedon-docs/lopo-docs/releases/download/lopo-v1.0.0/Lopo-v1.0.0.exe)  
+   [Lopo v1.0.1 Installer](https://github.com/dominexmacedon-docs/lopo-docs/releases/download/Lopo-v1.0.1/Lopo-v1.0.1.exe)  
 
 2. **Install and verify**  
    ```bash
-   lopo --version
+   lopo --v
    ```
 
 3. **Create hello.lopo**  
