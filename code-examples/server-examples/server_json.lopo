@@ -1,0 +1,62 @@
+define server = createServer();
+define configPath = "./runtime_config.json";
+
+# Pre-seed the configuration file if missing
+if (exists(configPath) == false) {
+    define initialConfig = {
+        meta: { title: "Production Cluster", securityLvl: 3 },
+        flags: { maintenanceMode: false, deepLogging: true }
+    };
+    writeJSON(configPath, initialConfig);
+}
+
+server.get("/", func(req) {
+    define activeConfig = readJSON(configPath);
+    
+    define templateMap = {
+        clusterName: activeConfig.meta.title,
+        securityLevel: toStr(activeConfig.meta.securityLvl),
+        maintFlag: toStr(activeConfig.flags.maintenanceMode),
+        logFlag: toStr(activeConfig.flags.deepLogging)
+    };
+    
+    return render("view_json.html", templateMap);
+});
+
+server.post("/update", func(req) {
+    define activeConfig = readJSON(configPath);
+    define pairs = split(req.body, "&");
+    
+    define i = 0;
+    while (i < len(pairs)) {
+        define kv = split(pairs[i], "=");
+        if (kv[0] == "clusterName" and len(kv[1]) > 0) {
+            activeConfig.meta.title = replace(kv[1], "+", " ");
+        }
+        if (kv[0] == "secLevel") {
+            activeConfig.meta.securityLvl = num(kv[1]);
+        }
+        if (kv[0] == "maintMode") {
+            if (kv[1] == "true") { activeConfig.flags.maintenanceMode = true; }
+            if (kv[1] == "false") { activeConfig.flags.maintenanceMode = false; }
+        }
+        i = i + 1;
+    }
+    
+    # Commit changes back to disk
+    writeJSON(configPath, activeConfig);
+    
+    # Reload fresh state map for UI compilation
+    define updatedConfig = readJSON(configPath);
+    define templateMap = {
+        clusterName: updatedConfig.meta.title,
+        securityLevel: toStr(updatedConfig.meta.securityLvl),
+        maintFlag: toStr(updatedConfig.flags.maintenanceMode),
+        logFlag: toStr(updatedConfig.flags.deepLogging)
+    };
+    
+    return render("view_json.html", templateMap);
+});
+
+show("Task 5 JSON Storage Panel running on http://localhost:8085");
+server.listen(8085);

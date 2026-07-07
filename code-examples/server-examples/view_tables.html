@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lopo Matrix Registry</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; background: #f4f6f9; color: #333; }
+        .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 600px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #00bcd4; color: white; }
+        input[type="text"], button { padding: 10px; font-size: 14px; margin-top: 5px; }
+        button { background: #00bcd4; color: white; border: none; cursor: pointer; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Insert Dataset Asset Entry</h2>
+        <form action="/insert" method="POST">
+            <input type="text" name="name" placeholder="Full Name" required />
+            <input type="text" name="role" placeholder="Engineering Role" required />
+            <button type="submit">Insert Row</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Active Data Storage Tables View</h2>
+        <table>
+            <thead>
+                <tr><th>Identity User</th><th>Assigned Role</th><th>Generated UUID Token</th></tr>
+            </thead>
+            <tbody>
+                {{ tableRows }}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

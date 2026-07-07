@@ -1,0 +1,20 @@
+define server = createServer();
+
+server.get("/", func(req) {
+    define platformHostIp = getIp();
+    define executionEpoch = toStr(now());
+    define systemNodeEnv = envGet("NODE_ENV", "Unavailable (Production Default)");
+    define architectureTrace = typeOf(server);
+
+    define parametersCollection = {
+        hostIp: platformHostIp,
+        epochTime: executionEpoch,
+        environmentMode: systemNodeEnv,
+        engineObjectIdentity: architectureTrace
+    };
+
+    return render("view_dashboard.html", parametersCollection);
+});
+
+show("Task 4 Diagnostics Engine Hub running on http://localhost:8084");
+server.listen(8084);

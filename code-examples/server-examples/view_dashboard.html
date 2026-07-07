@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lopo System Diagnostics Hub</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f0f2f5; margin: 0; padding: 40px; }
+        .wrapper { max-width: 800px; margin: 0 auto; }
+        header { background: #1e3a8a; color: white; padding: 20px 30px; border-radius: 8px 8px 0 0; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: white; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .metric-tile { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 6px; }
+        .metric-tile h3 { margin: 0 0 8px 0; color: #64748b; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .metric-tile p { margin: 0; font-size: 18px; font-weight: 600; color: #0f172a; word-break: break-all; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <h1 style="margin:0; font-size:24px;">Lopo Host Runtime Environment Analyzer</h1>
+            <p style="margin:5px 0 0 0; opacity:0.8;">Real-time execution status metric channels</p>
+        </header>
+        <div class="grid">
+            <div class="metric-tile">
+                <h3>Resolved Gateway Host Network IP</h3>
+                <p>{{ hostIp }}</p>
+            </div>
+            <div class="metric-tile">
+                <h3>Processing Unix Execution Epoch</h3>
+                <p>{{ epochTime }} ms</p>
+            </div>
+            <div class="metric-tile">
+                <h3>Extracted Environment Context</h3>
+                <p>{{ environmentMode }}</p>
+            </div>
+            <div class="metric-tile">
+                <h3>Server Object Structural Type Definition</h3>
+                <p>Type: {{ engineObjectIdentity }}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

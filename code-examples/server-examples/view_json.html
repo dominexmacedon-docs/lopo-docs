@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON Configuration Controller</title>
+    <style>
+        body { font-family: sans-serif; background: #f5f5f5; color: #333; margin: 40px; }
+        .box { background: white; padding: 25px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); max-width: 650px; margin-bottom: 20px; }
+        .badge { background: #673ab7; color: white; padding: 4px 8px; border-radius: 3px; font-family: monospace; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        input[type="text"], select { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+        button { background: #673ab7; color: white; border: none; padding: 10px 15px; margin-top: 15px; cursor: pointer; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Live Manifest State (readJSON)</h2>
+        <p><strong>Cluster Identifier:</strong> {{ clusterName }}</p>
+        <p><strong>Security Clearance:</strong> <span class="badge">Tier {{ securityLevel }}</span></p>
+        <p><strong>Maintenance Status:</strong> {{ maintFlag }}</p>
+        <p><strong>Deep System Logging:</strong> {{ logFlag }}</p>
+    </div>
+
+    <div class="box">
+        <h2>Modify Matrix Schemas</h2>
+        <form action="/update" method="POST">
+            <label>Rename Cluster:</label>
+            <input type="text" name="clusterName" placeholder="Enter fresh node title..." />
+            
+            <label>Security Clearance Level:</label>
+            <select name="secLevel">
+                <option value="1">Level 1 (Low)</option>
+                <option value="2">Level 2 (Standard)</option>
+                <option value="3" selected>Level 3 (Elevated)</option>
+                <option value="4">Level 4 (Critical Restricted)</option>
+            </select>
+
+            <label>Toggle Maintenance Mode:</label>
+            <select name="maintMode">
+                <option value="false">False (Live Operations)</option>
+                <option value="true">True (Lock Requests)</option>
+            </select>
+
+            <button type="submit">Commit State Changes</button>
+        </form>
+    </div>
+</body>
+</html>

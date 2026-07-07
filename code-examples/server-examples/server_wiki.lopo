@@ -1,0 +1,47 @@
+define server = createServer();
+
+server.get("/", func(req) {
+    define templateMap = { searchQuery: "None", resultsHtml: "<tr><td colspan='2'>Enter a search query above.</td></tr>" };
+    return render("view_wiki.html", templateMap);
+});
+
+server.get("/search", func(req) {
+    define queryParam = getProp(req, "query.q", "");
+    
+    if (len(queryParam) == 0) {
+        define templateMap = { searchQuery: "Empty", resultsHtml: "<tr><td colspan='2'>Query string cannot be blank.</td></tr>" };
+        return render("view_wiki.html", templateMap);
+    }
+    
+    # Query via Wikimedia OpenSearch API endpoint using built-in network client protocols
+    define targetUrl = "https://en.wikipedia.org/w/api.php?action=opensearch&limit=5&format=json&search=" + encodeURLComponent(queryParam);
+    define apiResponse = httpFetch(targetUrl, { method: "GET" });
+    define dataMatrix = apiResponse.body; 
+    
+    # openSearch returns standard tuple sets: [query, titles[], snippets[], links[]]
+    define titlesList = dataMatrix[1];
+    define snippetsList = dataMatrix[2];
+    define linksList = dataMatrix[3];
+    
+    define compiledRows = "";
+    define index = 0;
+    
+    if (len(titlesList) == 0) {
+        compiledRows = "<tr><td colspan='2'>No match index records discovered for query.</td></tr>";
+    } else {
+        while (index < len(titlesList)) {
+            define heading = titlesList[index];
+            define abstractText = snippetsList[index];
+            define referenceUrl = linksList[index];
+            
+            compiledRows = compiledRows + "<tr><td><strong>" + heading + "</strong></td><td>" + abstractText + "<br><a href='" + referenceUrl + "' target='_blank'>Read Wikipedia Profile &rarr;</a></td></tr>";
+            index = index + 1;
+        }
+    }
+    
+    define templateMap = { searchQuery: queryParam, resultsHtml: compiledRows };
+    return render("view_wiki.html", templateMap);
+});
+
+show("Task 2 Wikipedia gateway running on http://localhost:8082");
+server.listen(8082);

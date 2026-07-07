@@ -1,0 +1,41 @@
+define server = createServer();
+define storageLogPath = "./system_activity_ledger.txt";
+
+# Pre-seed log system verification file checks
+if (exists(storageLogPath) == false) {
+    writeFile(storageLogPath, "SYSTEM: Initialized persistent file activity audit pipeline.\n");
+}
+
+func readSanitizedLogData() {
+    define baseContent = readFile(storageLogPath);
+    # Convert newline entries into structural web breaks for pure markup injection formatting
+    return replace(baseContent, "\n", "<br>");
+}
+
+server.get("/", func(req) {
+    define pagePayload = { fileLogs: readSanitizedLogData() };
+    return render("view_logger.html", pagePayload);
+});
+
+server.post("/log", func(req) {
+    define submissionBody = req.body;
+    define segments = split(submissionBody, "=");
+    define messageText = "Empty Entry Context Block";
+    
+    if (len(segments) > 1) {
+        messageText = replace(segments[1], "+", " ");
+    }
+    
+    # Format a structural record timeline trace statement entries
+    define currentTimestamp = formatDate(timestamp(), "en-US");
+    define statement = "[" + currentTimestamp + "] LOG ACTION -> " + messageText + "\n";
+    
+    # Inject directly to persistent file resource
+    appendFile(storageLogPath, statement);
+    
+    define pagePayload = { fileLogs: readSanitizedLogData() };
+    return render("view_logger.html", pagePayload);
+});
+
+show("Task 3 Persistence Storage Server running on http://localhost:8083");
+server.listen(8083);
