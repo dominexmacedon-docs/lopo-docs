@@ -23,12 +23,11 @@
 
 ## Why Lopo?
 
-- **Learn fast** → Simple, readable syntax that’s friendly for beginners and productive for experienced developers.  
-- **Embed & extend** → Built on Node.js, so integration patterns (worker threads, subprocess IPC, N-API) are straightforward.  
-- **Practical** → Small footprint, fast startup, and features that let you build scripts, tools, or tiny apps quickly.  
+- **Easy to pick up** → The syntax is simple and readable, so beginners can learn quickly while experienced devs stay productive.  
+- **Built for integration** → Runs on Node.js, making it easy to embed or extend with worker threads, IPC, or N-API.  
+- **Practical by design** → Small footprint, fast startup, and just enough features to build scripts, tools, or small apps without overhead.  
 
-> [!NOTE]
-> **Syntax Flexibility:** Semicolons are optional! You do not strictly need to end your statements with a semicolon (`;`). The parser will gracefully evaluate statements split by standard newlines.
+> **Note:** Semicolons are optional. You can end statements with `;` if you like, but newlines work just fine.
 
 ---
 
@@ -40,28 +39,28 @@
 ---
 
 ## Features
-- Clean, easy-to-read syntax  
+- Clean, beginner-friendly syntax  
 - Lightweight interpreter with fast startup  
 - Variables, expressions, conditionals, loops, functions  
-- Entities (OOP-style objects), arrays, objects  
-- Built-in utility functions and modular design  
-- Command-line interface and native Windows editor with syntax highlighting  
-- Designed to be embeddable and interoperable with Node.js ecosystems  
+- Entities (object-style structures), arrays, objects  
+- Built-in utilities and modular design  
+- CLI plus a native Windows editor with syntax highlighting  
+- Designed to play nicely with Node.js ecosystems  
 
 ---
 
 ## Try Lopo in 60 Seconds
 
-1. **Download the installer** [Lopo v1.0.1 Installer](https://github.com/dominexmacedon-docs/lopo-docs/releases/download/Lopo-v1.0.1/Lopo-v1.0.1.exe)  
+1. **Download the installer** → [Lopo v1.0.1 Installer](https://github.com/dominexmacedon-docs/lopo-docs/releases/download/Lopo-v1.0.1/Lopo-v1.0.1.exe)  
 
-2. **Install and verify** ```bash
+2. **Check installation**  
+   ```bash
    lopo --v
+   ```
 
-```
-
-3. **Create hello.lopo** ```lopo
-# Both syntax structures are perfectly valid:
-
-
-show("Hello, Lopo!")
-show("Hello, Lopo!");
+3. **Write your first program** → `hello.lopo`  
+   ```lopo
+   # Both styles are valid:
+   show("Hello, Lopo!")
+   show("Hello, Lopo!");
+   ```
