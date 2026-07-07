@@ -1,0 +1,36 @@
+func runMathBuiltinsTestSuite() {
+    show("==================================================");
+    show(">>> STARTING SUITE: MATHEMATICAL FUNCTIONS MATRIX <<<");
+    show("==================================================");
+
+    # 1. Precision Multipliers & Core Rounding Scales
+    show("floor(4.99):        " + toStr(floor(4.99)));
+    show("ceil(4.01):         " + toStr(ceil(4.01)));
+    show("round(4.50):        " + toStr(round(4.50)));
+    show("abs(-150.75):       " + toStr(abs(-150.75)));
+
+    # 2. Algebraic Exponents Powers
+    show("pow(2, 8):          " + toStr(pow(2, 8)));
+    show("sqrt(144):          " + toStr(sqrt(144)));
+
+    # 3. Dynamic Min-Max Limits Series Captures
+    show("min(45, 12, 89, 2): " + toStr(min(45, 12, 89, 2)));
+    show("max(45, 12, 89, 2): " + toStr(max(45, 12, 89, 2)));
+
+    # 4. Randomization Distributions Generators
+    show("random(10, 20):     " + toStr(random(10, 20)));
+    show("randomInt(5, 15):   " + toStr(randomInt(5, 15)));
+    show("randomFloat(0, 1):  " + toStr(randomFloat(0.0, 1.0)));
+
+    # 5. Boundaries Control, Sign Trackers, and Interpolation
+    show("clamp(250, 10, 100):" + toStr(clamp(250, 10, 100)));
+    show("sign(-55):          " + toStr(sign(-55)));
+    show("lerp(10, 20, 0.5):  " + toStr(lerp(10, 20, 0.5)));
+
+    # 6. Trigonometry Angle Space Conversions
+    show("degToRad(180):      " + toStr(degToRad(180)));
+    show("radToDeg(3.14159):  " + toStr(radToDeg(3.141592653589793)));
+    show("--------------------------------------------------\n");
+}
+
+runMathBuiltinsTestSuite();

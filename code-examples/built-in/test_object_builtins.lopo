@@ -1,0 +1,27 @@
+func runObjectBuiltinsTestSuite() {
+    show("==================================================");
+    show(">>> STARTING SUITE: METADATA & DICTIONARY OBJECTS <<<");
+    show("==================================================");
+
+    define baselineAssetMap = { nodeId: 5051, structuralClass: "Alpha", operationalStatus: "Active" };
+    
+    # 1. Direct Ownership Verification Checks
+    show("hasOwn(nodeId):           " + toStr(hasOwn(baselineAssetMap, "nodeId")));
+    show("has(missingField):        " + toStr(has(baselineAssetMap, "missingField")));
+
+    # 2. Structural Keys, Values, and Matrix Pairs Extractors
+    show("keys() Element Matrix:    " + toStr(keys(baselineAssetMap)));
+    show("values() Element Matrix:  " + toStr(values(baselineAssetMap)));
+    show("entries() Vector Tuples:  " + toStr(entries(baselineAssetMap)));
+
+   
+    # 4. Nested Dotted Path Accessors (getProp / setProp)
+    define deepObjectTarget = { framework: { settings: { debugMode: false } } };
+    show("getProp(initial state):   " + toStr(getProp(deepObjectTarget, "framework.settings.debugMode", true)));
+    
+    setProp(deepObjectTarget, "framework.settings.debugMode", true);
+    show("getProp(after setProp):   " + toStr(getProp(deepObjectTarget, "framework.settings.debugMode", false)));
+    show("--------------------------------------------------\n");
+}
+
+runObjectBuiltinsTestSuite();

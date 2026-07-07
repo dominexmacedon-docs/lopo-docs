@@ -1,0 +1,42 @@
+func runStringBuiltinsTestSuite() {
+    show("==================================================");
+    show(">>> STARTING SUITE: STRING UTILITIES BLOCKS <<<");
+    show("==================================================");
+
+    define sampleText = "  Lopo Language Engine  ";
+    show("Original Base String: '" + sampleText + "'");
+
+    # 1. Case Modifications & Trimming
+    show("lower():      '" + lower(sampleText) + "'");
+    show("upper():      '" + upper(sampleText) + "'");
+    show("trim():       '" + trim(sampleText) + "'");
+    show("trimStart():  '" + trimStart(sampleText) + "'");
+    show("trimEnd():    '" + trimEnd(sampleText) + "'");
+
+    # 2. Structural Scanning Inspections
+    define cleanStr = "AlphaBetaGamma";
+    show("Target Checking String: " + cleanStr);
+    show("startsWith(Alpha): " + toStr(startsWith(cleanStr, "Alpha")));
+    show("endsWith(Gamma):   " + toStr(endsWith(cleanStr, "Gamma")));
+    show("includes(Beta):    " + toStr(includes(cleanStr, "Beta")));
+
+    # 3. Repeat & Replace Structural Shifts
+    show("repeat(Abc, 3):    " + repeat("Abc", 3));
+    show("repeatStr(X, 4):   " + repeatStr("X", 4));
+    show("replace(A-B-C):    " + replace("A-B-C", "-", "*"));
+    show("substring(2, 6):   " + substring(cleanStr, 2, 6));
+
+    # 4. Padding & Capitalization
+    show("padStart(5, 0):    " + padStart("7", 5, "0"));
+    show("padEnd(5, !):      " + padEnd("Alert", 8, "!"));
+    show("capitalize(lopo):  " + capitalize("lopo"));
+    show("reverseStr(Flow):  " + reverseStr("Flow"));
+
+    # 5. Token Arrays Splitting Split
+    define csvLine = "Node1,Node2,Node3";
+    define splitResult = split(csvLine, ",");
+    show("split(csvLine, ,): " + toStr(splitResult));
+    show("--------------------------------------------------\n");
+}
+
+runStringBuiltinsTestSuite();

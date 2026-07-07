@@ -1,0 +1,69 @@
+# Callback rule functions for structural mapping/filtering loops
+func multiplyElementByTen(element) { return element * 10; }
+func matchEvenElements(element) { return element % 2 == 0; }
+func accumulateSumValues(accumulator, currentItem) { return accumulator + currentItem; }
+func customInverseSort(a, b) { return b - a; }
+func evaluateParityKey(val) { return val % 2; }
+
+func runArrayBuiltinsTestSuite() {
+    show("==================================================");
+    show(">>> STARTING SUITE: COLLECTION & ARRAY PARITY <<<");
+    show("==================================================");
+
+    define numericDataset = [1, 2, 3, 4, 5];
+    show("Baseline Number Array: " + toStr(numericDataset));
+
+    # 1. Advanced High-Order Matrix Iteration Iterators
+    define mappedResults = map(numericDataset, multiplyElementByTen);
+    show("map() x10 Output:      " + toStr(mappedResults));
+
+    define filteredResults = filter(numericDataset, matchEvenElements);
+    show("filter() Evens Only:   " + toStr(filteredResults));
+
+    define reducedTotal = reduce(numericDataset, accumulateSumValues, 0);
+    show("reduce() Sum Total:    " + toStr(reducedTotal));
+
+    # 2. Linear Stack & Queue Mutations
+    define mutableArray = [20, 30];
+    push(mutableArray, 40);
+    show("After push(40):        " + toStr(mutableArray));
+    define poppedVal = pop(mutableArray);
+    show("After pop() [Item=" + toStr(poppedVal) + "]: " + toStr(mutableArray));
+
+    unshift(mutableArray, 10);
+    show("After unshift(10):     " + toStr(mutableArray));
+    define shiftedVal = shift(mutableArray);
+    show("After shift() [Item=" + toStr(shiftedVal) + "]: " + toStr(mutableArray));
+
+    # 3. Inversions & Sorting Formats
+    define unsortedMetrics = [5, 12, 1, 9, 3];
+    show("Before sort():         " + toStr(unsortedMetrics));
+    sort(unsortedMetrics);
+    show("Standard sort():       " + toStr(unsortedMetrics));
+    sort(unsortedMetrics, customInverseSort);
+    show("Custom sort(Inverse):  " + toStr(unsortedMetrics));
+
+    define arrayToInvert = [1, 2, 3];
+    reverse(arrayToInvert);
+    show("reverse([1,2,3]):      " + toStr(arrayToInvert));
+
+    # 4. Identification & Join Strings Synthesis
+    define stringTokens = ["System", "Core", "Online"];
+    show("join( - ):             " + join(stringTokens, " - "));
+    show("indexOf(9 inside list): " + toStr(indexOf(unsortedMetrics, 9)));
+    show("includesArr(12):       " + toStr(includesArr(unsortedMetrics, 12)));
+
+    # 5. Flattening & Uniqueness Filters
+    define deepNestedArray = [1, [2, 3], [[4, 5]]];
+    show("flatten() Nested Rows: " + toStr(flatten(deepNestedArray)));
+
+    define duplicatesArray = [7, 7, 8, 9, 7, 9, 10];
+    show("unique() Filter Sweep: " + toStr(unique(duplicatesArray)));
+
+    # 6. Choice Allocation & Accumulators Metrics
+    show("randomChoice() Pick:   " + toStr(randomChoice(numericDataset)));
+    show("count(Occurrences of 7): " + toStr(count(duplicatesArray, 7)));
+    show("--------------------------------------------------\n");
+}
+
+runArrayBuiltinsTestSuite();
