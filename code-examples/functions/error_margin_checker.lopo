@@ -1,0 +1,40 @@
+# Function checking deviation variance boundaries between experimental and target logs
+func verifyMetricIsWithinTolerance(observedValue, baselineTarget, allowedErrorMarginPct) {
+    define absoluteDelta = observedValue - baselineTarget;
+    
+    # Manual absolute value inversion mapping
+    if (absoluteDelta < 0) {
+        absoluteDelta = absoluteDelta * -1;
+    }
+    
+    define maximumAllowedDeviationValue = baselineTarget * (allowedErrorMarginPct / 100);
+    
+    if (absoluteDelta <= maximumAllowedDeviationValue) {
+        return true;
+    }
+    return false;
+}
+
+func runPrecisionCalibrationAudit() {
+    show("=== High-Precision Laboratory Hardware Calibration Board ===");
+    define calibrationStandardTarget = 500.0; # Fixed reference target
+    define safetyToleranceMarginPct = 2.5;    # Max 2.5% deviation allowed
+    
+    show(" System Baseline Criteria Target: " + toStr(calibrationStandardTarget) + " Units");
+    show(" Configured Safety Error Window:  " + toStr(safetyToleranceMarginPct) + "% Variance Bound");
+    
+    define currentMachineReading = num(ask("Enter live hardware sensor alignment reading: "));
+    
+    define accuracyStatusFlag = verifyMetricIsWithinTolerance(currentMachineReading, calibrationStandardTarget, safetyToleranceMarginPct);
+    
+    show("---------------------------------------------------------");
+    show("============== ALIGNMENT MARGIN EVALUATION =============");
+    if (accuracyStatusFlag == true) {
+        show(" Calibration Guard Status: PASS. Signal stays inside safe physical deviations.");
+    } else {
+        show(" Calibration Guard Status: FAIL. Out-of-bounds error spikes threaten mechanical failure.");
+    }
+    show("=========================================================");
+}
+
+runPrecisionCalibrationAudit();

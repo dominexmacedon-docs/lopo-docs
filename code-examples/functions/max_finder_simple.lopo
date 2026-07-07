@@ -1,0 +1,19 @@
+# Function that returns the higher value
+func findMaximum(a, b) {
+    if (a > b) {
+        return a;
+    }
+    return b;
+}
+
+func runMaxFinder() {
+    show("=== Maximum Finder ===");
+    define first = num(ask("Enter number A: "));
+    define second = num(ask("Enter number B: "));
+    
+    define highest = findMaximum(first, second);
+    
+    show("The larger number is: " + toStr(highest));
+}
+
+runMaxFinder();

@@ -1,0 +1,47 @@
+# Function that merges configuration profiles by updating missing values from overrides
+func combineConfigurationMaps(baseProfileMap, manualOverrideMap) {
+    define mergedOutputConfiguration = {
+        nodeId: baseProfileMap.nodeId,
+        baseOutputKw: baseProfileMap.baseOutputKw,
+        coolingPumpActive: baseProfileMap.coolingPumpActive
+    };
+    
+    # If the manual override supplies specific directive codes, execute parameter swaps
+    if (num(manualOverrideMap.forceOverridePin) == 9911) {
+        mergedOutputConfiguration.baseOutputKw = manualOverrideMap.overrideOutputKw;
+        mergedOutputConfiguration.coolingPumpActive = manualOverrideMap.overridePumpStatus;
+    }
+    
+    return mergedOutputConfiguration;
+}
+
+func runConfigurationMerger() {
+    show("=== Central Infrastructure Profile Aggregator Pipeline ===");
+    
+    # Core system values
+    define structuralNodeSettings = { nodeId: 4041, baseOutputKw: 1500, coolingPumpActive: false };
+    show("Active Base System Operational Profile: " + toStr(structuralNodeSettings));
+    
+    show("---------------------------------------------------------");
+    define securityOverridePin = num(ask("Enter Administrator Override Command Pin: "));
+    define targetNewWattage = num(ask("Enter emergency power line allocation cap (kW): "));
+    define targetPumpToggle = true; # Force cooling pumps open during modifications
+    
+    define commandInputBufferMap = {
+        forceOverridePin: securityOverridePin,
+        overrideOutputKw: targetNewWattage,
+        overridePumpStatus: targetPumpToggle
+    };
+    
+    # Feed datasets into the composition compiler function
+    define finalizedRuntimeConfiguration = combineConfigurationMaps(structuralNodeSettings, commandInputBufferMap);
+    
+    show("---------------------------------------------------------");
+    show("============== MERGED RUNTIME ENGINE MATRIX ==============");
+    show(" Resolved Node Identifier: " + toStr(finalizedRuntimeConfiguration.nodeId));
+    show(" Operational Power Output: " + toStr(finalizedRuntimeConfiguration.baseOutputKw) + " kW");
+    show(" Auxiliary Subsystem Lock: Cooling Auxiliary Pump status set to " + toStr(finalizedRuntimeConfiguration.coolingPumpActive));
+    show("=========================================================");
+}
+
+runConfigurationMerger();

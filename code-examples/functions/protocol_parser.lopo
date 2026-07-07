@@ -1,0 +1,42 @@
+# Function parsing dynamic text strings to isolate variable assignment properties
+func decryptProtocolHeaderString(rawTransmissionLine) {
+    define commandOperationCode = "UNKNOWN_OP";
+    
+    # Simulating simple string pattern parsing checks
+    if (rawTransmissionLine == "SYS_ACTIVATE_GRID_PHASE") {
+        commandOperationCode = "OP_EXECUTE_START";
+    } else {
+        if (rawTransmissionLine == "SYS_DEACTIVATE_GRID_PHASE") {
+            commandOperationCode = "OP_EXECUTE_HALT";
+        } else {
+            if (rawTransmissionLine == "SYS_PURGE_RESERVES") {
+                commandOperationCode = "OP_EXECUTE_CLEAN";
+            }
+        }
+    }
+    
+    return commandOperationCode;
+}
+
+func runNetworkCommandVerification() {
+    show("=== Sovereign Communication Interface Protocol Decrypter ===");
+    show(" Acceptable Command Signatures: [SYS_ACTIVATE_GRID_PHASE, SYS_DEACTIVATE_GRID_PHASE]");
+    
+    define inboundStringPayload = ask("Enter incoming encrypted data line payload: ");
+    
+    define internalOpToken = decryptProtocolHeaderString(inboundStringPayload);
+    
+    show("---------------------------------------------------------");
+    show("============== PROTOCOL ANALYSIS CLEARANCE ==============");
+    show(" Inbound Line Data:        " + inboundStringPayload);
+    show(" Resolved Operation Hook:  [" + internalOpToken + "]");
+    
+    if (internalOpToken == "UNKNOWN_OP") {
+        show(" Decryption Gateway Tracking: Rejected. Signature unmatched in instruction libraries.");
+    } else {
+        show(" Decryption Gateway Tracking: Authorized. Operation routing token sent to system cores.");
+    }
+    show("=========================================================");
+}
+
+runNetworkCommandVerification();

@@ -1,0 +1,17 @@
+# Function that adds two values
+func addNumbers(valueA, valueB) {
+    define totalSum = valueA + valueB;
+    return totalSum;
+}
+
+func runSimpleAdder() {
+    show("=== Simple Addition Tool ===");
+    define num1 = num(ask("Enter first number: "));
+    define num2 = num(ask("Enter second number: "));
+    
+    define result = addNumbers(num1, num2);
+    
+    show("Result: " + toStr(result));
+}
+
+runSimpleAdder();

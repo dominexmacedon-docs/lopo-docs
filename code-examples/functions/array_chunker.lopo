@@ -1,0 +1,46 @@
+# Function that partitions a list into fixed-size chunk components
+func splitArrayIntoSizedChunks(sourceList, chunkCapacityLimit) {
+    define chunkedMatrixCollection = [];
+    define pointer = 0;
+    define totalLength = len(sourceList);
+    
+    while (pointer < totalLength) {
+        define activeSubSegment = [];
+        define subCounter = 0;
+        
+        # Assemble an individual chunk segment up to the bucket limit
+        while (subCounter < chunkCapacityLimit and (pointer + subCounter) < totalLength) {
+            define valueToCopy = sourceList[pointer + subCounter];
+            push(activeSubSegment, valueToCopy);
+            subCounter = subCounter + 1;
+        }
+        
+        push(chunkedMatrixCollection, activeSubSegment);
+        # Slide the index pointer forward by the chunk layout size
+        pointer = pointer + chunkCapacityLimit;
+    }
+    
+    return chunkedMatrixCollection;
+}
+
+func runDataChunkingPipeline() {
+    show("=== Regional Grid Telemetry Sub-Packet Chunking Engine ===");
+    define bulkSensorPings = [101, 102, 103, 104, 105, 106, 107, 108];
+    show("Continuous Unsegmented Data Stream: " + toStr(bulkSensorPings));
+    
+    define partitionSize = num(ask("Enter maximum segment bucket chunk size (1-4): "));
+    
+    if (partitionSize > 0) {
+        define segmentedStreamMatrix = splitArrayIntoSizedChunks(bulkSensorPings, partitionSize);
+        
+        show("---------------------------------------------------------");
+        show("============== CHUNKING EXECUTION ANALYSIS ==============");
+        show(" Segmented Nested Sub-Packets: " + toStr(segmentedStreamMatrix));
+        show(" Total Individual Chunks Built: " + toStr(len(segmentedStreamMatrix)));
+        show("=========================================================");
+    } else {
+        show("CHUNKER ERROR: Segment boundaries must be greater than zero.");
+    }
+}
+
+runDataChunkingPipeline();

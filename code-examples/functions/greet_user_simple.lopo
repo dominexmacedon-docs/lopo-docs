@@ -1,0 +1,16 @@
+# Function that builds a greeting string
+func buildGreeting(userName) {
+    define message = "Hello, " + userName + "! Welcome to the terminal.";
+    return message;
+}
+
+func runGreetingPipeline() {
+    show("=== User Greeting System ===");
+    define nameInput = ask("Enter your name: ");
+    
+    define finalGreeting = buildGreeting(nameInput);
+    
+    show(finalGreeting);
+}
+
+runGreetingPipeline();

@@ -1,0 +1,18 @@
+# Function that calculates percentage amounts
+func calculatePercentage(totalAmount, percentRate) {
+    define fractionalRate = percentRate / 100;
+    define calculatedShare = totalAmount * fractionalRate;
+    return calculatedShare;
+}
+
+func runPercentageTool() {
+    show("=== Standard Share Calculator ===");
+    define baseValue = num(ask("Enter total baseline amount: "));
+    define rateValue = num(ask("Enter target percentage rate (e.g., 10, 20): "));
+    
+    define finalValue = calculatePercentage(baseValue, rateValue);
+    
+    show("Calculated Portion Value: " + toStr(finalValue));
+}
+
+runPercentageTool();

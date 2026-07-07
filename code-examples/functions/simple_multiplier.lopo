@@ -1,0 +1,17 @@
+# Function that multiplies two terms
+func multiplyValues(factorA, factorB) {
+    define calculationProduct = factorA * factorB;
+    return calculationProduct;
+}
+
+func runMultiplierTool() {
+    show("=== Standard Product Calculator ===");
+    define valA = num(ask("Enter first factor value: "));
+    define valB = num(ask("Enter second factor value: "));
+    
+    define ultimateProduct = multiplyValues(valA, valB);
+    
+    show("Multiplication Product: " + toStr(ultimateProduct));
+}
+
+runMultiplierTool();

@@ -1,0 +1,22 @@
+# Function that checks if a number is even
+func isNumberEven(inputNumber) {
+    if (inputNumber % 2 == 0) {
+        return true;
+    }
+    return false;
+}
+
+func runParityCheck() {
+    show("=== Basic Parity Checker ===");
+    define testVal = num(ask("Enter an integer to check: "));
+    
+    define checkResult = isNumberEven(testVal);
+    
+    if (checkResult == true) {
+        show("The number " + toStr(testVal) + " is EVEN.");
+    } else {
+        show("The number " + toStr(testVal) + " is ODD.");
+    }
+}
+
+runParityCheck();

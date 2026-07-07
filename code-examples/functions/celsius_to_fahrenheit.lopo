@@ -1,0 +1,16 @@
+# Function that converts Celsius degrees to Fahrenheit
+func convertCelsiusToFahrenheit(celsiusValue) {
+    define convertedTemp = (celsiusValue * 9 / 5) + 32;
+    return convertedTemp;
+}
+
+func runTemperatureConverter() {
+    show("=== Climate Temperature Unit Converter ===");
+    define currentCelsius = num(ask("Enter local temperature in °C: "));
+    
+    define currentFahrenheit = convertCelsiusToFahrenheit(currentCelsius);
+    
+    show("Converted Reading: " + toStr(currentFahrenheit) + "°F");
+}
+
+runTemperatureConverter();

@@ -1,0 +1,23 @@
+# Function that checks if a list is empty
+func isListEmpty(targetList) {
+    define listSize = len(targetList);
+    
+    if (listSize == 0) {
+        return true;
+    }
+    return false;
+}
+
+func runListCheck() {
+    show("=== Inventory Empty Status Check ===");
+    define realRegistry = [101, 102, 103];
+    define emptyRegistry = [];
+    
+    show("Checking active list registry...");
+    show("Is active registry empty? " + toStr(isListEmpty(realRegistry)));
+    
+    show("Checking backup list registry...");
+    show("Is backup registry empty? " + toStr(isListEmpty(emptyRegistry)));
+}
+
+runListCheck();

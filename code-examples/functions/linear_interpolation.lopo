@@ -1,0 +1,33 @@
+# Function computing linear value coordinate estimates between standard boundaries
+func calculateLinearInterpolation(rangeFloorVal, rangeCeilingVal, fractionalStepProgress) {
+    define totalSpanDistance = rangeCeilingVal - rangeFloorVal;
+    define proportionalShiftAmount = totalSpanDistance * fractionalStepProgress;
+    define intermediateEstimatedValue = rangeFloorVal + proportionalShiftAmount;
+    
+    return intermediateEstimatedValue;
+}
+
+func runInterpolationSim() {
+    show("=== Automated Civil Logistics Estimation Vector Sequencer ===");
+    
+    define lowerDataBoundary = num(ask("Enter performance threshold floor baseline value (0-1000): "));
+    define upperDataBoundary = num(ask("Enter performance threshold ceiling baseline value (0-1000): "));
+    define targetProgressRatio = num(ask("Enter evaluation time progression segment step ratio (0.0 to 1.0): "));
+    
+    if (targetProgressRatio >= 0.0 and targetProgressRatio <= 1.0 and lowerDataBoundary < upperDataBoundary) {
+        # Process mathematical algorithm mapping function
+        define intermediateProjectedMetric = calculateLinearInterpolation(lowerDataBoundary, upperDataBoundary, targetProgressRatio);
+        
+        show("---------------------------------------------------------");
+        show("============== INTERPOLATED ESTIMATION SUMMARY ==============");
+        show(" Low Boundary Baseline:   " + toStr(lowerDataBoundary));
+        show(" High Boundary Baseline:  " + toStr(upperDataBoundary));
+        show(" Midpoint Progress Shift: " + toStr(targetProgressRatio * 100) + "% Along Timeline");
+        show(" Calculated Value State:  " + toStr(intermediateProjectedMetric) + " Projected Metric Points");
+        show("=============================================================");
+    } else {
+        show("SIMULATION CRASH: Progress steps must reside strictly within a 0.0 to 1.0 ratio scope.");
+    }
+}
+
+runInterpolationSim();
