@@ -1,0 +1,52 @@
+define server = createServer();
+define userDataStore = [
+    { name: "John Doe", role: "Administrator", token: "U-1002" },
+    { name: "Jane Smith", role: "Engineer", token: "U-1055" }
+];
+
+# Generate custom raw HTML rows dynamically to replace the placeholder
+func buildTableRows() {
+    define rowsHtml = "";
+    define idx = 0;
+    while (idx < len(userDataStore)) {
+        define currentItem = userDataStore[idx];
+        rowsHtml = rowsHtml + "<tr><td>" + currentItem.name + "</td><td>" + currentItem.role + "</td><td>" + currentItem.token + "</td></tr>";
+        idx = idx + 1;
+    }
+    return rowsHtml;
+}
+
+# Serve the data input board dashboard
+server.get("/", func(req) {
+    define viewData = { tableRows: buildTableRows() };
+    return render("view_tables.html", viewData);
+});
+
+# Process a new database object mutation
+server.post("/insert", func(req) {
+    # Parse incoming URL form components using basic split strategies
+    define payload = req.body;
+    define pairs = split(payload, "&");
+    define nameValue = "";
+    define roleValue = "";
+    
+    define i = 0;
+    while (i < len(pairs)) {
+        define kv = split(pairs[i], "=");
+        if (kv[0] == "name") { nameValue = replace(kv[1], "+", " "); }
+        if (kv[0] == "role") { roleValue = replace(kv[1], "+", " "); }
+        i = i + 1;
+    }
+    
+    if (len(nameValue) > 0) {
+        define newEntry = { name: nameValue, role: roleValue, token: uuid() };
+        push(userDataStore, newEntry);
+    }
+    
+    # Render with updated data rows
+    define viewData = { tableRows: buildTableRows() };
+    return render("view_tables.html", viewData);
+});
+
+show("Task 1 Matrix Server running on http://localhost:8081");
+server.listen(8081);
