@@ -27,6 +27,9 @@
 - **Embed & extend** → Built on Node.js, so integration patterns (worker threads, subprocess IPC, N-API) are straightforward.  
 - **Practical** → Small footprint, fast startup, and features that let you build scripts, tools, or tiny apps quickly.  
 
+> [!NOTE]
+> **Syntax Flexibility:** Semicolons are optional! You do not strictly need to end your statements with a semicolon (`;`). The parser will gracefully evaluate statements split by standard newlines.
+
 ---
 
 ## Quick Links
@@ -49,21 +52,16 @@
 
 ## Try Lopo in 60 Seconds
 
-1. **Download the installer**  
-   [Lopo v1.0.1 Installer](https://github.com/dominexmacedon-docs/lopo-docs/releases/download/Lopo-v1.0.1/Lopo-v1.0.1.exe)  
+1. **Download the installer** [Lopo v1.0.1 Installer](https://github.com/dominexmacedon-docs/lopo-docs/releases/download/Lopo-v1.0.1/Lopo-v1.0.1.exe)  
 
-2. **Install and verify**  
-   ```bash
+2. **Install and verify** ```bash
    lopo --v
-   ```
 
-3. **Create hello.lopo**  
-   ```lopo
-   show("Hello, Lopo!");
-   ```
+```
 
----
+3. **Create hello.lopo** ```lopo
+# Both syntax structures are perfectly valid:
 
-<p align="center">
-  <b>Premium lightweight language for real-world projects</b>
-</p>
+
+show("Hello, Lopo!")
+show("Hello, Lopo!");
