@@ -2,7 +2,7 @@
   <img src="lopo.png" width="320" alt="Lopo Programming Language"/>
 </p>
 
-<h1 align="center">Lopo — a tiny language for real projects</h1>
+<h1 align="center">Lopo - a tiny language for real projects</h1>
 
 <p align="center">
   <a href="https://github.com/dominexmacedon-docs/lopo-docs/releases">
@@ -51,7 +51,7 @@
 
 ## Try Lopo in 60 Seconds
 
-1. **Download the installer** → [Lopo v1.0.1 Installer](https://github.com/dominexmacedon-docs/lopo-docs/releases/download/Lopo-v1.0.1/Lopo-v1.0.1.exe)  
+1. **Download the installer** → [Lopo v1.0.2 Installer](https://github.com/dominexmacedon-docs/lopo-docs/releases/download/Lopo-v1.0.2/Lopo-v1.0.2.exe)  
 
 2. **Check installation**  
    ```bash
