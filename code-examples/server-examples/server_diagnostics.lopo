@@ -1,0 +1,17 @@
+define server = createServer({});
+
+server.get("/sys-info", func(req, res) {
+    define template = readFile("./diagnostics.html");
+    
+    define systemIp = getIp();
+    define currentTime = formatDate(now(), "en-US", {});
+    define nodeEnv = getEnv("NODE_ENV", "development");
+
+    define html = replace(template, "{{IP}}", systemIp);
+    html = replace(html, "{{TIME}}", currentTime);
+    html = replace(html, "{{ENV}}", nodeEnv);
+    
+    return html;
+});
+
+server.listen(8080);

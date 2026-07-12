@@ -1,0 +1,23 @@
+define server = createServer({});
+
+server.get("/users", func(req, res) {
+    define template = readFile("./table.html");
+    define users = [
+        { id: 1, name: "Alice", role: "Admin" },
+        { id: 2, name: "Bob", role: "Developer" },
+        { id: 3, name: "Charlie", role: "Designer" }
+    ];
+    
+    define rows = "";
+    define i = 0;
+    while (i < len(users)) {
+        define u = users[i];
+        rows = rows + "<tr><td>" + str(u.id) + "</td><td>" + u.name + "</td><td>" + u.role + "</td></tr>";
+        i = i + 1;
+    }
+    
+    define finalHtml = replace(template, "<!-- {{TABLE_ROWS}} -->", rows);
+    return finalHtml;
+});
+
+server.listen(8080);

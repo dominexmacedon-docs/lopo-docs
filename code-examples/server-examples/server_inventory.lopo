@@ -1,0 +1,21 @@
+define server = createServer({});
+
+server.get("/inventory", func(req, res) {
+    define template = readFile("./inventory.html");
+    define stock = readJSON("./inventory.json");
+    
+    define itemsList = "";
+    define items = keys(stock);
+    define i = 0;
+    while (i < len(items)) {
+        define key = items[i];
+        define qty = getProp(stock, key, 0);
+        itemsList = itemsList + "<li>" + key + ": " + str(qty) + " items left</li>";
+        i = i + 1;
+    }
+    
+    define finalHtml = replace(template, "<!-- {{INVENTORY_ITEMS}} -->", itemsList);
+    return finalHtml;
+});
+
+server.listen(8080);

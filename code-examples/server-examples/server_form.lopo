@@ -1,0 +1,15 @@
+define server = createServer({});
+
+server.get("/contact", func(req, res) {
+    return readFile("./form.html");
+});
+
+server.post("/submit", func(req, res) {
+    define template = readFile("./result.html");
+    define username = getProp(req, "body.username", "Guest");
+    
+    define finalHtml = replace(template, "{{USERNAME}}", username);
+    return finalHtml;
+});
+
+server.listen(8080);

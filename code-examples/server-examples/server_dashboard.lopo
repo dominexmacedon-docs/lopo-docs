@@ -1,20 +1,20 @@
-define server = createServer();
+define server = createServer({});
 
-server.get("/", func(req) {
-    define platformHostIp = getIp();
-    define executionEpoch = toStr(now());
-    define systemNodeEnv = envGet("NODE_ENV", "Unavailable (Production Default)");
-    define architectureTrace = typeOf(server);
-
-    define parametersCollection = {
-        hostIp: platformHostIp,
-        epochTime: executionEpoch,
-        environmentMode: systemNodeEnv,
-        engineObjectIdentity: architectureTrace
-    };
-
-    return render("view_dashboard.html", parametersCollection);
+server.get("/dashboard", func(req, res) {
+    define template = readFile("./dashboard.html");
+    define rawScores = [88, 42, 95, 70, 61, 100];
+    
+    define passingScores = await filter(rawScores, func(score) {
+        return score >= 60;
+    });
+    
+    define maxVal = max(88, 42, 95, 70, 61, 100);
+    
+    define html = replace(template, "{{TOTAL_SCORES}}", str(len(rawScores)));
+    html = replace(html, "{{PASSING_SCORES}}", str(len(passingScores)));
+    html = replace(html, "{{MAX_SCORE}}", str(maxVal));
+    
+    return html;
 });
 
-show("Task 4 Diagnostics Engine Hub running on http://localhost:8084");
-server.listen(8084);
+server.listen(8080);

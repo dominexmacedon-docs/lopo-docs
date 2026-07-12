@@ -1,0 +1,7 @@
+define server = createServer({ enableWebSockets: true });
+
+server.get("/chat", func(req, res) {
+    return readFile("./chat.html");
+});
+
+server.listen(8080);

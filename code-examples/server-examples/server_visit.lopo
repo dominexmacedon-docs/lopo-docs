@@ -1,0 +1,10 @@
+define server = createServer({});
+
+server.get("/visit", func(req, res) {
+    define logMessage = "Visitor ping registered at epoch: " + str(now()) + "\n";
+    appendFile("./server_logs.txt", logMessage);
+    
+    return readFile("./visit.html");
+});
+
+server.listen(8080);

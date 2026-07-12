@@ -1,0 +1,11 @@
+define server = createServer({});
+
+server.get("/product/:id", func(req, res) {
+    define template = readFile("./product.html");
+    define productId = req.params.id;
+    
+    define finalHtml = replace(template, "{{PRODUCT_ID}}", productId);
+    return finalHtml;
+});
+
+server.listen(8080);

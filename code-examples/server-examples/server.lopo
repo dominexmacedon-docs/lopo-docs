@@ -1,0 +1,10 @@
+define server = createServer({ enableWebSockets: false });
+
+server.get("/", func(req, res) {
+    define htmlContent = readFile("./index.html");
+    return htmlContent;
+});
+
+server.listen(8080, func(port) {
+    show("Server started on port " + str(port));
+});
