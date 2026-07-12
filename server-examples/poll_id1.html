@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Community Opinion Survey</title>
+</head>
+<body>
+    <h2>Vote for Your Preferred Framework Style</h2>
+    <p>Total Submissions Documented: <strong>{{TOTAL_VOTES}}</strong></p>
+    <ul>
+        <li>Option A (Lopo Vanilla Functional): <b>{{VOTES_A}} votes</b></li>
+        <li>Option B (Lopo Dynamic Component): <b>{{VOTES_B}} votes</b></li>
+    </ul>
+    <hr>
+    <form method="POST" action="/submit-vote">
+        <label><input type="radio" name="choice" value="A" checked/> Option A</label><br>
+        <label><input type="radio" name="choice" value="B"/> Option B</label><br><br>
+        <button type="submit">Cast Ballot</button>
+    </form>
+</body>
+</html>

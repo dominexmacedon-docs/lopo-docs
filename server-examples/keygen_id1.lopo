@@ -1,0 +1,13 @@
+define server = createServer({});
+
+server.get("/generate-session", func(req, res) {
+    define template = readFile("./keygen_id1.html");
+    
+    define step1 = uuid();
+    define step2 = sha256(step1);
+    define mixedToken = upper(substring(step2, 0, 16)) + "-" + str(randomInt(1000, 9999));
+    
+    return replace(template, "{{KEY_CHAIN}}", mixedToken);
+});
+
+server.listen(8080);

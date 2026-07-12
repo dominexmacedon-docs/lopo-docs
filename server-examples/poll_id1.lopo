@@ -1,0 +1,37 @@
+define server = createServer({});
+
+server.get("/poll", func(req, res) {
+    define template = readFile("./poll_id1.html");
+    if (exists("./votes.json") == false) {
+        writeJSON("./votes.json", { a: 0, b: 0 });
+    }
+    
+    define currentVotes = readJSON("./votes.json");
+    define countA = getProp(currentVotes, "a", 0);
+    define countB = getProp(currentVotes, "b", 0);
+    define total = countA + countB;
+    
+    define html = replace(template, "{{TOTAL_VOTES}}", str(total));
+    html = replace(html, "{{VOTES_A}}", str(countA));
+    html = replace(html, "{{VOTES_B}}", str(countB));
+    return html;
+});
+
+server.post("/submit-vote", func(req, res) {
+    define selection = getProp(req, "body.choice", "A");
+    define currentVotes = readJSON("./votes.json");
+    
+    if (selection == "A") {
+        define currentA = getProp(currentVotes, "a", 0);
+        setProp(currentVotes, "a", currentA + 1);
+    }
+    if (selection == "B") {
+        define currentB = getProp(currentVotes, "b", 0);
+        setProp(currentVotes, "b", currentB + 1);
+    }
+    
+    writeJSON("./votes.json", currentVotes);
+    return "<html><head><meta http-equiv='refresh' content='0;url=/poll'></head></html>";
+});
+
+server.listen(8080);

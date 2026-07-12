@@ -1,0 +1,23 @@
+define server = createServer({});
+
+server.get("/integrity", func(req, res) {
+    return readFile("./signer_id1.html");
+});
+
+server.post("/sign-content", func(req, res) {
+    define name = getProp(req, "body.docName", "unnamed");
+    define content = getProp(req, "body.docContent", "");
+    
+    define hashIdentity = sha256(content);
+    define timestampText = formatDate(now(), "en-US", {});
+    
+    define summaryHtml = "<html><body><h2>Signing Successful</h2>";
+    summaryHtml = summaryHtml + "<p>Document Identity: <b>" + name + "</b></p>";
+    summaryHtml = summaryHtml + "<p>System Execution Timestamp: " + timestampText + "</p>";
+    summaryHtml = summaryHtml + "<p>SHA-256 Checksum Signature: <code>" + hashIdentity + "</code></p>";
+    summaryHtml = summaryHtml + "<br><a href='/integrity'>Sign another document</a></body></html>";
+    
+    return summaryHtml;
+});
+
+server.listen(8080);

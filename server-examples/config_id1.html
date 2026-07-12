@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Core Runtime Variables Setting</title>
+</head>
+<body>
+    <h2>System Variable Override Dashboard</h2>
+    <p>Active System Parameters State: <code>{{CURRENT_STATE}}</code></p>
+    <hr>
+    <form method="POST" action="/update-config">
+        <label><input type="checkbox" name="maintenance" value="true"/> Enable Global Maintenance Lock Mode</label><br><br>
+        <button type="submit">Commit New Variables Schema</button>
+    </form>
+</body>
+</html>

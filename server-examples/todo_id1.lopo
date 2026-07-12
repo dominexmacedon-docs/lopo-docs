@@ -1,0 +1,32 @@
+define server = createServer({});
+
+server.get("/todo", func(req, res) {
+    define template = readFile("./todo_id1.html");
+    if (exists("./todos.json") == false) {
+        writeJSON("./todos.json", []);
+    }
+    
+    define list = readJSON("./todos.json");
+    define elements = "";
+    define i = 0;
+    while (i < len(list)) {
+        elements = elements + "<li>" + list[i] + "</li>";
+        i = i + 1;
+    }
+    
+    return replace(template, "<!-- {{TODO_ITEMS}} -->", elements);
+});
+
+server.post("/todo/add", func(req, res) {
+    define newTask = getProp(req, "body.task", "");
+    if (newTask != "") {
+        define list = readJSON("./todos.json");
+        push(list, newTask);
+        writeJSON("./todos.json", list);
+    }
+    
+    # Simple direct redirect markup engine fallback
+    return "<html><head><meta http-equiv='refresh' content='0;url=/todo'></head></html>";
+});
+
+server.listen(8080);

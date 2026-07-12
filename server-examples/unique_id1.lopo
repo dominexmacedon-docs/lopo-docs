@@ -1,0 +1,18 @@
+define server = createServer({});
+
+server.get("/dedup", func(req, res) {
+    define template = readFile("./unique_id1.html");
+    define inventory = ["apple", "pear", "apple", "orange", "pear"];
+    
+    define distinctItems = unique(inventory);
+    define itemLines = "";
+    define i = 0;
+    while (i < len(distinctItems)) {
+        itemLines = itemLines + "<li>" + distinctItems[i] + "</li>";
+        i = i + 1;
+    }
+    
+    return replace(template, "<!-- {{CLEAN_LIST}} -->", itemLines);
+});
+
+server.listen(8080);

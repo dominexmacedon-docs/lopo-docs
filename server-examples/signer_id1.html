@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secure Document Signature Registry</title>
+</head>
+<body>
+    <h2>Cryptographic Integrity Verifier Node</h2>
+    <form method="POST" action="/sign-content">
+        <input type="text" name="docName" placeholder="Document Identifier Name" required/><br><br>
+        <textarea name="docContent" rows="4" cols="40" placeholder="Content text metadata..." required></textarea><br><br>
+        <button type="submit">Generate Verification Receipt</button>
+    </form>
+</body>
+</html>

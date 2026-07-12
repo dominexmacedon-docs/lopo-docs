@@ -1,0 +1,36 @@
+define server = createServer({});
+
+server.get("/wall", func(req, res) {
+    define template = readFile("./comment_id1.html");
+    if (exists("./wall.json") == false) {
+        writeJSON("./wall.json", []);
+    }
+    
+    define commentsList = readJSON("./wall.json");
+    define wallHtml = "";
+    define i = 0;
+    while (i < len(commentsList)) {
+        define item = commentsList[i];
+        define name = getProp(item, "author", "Anonymous");
+        define msg = getProp(item, "text", "");
+        wallHtml = wallHtml + "<div style='background:#f9f9f9; padding:8px; margin-bottom:5px;'><b>" + name + "</b>: " + msg + "</div>";
+        i = i + 1;
+    }
+    
+    return replace(template, "<!-- {{COMMENTS_WALL}} -->", wallHtml);
+});
+
+server.post("/add-comment", func(req, res) {
+    define user = getProp(req, "body.author", "Anonymous");
+    define noteText = getProp(req, "body.comment", "");
+    
+    if (noteText != "") {
+        define commentsList = readJSON("./wall.json");
+        push(commentsList, { author: user, text: noteText });
+        writeJSON("./wall.json", commentsList);
+    }
+    
+    return "<html><head><meta http-equiv='refresh' content='0;url=/wall'></head></html>";
+});
+
+server.listen(8080);

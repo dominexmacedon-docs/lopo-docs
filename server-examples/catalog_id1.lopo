@@ -1,0 +1,26 @@
+define server = createServer({});
+
+server.get("/catalog", func(req, res) {
+    define template = readFile("./catalog_id1.html");
+    define targetPage = getProp(req, "query.page", "1");
+    
+    define products = ["Item-A", "Item-B", "Item-C", "Item-D", "Item-E", "Item-F"];
+    define displayItems = "";
+    
+    if (targetPage == "1") {
+        displayItems = displayItems + "<li>" + products[0] + "</li>";
+        displayItems = displayItems + "<li>" + products[1] + "</li>";
+        displayItems = displayItems + "<li>" + products[2] + "</li>";
+    }
+    if (targetPage == "2") {
+        displayItems = displayItems + "<li>" + products[3] + "</li>";
+        displayItems = displayItems + "<li>" + products[4] + "</li>";
+        displayItems = displayItems + "<li>" + products[5] + "</li>";
+    }
+    
+    define html = replace(template, "{{PAGE_NUM}}", targetPage);
+    html = replace(html, "<!-- {{CATALOG_ITEMS}} -->", displayItems);
+    return html;
+});
+
+server.listen(8080);

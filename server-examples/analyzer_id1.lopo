@@ -1,0 +1,29 @@
+define server = createServer({});
+
+server.get("/analyzer", func(req, res) {
+    define template = readFile("./analyzer_id1.html");
+    define html = replace(template, "{{OLD_TEXT}}", "");
+    html = replace(html, "<!-- {{METRICS}} -->", "");
+    return html;
+});
+
+server.post("/analyze-text", func(req, res) {
+    define template = readFile("./analyzer_id1.html");
+    define targetText = getProp(req, "body.payload", "");
+    
+    define charCount = len(targetText);
+    define upperText = upper(targetText);
+    define cleanTrim = trim(targetText);
+    
+    define report = "<h4>Structural Breakdown:</h4><ul>";
+    report = report + "<li>Total Character Elements Count: " + str(charCount) + "</li>";
+    report = report + "<li>First Symbol Element Parameter: " + substring(cleanTrim, 0, 1) + "</li>";
+    report = report + "<li>Normalized Uppercase Mapping Layout: <code>" + upperText + "</code></li>";
+    report = report + "</ul>";
+    
+    define html = replace(template, "{{OLD_TEXT}}", targetText);
+    html = replace(html, "<!-- {{METRICS}} -->", report);
+    return html;
+});
+
+server.listen(8080);

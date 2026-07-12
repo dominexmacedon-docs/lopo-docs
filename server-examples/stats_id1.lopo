@@ -1,0 +1,18 @@
+define server = createServer({});
+
+server.get("/stats", func(req, res) {
+    define template = readFile("./stats_id1.html");
+    
+    define lowest = min(23, 45, 12, 89, 4, 56);
+    define highest = max(23, 45, 12, 89, 4, 56);
+    
+    # Restrict the maximum value safely inside 0 to 50 scale parameters
+    define clampedMax = clamp(highest, 0, 50);
+    
+    define html = replace(template, "{{MIN_VAL}}", str(lowest));
+    html = replace(html, "{{MAX_VAL}}", str(highest));
+    html = replace(html, "{{CLAMP_VAL}}", str(clampedMax));
+    return html;
+});
+
+server.listen(8080);

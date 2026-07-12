@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Item Database Search</title>
+</head>
+<body>
+    <h2>Catalog Search</h2>
+    <form method="GET" action="/search">
+        <input type="text" name="q" placeholder="Enter keyword (e.g., tech)..." value="{{QUERY}}"/>
+        <button type="submit">Search</button>
+    </form>
+    <h3>Results:</h3>
+    <ul>
+        <!-- {{RESULTS}} -->
+    </ul>
+</body>
+</html>

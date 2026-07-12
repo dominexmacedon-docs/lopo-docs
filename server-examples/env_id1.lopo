@@ -1,0 +1,14 @@
+define server = createServer({});
+
+server.get("/env-manifest", func(req, res) {
+    define template = readFile("./env_id1.html");
+    
+    define systemShellEnv = envGet("SHELL", "/bin/unknown-shell-fallback");
+    define dataSecretCredential = envGet("DATABASE_SECRET_TOKEN", "MISSING_DANGER_UNSET");
+    
+    define html = replace(template, "{{SHELL_PATH}}", systemShellEnv);
+    html = replace(html, "{{DB_KEY}}", dataSecretCredential);
+    return html;
+});
+
+server.listen(8080);

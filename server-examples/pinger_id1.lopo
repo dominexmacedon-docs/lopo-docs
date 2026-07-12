@@ -1,0 +1,16 @@
+define server = createServer({});
+
+server.get("/network-test", func(req, res) {
+    define template = readFile("./pinger_id1.html");
+    
+    define localNodeLive = pingHost("127.0.0.1", 8080, 1000);
+    define diagnosticMessage = "UNREACHABLE TIMEOUT TERMINATION SIGNAL";
+    
+    if (localNodeLive == true) {
+        diagnosticMessage = "ACTIVE OPERATIONAL CHANNEL CONNECTED";
+    }
+    
+    return replace(template, "{{SELF_STATUS}}", diagnosticMessage);
+});
+
+server.listen(8080);

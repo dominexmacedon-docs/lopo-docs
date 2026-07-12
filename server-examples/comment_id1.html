@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feedback Board</title>
+</head>
+<body>
+    <h2>Community Feedback Wall</h2>
+    <form method="POST" action="/add-comment">
+        <input type="text" name="author" placeholder="Your Name" required/><br><br>
+        <textarea name="comment" placeholder="Leave a note..." required></textarea><br><br>
+        <button type="submit">Publish Comment</button>
+    </form>
+    <hr>
+    <h3>Recent Notes:</h3>
+    <div>
+        <!-- {{COMMENTS_WALL}} -->
+    </div>
+</body>
+</html>

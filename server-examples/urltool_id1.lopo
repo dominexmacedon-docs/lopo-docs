@@ -1,0 +1,18 @@
+define server = createServer({});
+
+server.get("/url-encoder", func(req, res) {
+    define template = readFile("./urltool_id1.html");
+    return replace(template, "<!-- {{URL_OUT}} -->", "");
+});
+
+server.post("/process-url", func(req, res) {
+    define template = readFile("./urltool_id1.html");
+    define textInput = getProp(req, "body.rawQuery", "");
+    
+    define secureText = encodeURLComponent(textInput);
+    define outputBlock = "<p>Safe URI Web Parameter Sequence Result:<br><code>" + secureText + "</code></p>";
+    
+    return replace(template, "<!-- {{URL_OUT}} -->", outputBlock);
+});
+
+server.listen(8080);

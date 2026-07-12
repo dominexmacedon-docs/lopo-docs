@@ -1,0 +1,28 @@
+define server = createServer({});
+
+server.get("/search", func(req, res) {
+    define template = readFile("./search_id1.html");
+    define query = getProp(req, "query.q", "");
+    
+    define catalog = ["tech-laptop", "tech-mouse", "home-chair", "home-desk", "tech-keyboard"];
+    define matches = "";
+    
+    define i = 0;
+    while (i < len(catalog)) {
+        define item = catalog[i];
+        if (query == "" || includes(item, lower(query))) {
+            matches = matches + "<li>" + item + "</li>";
+        }
+        i = i + 1;
+    }
+    
+    if (matches == "") {
+        matches = "<li>No items matched your lookup search.</li>";
+    }
+    
+    define html = replace(template, "{{QUERY}}", query);
+    html = replace(html, "<!-- {{RESULTS}} -->", matches);
+    return html;
+});
+
+server.listen(8080);

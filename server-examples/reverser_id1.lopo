@@ -1,0 +1,19 @@
+define server = createServer({});
+
+server.get("/mirror", func(req, res) {
+    define template = readFile("./reverser_id1.html");
+    return replace(template, "<!-- {{MIRROR_BOX}} -->", "");
+});
+
+server.post("/mirror-string", func(req, res) {
+    define template = readFile("./reverser_id1.html");
+    define initialText = getProp(req, "body.targetWord", "");
+    
+    define flippedText = reverseStr(initialText);
+    define confirmationElement = "<div style='margin-top:15px;'>Flipped Result: <b>" + flippedText + "</b></div>";
+    
+    define html = replace(template, "<!-- {{MIRROR_BOX}} -->", confirmationElement);
+    return html;
+});
+
+server.listen(8080);

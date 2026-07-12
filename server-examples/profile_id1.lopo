@@ -1,0 +1,20 @@
+define server = createServer({});
+
+server.get("/random-member", func(req, res) {
+    define template = readFile("./profile_id1.html");
+    
+    define names = ["David", "Elena", "Franklin", "Grace"];
+    define fields = ["Cybersecurity", "Embedded Systems", "Data Structures", "UX Engineering"];
+    
+    define chosenName = randomChoice(names);
+    define chosenField = randomChoice(fields);
+    define uniqueToken = upper(substring(uuid(), 0, 8));
+    
+    define html = replace(template, "{{NAME}}", chosenName);
+    html = replace(html, "{{FIELD}}", chosenField);
+    html = replace(html, "{{CODE}}", uniqueToken);
+    
+    return html;
+});
+
+server.listen(8080);

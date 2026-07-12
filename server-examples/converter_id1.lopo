@@ -1,0 +1,24 @@
+define server = createServer({});
+
+server.get("/convert", func(req, res) {
+    define template = readFile("./converter_id1.html");
+    define html = replace(template, "{{INPUT}}", "");
+    html = replace(html, "<!-- {{RESULT_BOX}} -->", "");
+    return html;
+});
+
+server.post("/calc-temp", func(req, res) {
+    define template = readFile("./converter_id1.html");
+    define cVal = num(getProp(req, "body.celsius", "0"));
+    
+    # Formula calculation context mapping: (C * 9/5) + 32
+    define fVal = (cVal * 9 / 5) + 32;
+    
+    define outputBox = "<p style='font-size:1.2em;'>Result: <b>" + str(cVal) + "°C</b> is equal to <b>" + str(fVal) + "°F</b></p>";
+    
+    define html = replace(template, "{{INPUT}}", str(cVal));
+    html = replace(html, "<!-- {{RESULT_BOX}} -->", outputBox);
+    return html;
+});
+
+server.listen(8080);

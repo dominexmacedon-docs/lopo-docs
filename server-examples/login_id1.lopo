@@ -1,0 +1,21 @@
+define server = createServer({});
+
+server.get("/login", func(req, res) {
+    define template = readFile("./login_id1.html");
+    return replace(template, "{{ERROR_MSG}}", "");
+});
+
+server.post("/login-check", func(req, res) {
+    define template = readFile("./login_id1.html");
+    define user = getProp(req, "body.username", "");
+    define pass = getProp(req, "body.password", "");
+    
+    # Simple hash check illustration
+    if (user == "admin" && sha256(pass) == sha256("secret123")) {
+        return "<html><body><h1>Access Granted. Welcome back!</h1></body></html>";
+    }
+    
+    return replace(template, "{{ERROR_MSG}}", "Invalid username or password credentials.");
+});
+
+server.listen(8080);

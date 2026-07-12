@@ -1,0 +1,23 @@
+define server = createServer({});
+
+server.get("/config-panel", func(req, res) {
+    define template = readFile("./config_id1.html");
+    
+    if (exists("./app_config.json") == false) {
+        writeJSON("./app_config.json", { maintenanceMode: "false" });
+    }
+    
+    define currentSettings = readFile("./app_config.json");
+    return replace(template, "{{CURRENT_STATE}}", currentSettings);
+});
+
+server.post("/update-config", func(req, res) {
+    define flag = getProp(req, "body.maintenance", "false");
+    
+    define newConfigObj = { maintenanceMode: flag };
+    writeJSON("./app_config.json", newConfigObj);
+    
+    return "<html><body><h3>Settings applied configuration payload matrix update successful.</h3><a href='/config-panel'>Return to configuration dashboard control station</a></body></html>";
+});
+
+server.listen(8080);
