@@ -1,0 +1,15 @@
+define app = createServer();
+
+app.get("/admin", func(req, res) {
+    define pageData = {
+        title: "Root Administration Control Panel",
+        accessLevel: "SuperAdmin",
+        clusterLoad: "12.4%"
+    };
+    return render("admin_using_render.html", pageData);
+});
+define targetPort = 8080;
+
+app.listen(targetPort, func(p) {
+    show("Production engine live on cluster port: " + str(p));
+});

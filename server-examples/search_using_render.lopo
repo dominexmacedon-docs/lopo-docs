@@ -1,0 +1,15 @@
+define app = createServer();
+
+app.get("/search", func(req, res) {
+    define term = req.query.q;
+    define pageData = {
+        title: "Search Results Console",
+        query: term
+    };
+    return render("search_using_render.html", pageData);
+});
+define targetPort = 8080;
+
+app.listen(targetPort, func(p) {
+    show("Production engine live on cluster port: " + str(p));
+});

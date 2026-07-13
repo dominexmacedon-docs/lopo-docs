@@ -1,0 +1,15 @@
+define app = createServer();
+
+app.post("/auth", func(req, res) {
+    define user = req.body.username;
+    define pageData = {
+        title: "Authentication Token Generated",
+        username: user
+    };
+    return render("dashboard_using_render.html", pageData);
+});
+define targetPort = 8080;
+
+app.listen(targetPort, func(p) {
+    show("Production engine live on cluster port: " + str(p));
+});

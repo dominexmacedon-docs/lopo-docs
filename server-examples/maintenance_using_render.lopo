@@ -1,0 +1,15 @@
+define app = createServer();
+
+app.get("/status", func(req, res) {
+    define pageData = {
+        title: "System Maintenance Mode",
+        eta: "2 Hours",
+        engineer: "System Cluster Node 04"
+    };
+    return render("maintenance_using_render.html", pageData);
+});
+define targetPort = 8080;
+
+app.listen(targetPort, func(p) {
+    show("Production engine live on cluster port: " + str(p));
+});

@@ -1,0 +1,23 @@
+# Create a server instance using the built-in API
+define app = createServer();
+
+# Bind a GET route to the homepage path
+app.get("/", func(req, res) {
+    # Structure data payload context for rendering
+    define pageData = {
+        title: "LopoLang Engine Home",
+        username: "Guest Developer",
+        status: "Active and Online"
+    };
+
+    # Render server.html with the injected data map context
+    define htmlOutput = render("server.html", pageData);
+    
+    return htmlOutput;
+});
+
+# Start the server listening pipeline engine loop
+define port = 3000;
+app.listen(port, func(p) {
+    show("Server engine running smoothly at http://localhost:" + str(p));
+});

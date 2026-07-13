@@ -1,0 +1,15 @@
+define app = createServer();
+
+app.get("/user/:id", func(req, res) {
+    define userId = req.params.id;
+    define pageData = {
+        title: "User Profile Dashboard",
+        userId: userId,
+        bio: "Full Stack Engineer specializing in LopoLang architectures."
+    };
+    return render("profile_using_render.html", pageData);
+});
+define port = 3000;
+app.listen(port, func(p) {
+    show("Server engine running smoothly at http://localhost:" + str(p));
+});
