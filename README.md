@@ -35,7 +35,7 @@
 - [Releases](https://github.com/dominexmacedon-docs/lopo-docs/releases)  
 - [Docs & Examples](https://github.com/dominexmacedon-docs/lopo-docs)  
 - [License: MIT](https://opensource.org/licenses/MIT)  
-
+- [Full Lopo Projects](https://github.com/dominexmacedon-docs/lopo-projects) 
 ---
 
 ## Features
